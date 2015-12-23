@@ -50,7 +50,7 @@ console.log "Brightness: " + light.brightness
 Events
 ```
 # when the room gets dark, turn on the light
-# or: when darkness falls, enlighten us!
+# or: upon darkness, enlighten us!
 room.event 'dark', () ->
   light.on = true
 ```
