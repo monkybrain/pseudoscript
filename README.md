@@ -60,3 +60,13 @@ Conditional statements
 # if the light has been on for more than 30 minutes, turn it off
 if light.upTime > 30 then light.on = false
 ```
+Naming
+```
+# add a room called 'bedroom'
+home.rooms.push new Room('bedroom')
+
+# add a light to the bedroom called 'ceiling light'
+home.rooms[index].push new Light 'ceiling light'
+
+# (if I can avoid single/double quotes, that would be great)
+```
