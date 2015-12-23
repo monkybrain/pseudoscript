@@ -188,7 +188,7 @@
     log process input
    */
 
-  input = "turn on the bloody light and set the bleeding brightness to 45 you pathetic excuse for a home automation system!";
+  input = "turn on the light, increase the light's brightness to 50 and increase it again by 20";
 
   log(process(input));
 

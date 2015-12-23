@@ -17,7 +17,7 @@ run `coffee process.coffee` in `0.0.3/` for a very limited preview (edit the inp
 light.on = true
 light.timer = 30
 
-# turn on the light and increase the light's brightness to 50 and increase it again by 20
+# turn on the light, increase the light's brightness to 50 and increase it again by 20
 light.on = true
 light.brightness = 50
 light.brightness += 50

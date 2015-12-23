@@ -150,7 +150,8 @@ process = (input) ->
 
 # input = "turn on the light please and set the brightness to 4"
 # input = "if the light brightness is 20 then"
-input = "turn on the bloody light and set the bleeding brightness to 45 you pathetic excuse for a home automation system!"
+# input = "turn on the bloody light and set the bleeding brightness to 45 you pathetic excuse for a home automation system!"
+input = "turn on the light, increase the light's brightness to 50 and increase it again by 20"
 log process input
 
 
