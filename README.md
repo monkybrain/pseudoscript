@@ -26,7 +26,8 @@ light.brightness += 50
 light.on = false
 light.timer = 20
 
-# turn on the bloody light and set the bleeding brightness to 45 you stupid home automation system!
+# turn on the bloody light and set the bleeding brightness to 45 you pathetic excuse for a home automation system!
+# (even handles abuse...)
 light.on = true
 light.on = 45
 
@@ -49,6 +50,7 @@ console.log "Brightness: " + light.brightness
 Events
 ```
 # when the room gets dark, turn on the light
+# or: when darkness falls, enlighten us!
 room.event 'dark', () ->
   light.on = true
 ```

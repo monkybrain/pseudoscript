@@ -4,7 +4,7 @@ class Abject
   constructor: () ->
     @members = []
 
-class Light extends Object
+class Light extends Abject
 
     @word: 'light'
 

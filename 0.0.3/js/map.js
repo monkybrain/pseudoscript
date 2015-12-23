@@ -30,7 +30,7 @@
 
     return Light;
 
-  })(Object);
+  })(Abject);
 
   objects = {
     Light: Light

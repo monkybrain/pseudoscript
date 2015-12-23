@@ -11,7 +11,7 @@ light.brightness += 50
 light.on = false
 light.timer = 20
 
-# turn on the bloody light and set the bleeding brightness to 45 you stupid home automation system!
+# turn on the bloody light and set the bleeding brightness to 45 you pathetic excuse for a home automation system!
 light.on = true
 light.on = 45
 

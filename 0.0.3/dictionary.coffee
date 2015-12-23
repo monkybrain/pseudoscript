@@ -32,5 +32,13 @@ dictionary =
       type: 'decrease'
     'turn .*? down by':
       type: 'decrease'
+  # QUESTIONS
+    'is .*? ?':
+      type: 'question'
+    'what .*? \?':
+      type: 'question'
+  # CONDITIONALS
+    'if .*? (then)|(,)':
+      type: 'conditional'
 
 module.exports = dictionary

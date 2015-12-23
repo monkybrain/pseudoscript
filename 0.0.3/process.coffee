@@ -31,14 +31,14 @@ separate = (line) ->
 
   sentence =
     main: clauses[0]
-    sub: clauses.slice 1
+    sub: clauses[1...]
 
 find =
   verb: (clause) ->
-    for entry, word of dict.verbs
+    for entry, definition of dict.verbs
       match = clause.match entry
       if match?
-        return word
+        return definition
 
   object: (clause) ->
     for key, object of map
@@ -65,13 +65,17 @@ find =
       return value
 
 construct =
-  # TODO: Fix terrible object names! (info especially!)
+  # TODO: Fix terrible naming! ('info' and 'newWord' especially!)
   set: (info) ->
-    syntax = "#{info.object}.#{info.property} = #{info.value}"
+    "#{info.object}.#{info.property} = #{info.value}"
   increase: (info) ->
-    syntax = "#{info.object}.#{info.property} += #{info.value}"
+    "#{info.object}.#{info.property} += #{info.value}"
   decrease: (info) ->
-    syntax = "#{info.object}.#{info.property} -= #{info.value}"
+    "#{info.object}.#{info.property} -= #{info.value}"
+  question: (info) ->
+    "console.log #{info.object}.#{info.property}"
+  conditional: (info) ->
+    "if #{info.object}.#{info.property} is #{value}"
 
 
 process = (input) ->
@@ -85,12 +89,13 @@ process = (input) ->
   # Main clause
   info = find.verb(sentence.main)
   if not info.object?
-    info.object = find.object(sentence.main) # TODO: Figure out why toString() is needed?
+    info.object = find.object(sentence.main) # TODO: Figure out why toString() is/isn't needed?
   if not info.property?
     info.property = find.property(sentence.main, info.object)
   if not info.value?
     info.value = find.value(sentence.main, info.object)
 
+  # Get syntax and construct CoffeeScript line
   lines = []
   if info.type is 'set'
     lines.push construct.set info
@@ -98,7 +103,12 @@ process = (input) ->
     lines.push construct.increase info
   if info.type is 'decrease'
     lines.push construct.decrease info
+  if info.type is 'question'
+    lines.push construct.question info
+  if info.type is 'conditional'
+    lines.push construct.conditional info
 
+  # Subclauses
   for clause in sentence.sub
     newWord = find.verb(clause)
     info.type = newWord.type
@@ -138,7 +148,9 @@ process = (input) ->
   log process input###
 
 
-input = "turn on the light please and set the brightness to 4"
+# input = "turn on the light please and set the brightness to 4"
+# input = "if the light brightness is 20 then"
+input = "turn on the bloody light and set the bleeding brightness to 45 you pathetic excuse for a home automation system!"
 log process input
 
 

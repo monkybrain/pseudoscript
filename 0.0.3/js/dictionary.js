@@ -43,6 +43,15 @@
       },
       'turn .*? down by': {
         type: 'decrease'
+      },
+      'is .*? ?': {
+        type: 'question'
+      },
+      'what .*? \?': {
+        type: 'question'
+      },
+      'if .*? (then)|(,)': {
+        type: 'conditional'
       }
     }
   };

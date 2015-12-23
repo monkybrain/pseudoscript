@@ -44,13 +44,13 @@
 
   find = {
     verb: function(clause) {
-      var entry, match, ref, word;
+      var definition, entry, match, ref;
       ref = dict.verbs;
       for (entry in ref) {
-        word = ref[entry];
+        definition = ref[entry];
         match = clause.match(entry);
         if (match != null) {
-          return word;
+          return definition;
         }
       }
     },
@@ -93,16 +93,19 @@
 
   construct = {
     set: function(info) {
-      var syntax;
-      return syntax = info.object + "." + info.property + " = " + info.value;
+      return info.object + "." + info.property + " = " + info.value;
     },
     increase: function(info) {
-      var syntax;
-      return syntax = info.object + "." + info.property + " += " + info.value;
+      return info.object + "." + info.property + " += " + info.value;
     },
     decrease: function(info) {
-      var syntax;
-      return syntax = info.object + "." + info.property + " -= " + info.value;
+      return info.object + "." + info.property + " -= " + info.value;
+    },
+    question: function(info) {
+      return "console.log " + info.object + "." + info.property;
+    },
+    conditional: function(info) {
+      return "if " + info.object + "." + info.property + " is " + value;
     }
   };
 
@@ -130,6 +133,12 @@
     }
     if (info.type === 'decrease') {
       lines.push(construct.decrease(info));
+    }
+    if (info.type === 'question') {
+      lines.push(construct.question(info));
+    }
+    if (info.type === 'conditional') {
+      lines.push(construct.conditional(info));
     }
     ref = sentence.sub;
     for (j = 0, len = ref.length; j < len; j++) {
@@ -179,7 +188,7 @@
     log process input
    */
 
-  input = "turn on the light please and set the brightness to 4";
+  input = "turn on the bloody light and set the bleeding brightness to 45 you pathetic excuse for a home automation system!";
 
   log(process(input));
 
