@@ -4,12 +4,13 @@ class Universe
   @Self = 'Universe'
 
   constructor: () ->
-    @contains = []
+    @members = []
     @scope = null
 
   add: (object) ->
-    @contains.push(object)
-    @scope = @contains[@contains.length - 1]
+    @members.push(object)
+    @scope = @members[@members.length - 1]
+
 
 ### ABSTACTS: NOUN ###
 class Noun extends Universe
@@ -19,19 +20,14 @@ class Noun extends Universe
 
   ref: null
 
-  add: (object) ->
-    @contains.push(object)
-
   constructor: (property) ->
+    @members = []
     @index++
     @property = property
-    @contains = []
 
   set: (property, value) ->
 
   get: (property, value) ->
-
-  containedIn: []
 
   state: {}
 

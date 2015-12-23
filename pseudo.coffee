@@ -19,6 +19,7 @@ pseudoLines = [
   "let there be a room"
   "create another room called 'bedroom'"
   "add a light to the room"
+  "how many lights in room?"
 ]
 coffeeLines = pseudoLines.map (line) ->
   parser.parse line

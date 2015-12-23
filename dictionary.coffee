@@ -1,6 +1,13 @@
 # Simple dictionary
 module.exports =
 
+  types:
+    questions:
+      number:
+        patterns: [/how many.*?/]
+        syntax: (claas, members) ->
+          "console.log question"
+
   prepositions:
     to:
       patterns: ["to"]
@@ -12,7 +19,7 @@ module.exports =
       syntax: (scope, model, ref, indirect) ->
 
         # Construct object identifier
-        object = model.self + "_" + model.count++
+        object = model.self + "s[" + model.count++ + "]"
 
         # Process scope
         model.scope = object
@@ -22,10 +29,9 @@ module.exports =
 
         # Construct syntax
         syntax = []
-        syntax.push "#{object} = new #{model.Self}(#{ref})"
+        syntax.push "#{model.self}s.push new #{model.Self}(#{ref})"
         syntax.push "#{parent}.add #{object}"
         syntax.join "\n"
-
 
   adverbs:
     scope:

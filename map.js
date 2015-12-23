@@ -10,13 +10,13 @@
     Universe.Self = 'Universe';
 
     function Universe() {
-      this.contains = [];
+      this.members = [];
       this.scope = null;
     }
 
     Universe.prototype.add = function(object) {
-      this.contains.push(object);
-      return this.scope = this.contains[this.contains.length - 1];
+      this.members.push(object);
+      return this.scope = this.members[this.members.length - 1];
     };
 
     return Universe;
@@ -35,21 +35,15 @@
 
     Noun.prototype.ref = null;
 
-    Noun.prototype.add = function(object) {
-      return this.contains.push(object);
-    };
-
     function Noun(property) {
+      this.members = [];
       this.index++;
       this.property = property;
-      this.contains = [];
     }
 
     Noun.prototype.set = function(property, value) {};
 
     Noun.prototype.get = function(property, value) {};
-
-    Noun.prototype.containedIn = [];
 
     Noun.prototype.state = {};
 
