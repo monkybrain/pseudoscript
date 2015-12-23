@@ -127,11 +127,11 @@ process = (input) ->
 
 # RUN
 inputs = [
-  "turn on the light and set the timer to 30 minutes"
+  # "turn on the light and set the timer to 30 minutes"
   # "turn on the light and increase the light's brightness to 50 and increase it again by 20"
-  # "turn the light off and set the timer to 100"
-  # "turn off the light and set the brightness to 45 and set the timer to 20!"
-  # "turn off the light and set the timer to 40"
+  # "turn the light off please and set the timer to 20 minutes, okay?"
+  # "turn on the bloody light and set the bleeding brightness to 45 you stupid home automation system!"
+ "turn the light's brightness up to 40 would ya?"
 ]
 
 for input in inputs

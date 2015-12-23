@@ -164,7 +164,7 @@
     return code.join("\n");
   };
 
-  inputs = ["turn on the light and set the timer to 30 minutes"];
+  inputs = ["turn the light's brightness up to 40 would ya?"];
 
   for (j = 0, len = inputs.length; j < len; j++) {
     input = inputs[j];

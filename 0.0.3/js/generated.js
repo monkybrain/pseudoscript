@@ -2,14 +2,22 @@
 (function() {
   light.on = true;
 
-  light.brightness = 30;
+  light.timer = 30;
+
+  light.on = true;
+
+  light.brightness = 50;
+
+  light.brightness += 50;
 
   light.on = false;
 
   light.timer = 20;
 
-  light.timer = 20;
+  light.on = true;
 
-  light.timer = 100;
+  light.on = 45;
+
+  light.brightness = 40;
 
 }).call(this);
