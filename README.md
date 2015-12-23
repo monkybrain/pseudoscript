@@ -2,6 +2,8 @@
 
 Transpiles pseudo code in to CoffeeScript/JavaScript.
 
+It's kind of magic...
+
 ### Status ###
 Protohack!
 
