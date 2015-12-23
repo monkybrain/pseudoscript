@@ -9,17 +9,20 @@
       this.scope = 'universe';
     }
 
-    Parser.prototype.parse = function(line) {
-
-      /* Remove ignored words */
-      var body, entry, indirect, j, k, l, len, len1, len2, len3, len4, m, match, model, n, pattern, phrase, ref, ref1, ref2, ref3, ref4, ref5, ref6, vp, word;
-      ref = this.dictionary.ignore;
+    Parser.prototype.question = function(line, subtype) {
+      var j, len, model, ref;
+      ref = this.map.concretes;
       for (j = 0, len = ref.length; j < len; j++) {
-        word = ref[j];
-        line = line.replace(word + " ", "");
+        model = ref[j];
+        null;
       }
+      return "console.log rooms";
+    };
+
+    Parser.prototype.vp = function(line) {
 
       /* VERB PHRASE */
+      var body, entry, indirect, j, k, l, len, len1, len2, len3, m, match, model, pattern, phrase, ref, ref1, ref2, ref3, ref4, ref5, vp;
       vp = {
         verb: null,
         object: null,
@@ -35,20 +38,20 @@
       }
 
       /* Find indirect object */
-      ref1 = this.dictionary.prepositions;
-      for (entry in ref1) {
-        body = ref1[entry];
-        ref2 = body.patterns;
-        for (k = 0, len1 = ref2.length; k < len1; k++) {
-          pattern = ref2[k];
+      ref = this.dictionary.prepositions;
+      for (entry in ref) {
+        body = ref[entry];
+        ref1 = body.patterns;
+        for (j = 0, len = ref1.length; j < len; j++) {
+          pattern = ref1[j];
           match = line.match(pattern);
           if (match != null) {
             phrase = line.slice(match.index);
             line = line.slice(0, line.lastIndexOf(phrase));
             indirect = phrase.slice(pattern.length + 1);
-            ref3 = this.map.concretes;
-            for (l = 0, len2 = ref3.length; l < len2; l++) {
-              model = ref3[l];
+            ref2 = this.map.concretes;
+            for (k = 0, len1 = ref2.length; k < len1; k++) {
+              model = ref2[k];
               match = indirect.match(model.lexical.word);
               if (match != null) {
                 if (model.scope != null) {
@@ -64,9 +67,9 @@
       }
 
       /* Find object */
-      ref4 = this.map.concretes;
-      for (m = 0, len3 = ref4.length; m < len3; m++) {
-        model = ref4[m];
+      ref3 = this.map.concretes;
+      for (l = 0, len2 = ref3.length; l < len2; l++) {
+        model = ref3[l];
         match = line.match(model.lexical.word);
         if (match != null) {
           vp.object = model;
@@ -75,12 +78,12 @@
       }
 
       /* Find verb */
-      ref5 = this.dictionary.verbs;
-      for (entry in ref5) {
-        body = ref5[entry];
-        ref6 = body.patterns;
-        for (n = 0, len4 = ref6.length; n < len4; n++) {
-          pattern = ref6[n];
+      ref4 = this.dictionary.verbs;
+      for (entry in ref4) {
+        body = ref4[entry];
+        ref5 = body.patterns;
+        for (m = 0, len3 = ref5.length; m < len3; m++) {
+          pattern = ref5[m];
           match = line.match(body.pattern);
           if (match != null) {
             vp.verb = body.syntax;
@@ -90,6 +93,47 @@
       }
       if (vp.verb != null) {
         return vp.verb(this.scope, vp.object, vp.ref, vp.indirect);
+      }
+    };
+
+    Parser.prototype.type = function(line) {
+      var j, key, len, match, pattern, ref, ref1, sentence, value;
+      sentence = {
+        type: 'declarative',
+        subtype: null
+      };
+      ref = this.dictionary.types.questions;
+      for (key in ref) {
+        value = ref[key];
+        ref1 = value.patterns;
+        for (j = 0, len = ref1.length; j < len; j++) {
+          pattern = ref1[j];
+          match = line.match(pattern);
+          if (match != null) {
+            sentence.type = 'question';
+            sentence.subtype = key;
+          }
+        }
+      }
+      return sentence;
+    };
+
+    Parser.prototype.parse = function(line) {
+
+      /* Remove ignored words */
+      var j, len, ref, sentence, word;
+      ref = this.dictionary.ignore;
+      for (j = 0, len = ref.length; j < len; j++) {
+        word = ref[j];
+        line = line.replace(word + " ", "");
+      }
+
+      /* Find sentence type */
+      sentence = this.type(line);
+      if (sentence.type === 'question') {
+        return this.question(line, sentence.subtype);
+      } else {
+        return this.vp(line);
       }
     };
 
@@ -104,7 +148,9 @@
       document.push("Noun = map.abstracts.Noun");
       document.push("\n# Concretes #");
       document.push("Room = map.concretes[0]");
-      document.push("Light = map.concretes[1]");
+      document.push("Light = map.concretes[1]\n");
+      document.push("rooms = []");
+      document.push("lights = []");
       document.push("\n\n\n### Code ###\n");
       document.push("# So you think you're god...");
       document.push("universe = new Universe()\n");

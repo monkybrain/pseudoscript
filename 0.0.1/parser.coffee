@@ -7,11 +7,14 @@ class Parser
     # Set scope to universe
     @scope = 'universe'
 
-  parse: (line) ->
+  question: (line, subtype) ->
+    # find class
+    for model in @map.concretes
+      null
+    # syntax = @dictionary.types.questions[subtype].syntax
+    "console.log rooms"
 
-    ### Remove ignored words ###
-    for word in @dictionary.ignore
-      line = line.replace "#{word} ", ""
+  vp: (line) ->
 
     ### VERB PHRASE ###
     vp =
@@ -29,21 +32,21 @@ class Parser
 
     ### Find indirect object ###
     for entry, body of @dictionary.prepositions
-        for pattern in body.patterns
-          match = line.match pattern
-          if match?
-            # Unuglify!!!
-            phrase = line.slice(match.index)
-            line = line.slice 0, line.lastIndexOf(phrase)
-            indirect = phrase.slice pattern.length + 1
-            for model in @map.concretes
-              match = indirect.match model.lexical.word
-              if match?
-                if model.scope?
-                  vp.indirect = model.scope
-                else
-                  vp.indirect = null
-                break
+      for pattern in body.patterns
+        match = line.match pattern
+        if match?
+          # Unuglify!!!
+          phrase = line.slice(match.index)
+          line = line.slice 0, line.lastIndexOf(phrase)
+          indirect = phrase.slice pattern.length + 1
+          for model in @map.concretes
+            match = indirect.match model.lexical.word
+            if match?
+              if model.scope?
+                vp.indirect = model.scope
+              else
+                vp.indirect = null
+              break
 
     ### Find object ###
     for model in @map.concretes
@@ -61,7 +64,38 @@ class Parser
           break
 
     if vp.verb?
-      return vp.verb(@scope, vp.object, vp.ref, vp.indirect)
+      vp.verb(@scope, vp.object, vp.ref, vp.indirect)
+
+  type: (line) ->
+
+    sentence = {
+      type: 'declarative'
+      subtype: null
+    }
+
+    # Check if question
+    for key, value of @dictionary.types.questions
+      for pattern in value.patterns
+        match = line.match pattern
+        if match?
+          sentence.type = 'question'
+          sentence.subtype = key
+
+    sentence
+
+  parse: (line) ->
+
+    ### Remove ignored words ###
+    for word in @dictionary.ignore
+      line = line.replace "#{word} ", ""
+
+    ### Find sentence type ###
+    sentence = @type line
+
+    if sentence.type is 'question'
+      return @question line, sentence.subtype
+    else
+      return @vp line
 
   wrap: (lines, comments, path) ->
 
@@ -79,7 +113,9 @@ class Parser
     document.push "Noun = map.abstracts.Noun"
     document.push "\n# Concretes #"
     document.push "Room = map.concretes[0]"
-    document.push "Light = map.concretes[1]"
+    document.push "Light = map.concretes[1]\n"
+    document.push "rooms = []"
+    document.push "lights = []"
 
     document.push "\n\n\n### Code ###\n"
 
