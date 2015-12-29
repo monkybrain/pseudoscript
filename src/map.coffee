@@ -1,65 +1,77 @@
-class Abject
+class Objekt
 # 'Object' already taken...
 
   @members = []
 
+  @index = 0
+
   constructor: (ref) ->
     if ref? then @ref = ref
     @children = []
+    @constructor.members.push this
+    @constructor.index++
 
   add: (object) ->
     @children.push object.ref
-    # @children.push type: type, ref: reference
 
-  set: (p, value) ->
-    property = null
+  set: (property, value) ->
+
+    # Factorize this!
     for key of @properties
-      if p is key
-        property = p
+      if property is key
+        found = true
         break
-    if not property
+    if not found?
+      # Error
       console.error "Invalid property"
     else
       # Make sure value is of right type
       if typeof value is typeof this.properties[property]
+        # Set property
         this.properties[property] = value
       else
+        # Error
         console.error "Invalid value"
 
-class Light extends Abject
+  inc: (property, value) ->
+    this.properties[property] += value
 
-    @word: 'light'
+  dec: (property, value) ->
+    this.properties[property] -= value
 
-    # Default values
-    @properties:
-      'on': false
-      'brightness': 5
-      'timer': 10
+  alreadyUsing: (ref) ->
+    ref in @constructor.members
 
-    constructor: (ref) ->
-      super(ref)
-      @properties = Light.properties
-      Light.members.push this
+  @get: (ref) ->
+    for member in @.members
+      if ref is member.ref
+        return member
 
-class Room extends Abject
+class Light extends Objekt
+
+  @word: 'light'
+
+  # Default values
+  @properties:
+    'on': false
+    'brightness': 5
+    'timer': 10
+    'color': 'white'
+
+  constructor: (ref) ->
+    super(ref)
+    @properties = Light.properties
+
+class Room extends Objekt
 
   @word: 'room'
 
   constructor: (ref) ->
     super(ref)
-    @properties = Light.properties
-    Room.members.push this
 
 objects = {
   Light: Light
   Room: Room
 }
-
-#l = new Light 'fisk'
-#l.set 'brightness', 10
-bedrrom = new Room 'bedroom'
-kitchen = new Room 'kitchen'
-kitchen.add new Light 'ceiling'
-console.log Room
 
 module.exports = objects

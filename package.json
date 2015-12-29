@@ -6,6 +6,9 @@
   "directories": {
     "doc": "docs"
   },
+  "bin": {
+    "pseudo": "src/js/pseudo.js"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -20,6 +23,7 @@
   },
   "homepage": "https://github.com/monkybrain/pseudoscript#readme",
   "dependencies": {
-    "monky-tools": "0.0.3"
+    "monky-tools": "0.0.3",
+    "yargs": "^3.31.0"
   }
 }

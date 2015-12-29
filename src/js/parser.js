@@ -73,7 +73,6 @@
         definition = ref[entry];
         match = clause.match(definition.pattern);
         if (match != null) {
-          console.log(match);
           return entry;
         }
       }
@@ -211,7 +210,7 @@
         }
 
         /* PROPERTY */
-        property = this.find.property(clause.text, this.scope.object);
+        property = this.find.property(clause.text, this.scope.object.type);
         if (property != null) {
           this.scope.property = clause.property = property;
         } else {

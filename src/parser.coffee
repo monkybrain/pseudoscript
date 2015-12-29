@@ -42,7 +42,6 @@ class Finder
     for entry, definition of @dict.units
       match = clause.match definition.pattern
       if match?
-        console.log match
         return entry
 
   reference: (clause) ->
@@ -153,7 +152,7 @@ class Parser
         clause.object.ref = @scope.object.ref
 
       ### PROPERTY ###
-      property = @find.property clause.text, @scope.object
+      property = @find.property clause.text, @scope.object.type
       if property?
         @scope.property = clause.property = property
       else
