@@ -20,6 +20,6 @@
   },
   "homepage": "https://github.com/monkybrain/pseudoscript#readme",
   "dependencies": {
-    "monky-tools": "0.0.2"
+    "monky-tools": "0.0.3"
   }
 }

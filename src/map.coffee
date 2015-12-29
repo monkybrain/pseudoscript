@@ -1,8 +1,15 @@
 class Abject
 # 'Object' already taken...
 
-  constructor: () ->
-    @members = []
+  @members = []
+
+  constructor: (ref) ->
+    if ref? then @ref = ref
+    @children = []
+
+  add: (object) ->
+    @children.push object.ref
+    # @children.push type: type, ref: reference
 
   set: (p, value) ->
     property = null
@@ -30,15 +37,29 @@ class Light extends Abject
       'timer': 10
 
     constructor: (ref) ->
-      if ref? then @ref = ref
+      super(ref)
       @properties = Light.properties
+      Light.members.push this
+
+class Room extends Abject
+
+  @word: 'room'
+
+  constructor: (ref) ->
+    super(ref)
+    @properties = Light.properties
+    Room.members.push this
 
 objects = {
   Light: Light
+  Room: Room
 }
 
-###l = new Light()
-l.set 'brightness', 10
-console.log l###
+#l = new Light 'fisk'
+#l.set 'brightness', 10
+bedrrom = new Room 'bedroom'
+kitchen = new Room 'kitchen'
+kitchen.add new Light 'ceiling'
+console.log Room
 
 module.exports = objects

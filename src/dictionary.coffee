@@ -23,6 +23,8 @@ dictionary =
   # CREATE
     'create':
       type: 'create'
+    'add':
+      type: 'create'
   # INCREASE/DECREASE
     'increase .*? by':
       type: 'increase'

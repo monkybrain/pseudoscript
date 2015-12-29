@@ -32,6 +32,9 @@
       'create': {
         type: 'create'
       },
+      'add': {
+        type: 'create'
+      },
       'increase .*? by': {
         type: 'increase'
       },

@@ -1,5 +1,3 @@
-dictionary = require "./dictionary"
-map = require "./map"
 tools = require "monky-tools"
 
 log = tools.console.log
@@ -24,14 +22,14 @@ class Finder
         return object.word
 
   property: (clause, object) ->
-    for key, obj of map
+    for key, obj of @map
       if obj.word is object
         for property of obj.properties
           match = clause.match property
           if match?
             return property
 
-  value: (clause, object) ->
+  value: (clause) ->
     pattern = new RegExp("(to )|(by )")
     match = clause.match pattern
     if match?
@@ -47,6 +45,18 @@ class Finder
         console.log match
         return entry
 
+  reference: (clause) ->
+    pattern = /"|'/g
+    indices = []
+    loop
+      match = pattern.exec clause
+      if match? then indices.push match.index else break
+    if indices.length > 0
+      start = indices[0] + 1
+      end = indices[1]
+      reference = clause[start...end]
+    reference
+
 class Parser
 
   constructor: (dictionary, map) ->
@@ -55,8 +65,12 @@ class Parser
     @find = new Finder(@dict, @map)
     @scope =
       verb: null
-      object: null
-      indirect: null
+      object:
+        class: null
+        ref: null
+      indirect:
+        class: null
+        ref: null
       property: null
 
   separate: (line) ->
@@ -123,12 +137,20 @@ class Parser
       else
         clause.verb = @scope.verb
 
-      ### OBJECT ###
-      object = @find.object clause.text
-      if object?
+      ### OBJECT - TYPE ###
+      type = @find.object clause.text
+      if type?
+        object = type: type
         @scope.object = clause.object = object
       else
         clause.object = @scope.object
+
+      ### OBJECT - REFERENCE ###
+      reference = @find.reference clause.text
+      if reference?
+        @scope.object.ref = clause.object.ref = reference
+      else
+        clause.object.ref = @scope.object.ref
 
       ### PROPERTY ###
       property = @find.property clause.text, @scope.object
@@ -138,7 +160,7 @@ class Parser
         clause.property = @scope.property
 
       ### VALUE ###
-      value = @find.value clause.text, clause.object
+      value = @find.value clause.text
       if value?
         value = parseFloat(value)
         @scope.value = clause.value = value
@@ -155,7 +177,4 @@ class Parser
 
     clauses
 
-p = new Parser(dictionary, map)
-# console.log p.parse "turn on the light, set the brightness up to 45 and the timer to 20"
-console.log p.parse "set the brightness of the light to 20, turn it on and set the timer to 2 hours"
-console.log p.parse "set the timer to 20 minutes"
+module.exports = Parser
