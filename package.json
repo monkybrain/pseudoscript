@@ -24,6 +24,8 @@
   "homepage": "https://github.com/monkybrain/pseudoscript#readme",
   "dependencies": {
     "monky-tools": "0.0.3",
+    "promise": "^7.1.1",
+    "spark": "^1.0.0",
     "yargs": "^3.31.0"
   }
 }

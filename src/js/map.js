@@ -32,13 +32,16 @@
         }
       }
       if (found == null) {
-        return console.error("Invalid property");
+        console.error("Invalid property");
       } else {
         if (typeof value === typeof this.properties[property]) {
-          return this.properties[property] = value;
+          this.properties[property] = value;
         } else {
-          return console.error("Invalid value");
+          console.error("Invalid value");
         }
+      }
+      if (this.photon) {
+        return console.log(this.photon);
       }
     };
 
@@ -81,7 +84,7 @@
       'color': 'white'
     };
 
-    function Light(ref) {
+    function Light(ref, photon) {
       Light.__super__.constructor.call(this, ref);
       this.properties = Light.properties;
     }

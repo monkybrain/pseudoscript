@@ -32,6 +32,8 @@ class Objekt
       else
         # Error
         console.error "Invalid value"
+    if @photon
+      console.log @photon
 
   inc: (property, value) ->
     this.properties[property] += value
@@ -58,7 +60,7 @@ class Light extends Objekt
     'timer': 10
     'color': 'white'
 
-  constructor: (ref) ->
+  constructor: (ref, photon) ->
     super(ref)
     @properties = Light.properties
 
