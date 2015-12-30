@@ -181,7 +181,7 @@
           clause.type = 'verb phrase';
           this.scope.verb = clause.verb = verb.type;
           if (verb.property != null) {
-            this.scope.propery = clause.property = verb.property;
+            this.scope.property = clause.property = verb.property;
           }
           if (verb.value != null) {
             this.scope.value = clause.value = verb.value;
@@ -220,7 +220,7 @@
         /* VALUE */
         value = this.find.value(clause.text);
         if (value != null) {
-          value = parseFloat(value);
+          value = isNaN(parseFloat(value)) ? value : parseFloat(value);
           this.scope.value = clause.value = value;
         } else {
           clause.value = this.scope.value;

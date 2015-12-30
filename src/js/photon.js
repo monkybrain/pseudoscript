@@ -40,7 +40,7 @@
 
     Photon.prototype.set = function(property, value) {
       return new Promise(function(resolve, reject) {
-        console.log("Setting " + property + " to " + value);
+        value = value.toString();
         if (property === 'color') {
           Photon.photon.callFunction('setColor', value, function(err, data) {
             if (err != null) {
@@ -51,7 +51,16 @@
           });
         }
         if (property === 'brightness') {
-          return Photon.photon.callFunction('setB', value, function(err, data) {
+          Photon.photon.callFunction('setB', value, function(err, data) {
+            if (err != null) {
+              return reject(err);
+            } else {
+              return resolve(data);
+            }
+          });
+        }
+        if (property === 'on') {
+          return Photon.photon.callFunction('flip', value, function(err, data) {
             if (err != null) {
               return reject(err);
             } else {

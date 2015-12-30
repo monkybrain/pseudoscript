@@ -38,7 +38,7 @@ class Photon
   set: (property, value) ->
     new Promise (resolve, reject) ->
 
-      console.log "Setting " + property + " to " + value
+      value = value.toString()
 
       if property is 'color'
         Photon.photon.callFunction 'setColor', value, (err, data) ->
@@ -49,6 +49,13 @@ class Photon
 
       if property is 'brightness'
         Photon.photon.callFunction 'setB', value, (err, data) ->
+          if err?
+            reject err
+          else
+            resolve data
+
+      if property is 'on'
+        Photon.photon.callFunction 'flip', value, (err, data) ->
           if err?
             reject err
           else

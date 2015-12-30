@@ -125,9 +125,9 @@ class Parser
 
         @scope.verb = clause.verb = verb.type
 
-        # Find property (if attached to verb)
+        # Find property (if attached to verb)s
         if verb.property?
-          @scope.propery = clause.property = verb.property
+          @scope.property = clause.property = verb.property
 
         # Find value (if attached to verb)
         if verb.value?
@@ -161,7 +161,7 @@ class Parser
       ### VALUE ###
       value = @find.value clause.text
       if value?
-        value = parseFloat(value)
+        value = if isNaN parseFloat value then value else parseFloat value
         @scope.value = clause.value = value
       else
         clause.value = @scope.value

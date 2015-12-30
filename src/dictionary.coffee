@@ -21,7 +21,7 @@ dictionary =
     'turn .*? down to':
       type: 'set'
   # CREATE
-    'create':
+    '(create)|(add)':
       type: 'create'
     'add':
       type: 'create'

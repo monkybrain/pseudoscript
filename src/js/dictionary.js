@@ -29,7 +29,7 @@
       'turn .*? down to': {
         type: 'set'
       },
-      'create': {
+      '(create)|(add)': {
         type: 'create'
       },
       'add': {

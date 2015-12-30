@@ -1,3 +1,5 @@
+Promise = require "promise"
+
 class Objekt
 # 'Object' already taken...
 
@@ -5,8 +7,9 @@ class Objekt
 
   @index = 0
 
-  constructor: (ref) ->
+  constructor: (ref, photon) ->
     if ref? then @ref = ref
+    if photon? then @photon = photon
     @children = []
     @constructor.members.push this
     @constructor.index++
@@ -15,6 +18,8 @@ class Objekt
     @children.push object.ref
 
   set: (property, value) ->
+
+    console.log "Setting #{property} of '#{this.ref}' to #{value}"
 
     # Factorize this!
     for key of @properties
@@ -33,13 +38,20 @@ class Objekt
         # Error
         console.error "Invalid value"
     if @photon
-      console.log @photon
+      @photon.set(property, value).then(
+        (result) ->
+          console.log "Done!"
+        (err) ->
+          console.error err
+      )
 
   inc: (property, value) ->
     this.properties[property] += value
+    @set property, this.properties[property]
 
   dec: (property, value) ->
     this.properties[property] -= value
+    @set property, this.properties[property]
 
   alreadyUsing: (ref) ->
     ref in @constructor.members
@@ -55,21 +67,21 @@ class Light extends Objekt
 
   # Default values
   @properties:
-    'on': false
+    'on': true
     'brightness': 5
     'timer': 10
     'color': 'white'
 
   constructor: (ref, photon) ->
-    super(ref)
+    super(ref, photon)
     @properties = Light.properties
 
 class Room extends Objekt
 
   @word: 'room'
 
-  constructor: (ref) ->
-    super(ref)
+  constructor: (ref, photon) ->
+    super(ref, photon)
 
 objects = {
   Light: Light
