@@ -27,6 +27,9 @@
           devices = Spark.listDevices();
           return devices.then(function(devices) {
             Photon.photon = devices[0];
+            Photon.photon.onEvent('dark', function(data) {
+              return console.log("Incoming event! Dark: " + JSON.stringify(data));
+            });
             return resolve("connected");
           }, function(err) {
             return reject(err);

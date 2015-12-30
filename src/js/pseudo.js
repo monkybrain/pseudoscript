@@ -22,17 +22,21 @@
 
   photon = new Photon();
 
-  photon.connect().then(function() {
+  photon.connect().then((function(result) {
     console.log("connected");
-    return photon.set('color', 'white').then(function(result) {
-      console.log(result);
-      return photon.set('brightness', '100').then(function(result) {
-        return console.log(result);
-      });
-    });
+    return photon.set('color', 'white');
+
+    /*photon.onEvent 'dark', (data) ->
+      console.log "DARK"
+      console.log data
+     */
   }, function(err) {
     return console.error(err);
-  });
+  }));
+
+  setInterval(function() {
+    return null;
+  }, 5000);
 
   return;
 

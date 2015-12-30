@@ -10,16 +10,27 @@ if argv._[0]?
   command = argv._[0]
 
 photon = new Photon()
-photon.connect().then(
-  () ->
+
+photon.connect().then (
+
+  (result) ->
     console.log "connected"
-    photon.set('color', 'white').then (result) ->
-      console.log result
-      photon.set('brightness', '100').then (result) ->
-        console.log result
+
+    # Set color to white
+    photon.set 'color', 'white'
+
+    # Set event listener
+    ###photon.onEvent 'dark', (data) ->
+      console.log "DARK"
+      console.log data###
+
   (err) ->
     console.error err
-  )
+)
+
+setInterval () ->
+  null
+, 5000
 
 return
 parser = new Parser(dictionary, map)

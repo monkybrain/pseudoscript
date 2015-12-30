@@ -22,8 +22,15 @@ class Photon
         devices = Spark.listDevices()
         devices.then(
           (devices) ->
+
             Photon.photon = devices[0]
+
+            # TODO: MOVE EVENT LISTENER TO APPROPRIATE PLACE, JUST TESTING NOW!
+            Photon.photon.onEvent 'dark', (data) ->
+              console.log "Incoming event! Dark: " + JSON.stringify(data)
+
             resolve "connected"
+
           (err) ->
             reject err
         )
