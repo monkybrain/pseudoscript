@@ -19,7 +19,7 @@ class Objekt
 
   set: (property, value) ->
 
-    console.log "Setting #{property} of '#{this.ref}' to #{value}"
+    console.log "Setting property '#{property}' of '#{this.ref}' to #{value}"
 
     # Factorize this!
     for key of @properties

@@ -21,9 +21,7 @@ dictionary =
     'turn .*? down to':
       type: 'set'
   # CREATE
-    '(create)|(add)':
-      type: 'create'
-    'add':
+    '(create)|(add)|(connect)':
       type: 'create'
   # INCREASE/DECREASE
     'increase .*? by':

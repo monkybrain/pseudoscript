@@ -29,10 +29,7 @@
       'turn .*? down to': {
         type: 'set'
       },
-      '(create)|(add)': {
-        type: 'create'
-      },
-      'add': {
+      '(create)|(add)|(connect)': {
         type: 'create'
       },
       'increase .*? by': {

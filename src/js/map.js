@@ -30,7 +30,7 @@
 
     Objekt.prototype.set = function(property, value) {
       var found, key;
-      console.log("Setting " + property + " of '" + this.ref + "' to " + value);
+      console.log("Setting property '" + property + "' of '" + this.ref + "' to " + value);
       for (key in this.properties) {
         if (property === key) {
           found = true;
