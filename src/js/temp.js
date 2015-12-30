@@ -15,8 +15,8 @@
   console.log('# Running script #');
 
   photon.connect().then(function() {
-    new Light('test', photon);
-    return Light.get('test').set('on', false);
+    new Light('undefined', photon);
+    return Light.get('undefined').set('on', false);
   }).then(function() {
     return console.log('# End of script #');
   });
