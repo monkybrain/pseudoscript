@@ -37,7 +37,7 @@
     };
 
     Programmer.prototype.process = function(script) {
-      var adverb, closeAdverbWithValue, i, indent, len, milliseconds, object, operation, property, ref, syntax, type, unit, value, verb;
+      var adverb, closeAdverbWithValue, closeEvent, event, i, indent, len, milliseconds, object, operation, property, ref, syntax, type, unit, value, verb;
       syntax = [];
       indent = 2;
       for (i = 0, len = script.length; i < len; i++) {
@@ -52,6 +52,20 @@
             indent += 2;
             closeAdverbWithValue = milliseconds;
           }
+          if (adverb === 'interval') {
+            value = operation.value;
+            unit = operation.unit;
+            milliseconds = this.convertTime(operation.value, operation.unit);
+            syntax.push("\n\n" + this.indent("setInterval () ->", indent));
+            indent += 2;
+            closeAdverbWithValue = milliseconds;
+          }
+        }
+        if (operation.type === 'event phrase') {
+          event = operation.event;
+          syntax.push("\n" + this.indent("photon.on '" + event + "', () ->", indent));
+          indent += 2;
+          closeEvent = true;
         }
         if (operation.type === 'verb phrase') {
           verb = operation.verb;
@@ -90,6 +104,9 @@
         indent -= 2;
         syntax.push("\n" + this.indent(", " + closeAdverbWithValue, indent) + "\n");
       }
+      if (closeEvent != null) {
+        indent -= 2;
+      }
       return syntax.join("\n");
     };
 
@@ -104,8 +121,6 @@
       output.push("console.log '# Running script #'");
       output.push("photon.connect()\n.then () ->");
       output.push("  console.log 'Connected!'\n");
-      output.push("  # Set event listener");
-      output.push("  photon.on 'button', () ->\n    console.log 'button pushed'");
       output.push(code);
       return output.join("\n");
     };

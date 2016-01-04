@@ -56,10 +56,13 @@
     adverbs: {
       '^(in)|(after) \\d+': {
         type: 'delay'
+      },
+      '^(every) \\d+': {
+        type: 'interval'
       }
     },
     events: {
-      'when .*? button': {
+      'when.*?button': {
         event: 'button'
       }
     },

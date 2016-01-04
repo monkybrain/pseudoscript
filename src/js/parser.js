@@ -16,8 +16,19 @@
 
     Finder.prototype.adverb = function(clause) {
       var definition, entry, match, ref;
-      console.log(clause);
       ref = this.dict.adverbs;
+      for (entry in ref) {
+        definition = ref[entry];
+        match = clause.match(new RegExp(entry));
+        if (match != null) {
+          return definition;
+        }
+      }
+    };
+
+    Finder.prototype.event = function(clause) {
+      var definition, entry, match, ref;
+      ref = this.dict.events;
       for (entry in ref) {
         definition = ref[entry];
         match = clause.match(new RegExp(entry));
@@ -165,7 +176,7 @@
     };
 
     Parser.prototype.parse = function(line) {
-      var adverb, clause, clauses, i, len, match, object, property, reference, type, unit, value, verb;
+      var adverb, clause, clauses, event, i, len, match, object, property, reference, type, unit, value, verb;
       clauses = this.separate(line);
       clauses = clauses.map(function(clause) {
         return {
@@ -185,6 +196,14 @@
             clause.value = this.find.value(clause.text);
             clause.unit = this.find.unit(clause.text);
           }
+          continue;
+        }
+
+        /* EVENT */
+        event = this.find.event(clause.text);
+        if (event != null) {
+          clause.type = 'event phrase';
+          clause.event = event.event;
           continue;
         }
 

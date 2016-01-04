@@ -1,5 +1,5 @@
-Add a light called 'test' and blink 3 times.
+Add a light called 'test' and set the brightness to 100
 
-After 2 seconds, set the color to red
+Every 1 seconds, set the color to random
 
-After 3 seconds, set the color to blue and after another 3 seconds, set the color to yellow
+When button is pressed, set the color to random

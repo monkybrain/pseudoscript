@@ -55,6 +55,29 @@ class Programmer
 
           closeAdverbWithValue = milliseconds
 
+        if adverb is 'interval'
+
+          value = operation.value
+          unit = operation.unit
+
+          milliseconds = @convertTime operation.value, operation.unit
+
+          syntax.push "\n\n" + @indent "setInterval () ->", indent
+
+          indent += 2
+
+          closeAdverbWithValue = milliseconds
+
+      if operation.type is 'event phrase'
+
+        event = operation.event
+
+        syntax.push "\n" + @indent "photon.on '#{event}', () ->", indent
+
+        indent += 2
+
+        closeEvent = true
+
       if operation.type is 'verb phrase'
 
         verb = operation.verb
@@ -118,6 +141,9 @@ class Programmer
       indent -= 2
       syntax.push "\n" + @indent(", " + closeAdverbWithValue, indent) + "\n"
 
+    if closeEvent?
+      indent -= 2
+
     syntax.join "\n"
 
   wrap: (code) ->
@@ -131,8 +157,6 @@ class Programmer
 
     output.push "photon.connect()\n.then () ->"
     output.push "  console.log 'Connected!'\n"
-    output.push "  # Set event listener"
-    output.push "  photon.on 'button', () ->\n    console.log 'button pushed'"
     output.push code
     # output.push @indent "console.log '# End of script #'", 2
     output.join "\n"

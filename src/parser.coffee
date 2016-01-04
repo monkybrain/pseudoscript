@@ -10,8 +10,13 @@ class Finder
     @map = map
 
   adverb: (clause) ->
-    console.log clause
     for entry, definition of @dict.adverbs
+      match = clause.match new RegExp entry
+      if match?
+        return definition
+
+  event: (clause) ->
+    for entry, definition of @dict.events
       match = clause.match new RegExp entry
       if match?
         return definition
@@ -124,6 +129,13 @@ class Parser
         if match?
           clause.value = @find.value clause.text
           clause.unit = @find.unit clause.text
+        continue
+
+      ### EVENT ###
+      event = @find.event clause.text
+      if event?
+        clause.type = 'event phrase'
+        clause.event = event.event
         continue
 
       ### VERB ###

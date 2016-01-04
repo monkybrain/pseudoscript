@@ -16,18 +16,14 @@
 
   photon.connect().then(function() {
     console.log('Connected!');
-    photon.on('button', function() {
-      return console.log('button pushed');
-    });
     new Light('test', photon);
-    Light.get('test')["do"]('blink', 3);
-    setTimeout(function() {
-      return Light.get('test').set('color', 'red');
-    }, 2000);
-    return setTimeout(function() {
-      Light.get('test').set('color', 'blue');
-      return Light.get('test').set('color', 'yellow');
-    }, 3000);
+    Light.get('test').set('brightness', 100);
+    setInterval(function() {
+      return Light.get('test').set('color', 'random');
+    }, 1000);
+    return photon.on('button', function() {
+      return Light.get('test').set('color', 'random');
+    });
   });
 
 }).call(this);
