@@ -100,34 +100,6 @@ class Parser
       return not clause.match conjunctions
     return clauses
 
-
-  ###separate: (line) ->
-
-    # Remove conjunctions and punctuation
-    ignore = new RegExp "(and)|,|!", "g"
-    line = line.replace ignore, " "
-
-    # Define separators (verbs in dictionary) and generate regular expression
-    separators = Object.keys(@dict.verbs).map (separator) ->
-      "(" + separator + ")"
-    pattern = new RegExp separators.join("|"), "g"
-
-    # Get indices of parts
-    indices = []
-    loop
-      result = pattern.exec line
-      if result is null then break else indices.push result.index
-
-    # Split string according to indices
-    clauses = []
-    for num, i in indices
-      if indices[i+1]?
-        clauses.push line[indices[i]...indices[i+1]].trim()
-      else
-        clauses.push line[indices[i]...].trim()
-
-    clauses###
-
   parse: (line) ->
 
     clauses = @separate line
