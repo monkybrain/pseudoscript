@@ -17,14 +17,22 @@ photon.connect()
   # Set the property 'brightness' of 'test' to 100
   Light.get('test').set('brightness', 100)
 
+  setTimeout () ->
+
+    # Set the property 'color' of 'test' to 'yellow'
+    Light.get('test').set('color', 'yellow')
+
+  , 1000
+
+
   setInterval () ->
 
     # Set the property 'color' of 'test' to 'random'
     Light.get('test').set('color', 'random')
 
-  , 1000
+  , 3000
 
   photon.on 'button', () ->
 
-    # Set the property 'color' of 'test' to 'random'
-    Light.get('test').set('color', 'random')
+    # Set the property 'brightness' of 'test' to 10
+    Light.get('test').set('brightness', 10)

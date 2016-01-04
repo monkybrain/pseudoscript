@@ -18,11 +18,14 @@
     console.log('Connected!');
     new Light('test', photon);
     Light.get('test').set('brightness', 100);
+    setTimeout(function() {
+      return Light.get('test').set('color', 'yellow');
+    }, 1000);
     setInterval(function() {
       return Light.get('test').set('color', 'random');
-    }, 1000);
+    }, 3000);
     return photon.on('button', function() {
-      return Light.get('test').set('color', 'random');
+      return Light.get('test').set('brightness', 10);
     });
   });
 
