@@ -28,15 +28,13 @@
       return this.children.push(object.ref);
     };
 
-    Objekt.prototype["do"] = function(action, value) {
-      console.log("Performing action '" + action + "' " + value + " times");
-      if (action === 'blink') {
-        return this.photon["do"]('blink', value).then(function(result) {
-          return console.log('Done!');
-        }, function(err) {
-          return console.error(err);
-        });
-      }
+    Objekt.prototype["do"] = function(action, times) {
+      console.log(("Performing action '" + action + "' " + times + " time") + (times !== 1 ? "s" : ""));
+      return this.photon["do"](action, times).then(function(result) {
+        return console.log('Done!');
+      }, function(err) {
+        return console.error(err);
+      });
     };
 
     Objekt.prototype.set = function(property, value) {

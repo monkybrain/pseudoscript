@@ -55,13 +55,29 @@
     };
 
     Finder.prototype.value = function(clause) {
-      var match, pattern, value;
+      var match, pattern, value, verb;
+      verb = this.verb(clause);
+      if (verb != null) {
+        if (verb.value != null) {
+          return verb.value;
+        }
+      }
       pattern = new RegExp("(to )|(by )");
       match = clause.match(pattern);
       if (match != null) {
         value = clause.slice(match.index);
         value = value.replace(match[0], "");
         value = value.split(" ")[0];
+        return value;
+      }
+      pattern = /\d+ time(s)|( )/g;
+      match = pattern.exec(clause);
+      if (match != null) {
+        value = clause.slice(match.index);
+        value = value.replace("times", "");
+        if (!isNaN(parseInt(value))) {
+          value = parseInt(value);
+        }
         return value;
       }
     };
