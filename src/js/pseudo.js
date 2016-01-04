@@ -18,6 +18,8 @@
 
   Photon = require("./photon");
 
+  command = "add a light called 'test', set the color to red and blink";
+
   if (argv._[0] != null) {
     command = argv._[0];
   }

@@ -28,6 +28,17 @@
       return this.children.push(object.ref);
     };
 
+    Objekt.prototype["do"] = function(action, value) {
+      console.log("Performing action '" + action + "' " + value + " times");
+      if (action === 'blink') {
+        return this.photon["do"]('blink', value).then(function(result) {
+          return console.log('Done!');
+        }, function(err) {
+          return console.error(err);
+        });
+      }
+    };
+
     Objekt.prototype.set = function(property, value) {
       var found, key;
       console.log("Setting property '" + property + "' of '" + this.ref + "' to " + value);

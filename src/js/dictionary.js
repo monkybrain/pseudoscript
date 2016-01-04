@@ -29,6 +29,11 @@
       'turn .*? down to': {
         type: 'set'
       },
+      'blink': {
+        type: 'do',
+        action: 'blink',
+        value: 3
+      },
       '(create)|(add)|(connect)': {
         type: 'create'
       },

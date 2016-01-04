@@ -36,8 +36,18 @@
           syntax.push("\n.then () ->");
         }
         if (verb === 'increase') {
-          syntax.push("\n# Increasing the property '" + property + "' of '" + ref + "' by " + value);
+          syntax.push("\n  # Increasing the property '" + property + "' of '" + ref + "' by " + value);
           syntax.push("  " + type + ".get('" + ref + "').inc('" + property + "', " + value + ").then () ->");
+          syntax.push("\n.then () ->");
+        }
+        if (verb === 'decrease') {
+          syntax.push("\n  # Decreasing the property '" + property + "' of '" + ref + "' by " + value);
+          syntax.push("  " + type + ".get('" + ref + "').dec('" + property + "', " + value + ").then () ->");
+          syntax.push("\n.then () ->");
+        }
+        if (verb === 'do') {
+          syntax.push("\n  # Blink " + value + " times");
+          syntax.push("  " + type + ".get('" + ref + "').do('blink', " + value + ")");
           syntax.push("\n.then () ->");
         }
       }

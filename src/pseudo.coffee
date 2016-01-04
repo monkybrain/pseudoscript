@@ -10,7 +10,7 @@ Programmer = require "./programmer"
 Photon = require "./photon"
 
 # command = "add a light called 'ceiling light', set the brightness to 10 and the color to green"
-# command = "add a light called 'ceiling light' and set the color to blue"
+command = "add a light called 'test', set the color to red and blink"
 if argv._[0]?
   command = argv._[0]
 
@@ -20,9 +20,13 @@ programmer = new Programmer(map)
 # Parse command
 script = parser.parse command
 
+# console.log script
+
 # Assemble program
 code = programmer.process script
 program = programmer.wrap code
+
+# console.log program
 
 ###
 console.log "Generated code: "
