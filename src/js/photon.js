@@ -71,6 +71,21 @@
       });
     };
 
+    Photon.prototype["do"] = function(action, value) {
+      return new Promise(function(resolve, reject) {
+        value = value.toString();
+        if (action === 'blink') {
+          return Photon.photon.callFunction('blink', value, function(err, data) {
+            if (err != null) {
+              return reject(err);
+            } else {
+              return resolve(data);
+            }
+          });
+        }
+      });
+    };
+
     return Photon;
 
   })();

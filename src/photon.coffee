@@ -61,6 +61,18 @@ class Photon
           else
             resolve data
 
+  do: (action, value) ->
+    new Promise (resolve, reject) ->
+
+      value = value.toString()
+
+      if action is 'blink'
+        Photon.photon.callFunction 'blink', value, (err, data) ->
+          if err?
+            reject err
+          else
+            resolve data
+
 
 module.exports = Photon
 

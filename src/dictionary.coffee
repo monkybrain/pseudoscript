@@ -20,10 +20,18 @@ dictionary =
       type: 'set'
     'turn .*? down to':
       type: 'set'
-  # CREATE
+
+    # DO
+    'blink':
+      type: 'do'
+      action: 'blink'
+      value: 3
+
+    # CREATE
     '(create)|(add)|(connect)':
       type: 'create'
-  # INCREASE/DECREASE
+
+    # INCREASE/DECREASE
     'increase .*? by':
       type: 'increase'
     'turn .*? up by':
