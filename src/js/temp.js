@@ -16,7 +16,11 @@
 
   photon.connect().then(function() {
     new Light('undefined', photon);
-    return Light.get('undefined').set('on', false);
+    return Light.get('undefined').set('color', 'red');
+  }).then(function() {
+    return Light.get('undefined').set('brightness', 10);
+  }).then(function() {
+    return Light.get('undefined').set('brightness', 10);
   }).then(function() {
     return console.log('# End of script #');
   });

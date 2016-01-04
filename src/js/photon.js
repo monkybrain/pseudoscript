@@ -41,33 +41,29 @@
     Photon.prototype.set = function(property, value) {
       return new Promise(function(resolve, reject) {
         value = value.toString();
-        if (property === 'color') {
-          Photon.photon.callFunction('setColor', value, function(err, data) {
-            if (err != null) {
-              return reject(err);
-            } else {
-              return resolve(data);
-            }
-          });
+        return Photon.photon.callFunction('set', property + ":" + value, function(err, data) {
+          if (err != null) {
+            return reject(err);
+          } else {
+            return resolve(data);
+          }
+        });
+      });
+    };
+
+    Photon.prototype["do"] = function(action, times) {
+      return new Promise(function(resolve, reject) {
+        if (times == null) {
+          times = 1;
         }
-        if (property === 'brightness') {
-          Photon.photon.callFunction('setB', value, function(err, data) {
-            if (err != null) {
-              return reject(err);
-            } else {
-              return resolve(data);
-            }
-          });
-        }
-        if (property === 'on') {
-          return Photon.photon.callFunction('flip', value, function(err, data) {
-            if (err != null) {
-              return reject(err);
-            } else {
-              return resolve(data);
-            }
-          });
-        }
+        times = times.toString();
+        return Photon.photon.callFunction('do', action + ":" + times, function(err, data) {
+          if (err != null) {
+            return reject(err);
+          } else {
+            return resolve(data);
+          }
+        });
       });
     };
 

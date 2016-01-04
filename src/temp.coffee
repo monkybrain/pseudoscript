@@ -13,8 +13,18 @@ photon.connect()
   new Light('undefined', photon)
 
 
-  # Set the property 'on' of 'undefined' to false
-  Light.get('undefined').set('on', false)
+  # Set the property 'color' of 'undefined' to 'red'
+  Light.get('undefined').set('color', 'red')
+
+.then () ->
+
+  # Set the property 'brightness' of 'undefined' to 10
+  Light.get('undefined').set('brightness', 10)
+
+.then () ->
+
+  # Set the property 'brightness' of 'undefined' to 10
+  Light.get('undefined').set('brightness', 10)
 
 .then () ->
   console.log '# End of script #'

@@ -40,27 +40,24 @@ class Photon
 
       value = value.toString()
 
-      if property is 'color'
-        Photon.photon.callFunction 'setColor', value, (err, data) ->
-          if err?
-            reject err
-          else
-            resolve data
+      Photon.photon.callFunction 'set', property + ":" + value, (err, data) ->
+        if err?
+          reject err
+        else
+          resolve data
 
-      if property is 'brightness'
-        Photon.photon.callFunction 'setB', value, (err, data) ->
-          if err?
-            reject err
-          else
-            resolve data
+  do: (action, times) ->
+    new Promise (resolve, reject) ->
 
-      if property is 'on'
-        Photon.photon.callFunction 'flip', value, (err, data) ->
-          if err?
-            reject err
-          else
-            resolve data
+      if not times?
+        times = 1
+      times = times.toString()
 
+      Photon.photon.callFunction 'do', action + ":" + times, (err, data) ->
+        if err?
+          reject err
+        else
+          resolve data
 
 module.exports = Photon
 
