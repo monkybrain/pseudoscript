@@ -28,27 +28,32 @@
         value = isNaN(operation.value) ? "'" + operation.value + "'" : operation.value;
         if (verb === 'create') {
           syntax.push("\n  # Create " + type + " called '" + ref + "'");
-          syntax.push("  new " + type + "('" + ref + "', photon)\n");
+          syntax.push("  new " + type + "('" + ref + "', photon)");
         }
         if (verb === 'set') {
           syntax.push("\n  # Set the property '" + property + "' of '" + ref + "' to " + value);
           syntax.push("  " + type + ".get('" + ref + "').set('" + property + "', " + value + ")");
-          syntax.push("\n.then () ->");
+          syntax.push("\n.then () ->\n");
         }
         if (verb === 'increase') {
           syntax.push("\n  # Increasing the property '" + property + "' of '" + ref + "' by " + value);
           syntax.push("  " + type + ".get('" + ref + "').inc('" + property + "', " + value + ").then () ->");
-          syntax.push("\n.then () ->");
+          syntax.push("\n.then () ->\n");
         }
         if (verb === 'decrease') {
           syntax.push("\n  # Decreasing the property '" + property + "' of '" + ref + "' by " + value);
           syntax.push("  " + type + ".get('" + ref + "').dec('" + property + "', " + value + ").then () ->");
-          syntax.push("\n.then () ->");
+          syntax.push("\n.then () ->\n");
         }
         if (verb === 'do') {
           syntax.push("\n  # Blink " + value + " times");
           syntax.push("  " + type + ".get('" + ref + "').do('blink', " + value + ")");
-          syntax.push("\n.then () ->");
+          syntax.push("\n.then () ->\n");
+        }
+        if (verb === 'log') {
+          syntax.push("\n  # Logging");
+          syntax.push("  console.log " + type + ".get('" + ref + "')");
+          syntax.push("\n.then () ->\n");
         }
       }
       return syntax.join("\n");

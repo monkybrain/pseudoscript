@@ -37,6 +37,9 @@
       '(create)|(add)|(connect)': {
         type: 'create'
       },
+      '(show)|(show me)|(display)': {
+        type: 'log'
+      },
       'increase .*? by': {
         type: 'increase'
       },

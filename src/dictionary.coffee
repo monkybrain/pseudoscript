@@ -31,6 +31,10 @@ dictionary =
     '(create)|(add)|(connect)':
       type: 'create'
 
+    # LOG
+    '(show)|(show me)|(display)':
+      type: 'log'
+
     # INCREASE/DECREASE
     'increase .*? by':
       type: 'increase'

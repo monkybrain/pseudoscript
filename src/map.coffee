@@ -18,16 +18,15 @@ class Objekt
     @children.push object.ref
 
   # TODO: HACK! FIND PROPER PLACE FOR THIS AND IMPLEMENT ERROR HANDLING AS BELOW WITH 'SET'
-  do: (action, value) ->
+  do: (action, times) ->
 
-    console.log "Performing action '#{action}' #{value} times"
+    console.log "Performing action '#{action}' #{times} time" + if times isnt 1 then "s" else ""
 
-    if action is 'blink'
-     @photon.do('blink', value).then(
-       (result) ->
-         console.log 'Done!'
-       (err) ->
-         console.error err
+    @photon.do(action, times).then(
+      (result) ->
+       console.log 'Done!'
+      (err) ->
+       console.error err
      )
 
   set: (property, value) ->

@@ -30,6 +30,14 @@ class Finder
             return property
 
   value: (clause) ->
+
+    # If value defined in dictionary -> return dictionary value
+    verb = @verb clause
+    if verb?
+      if verb.value?
+        return verb.value
+
+    # Else -> match patterns
     pattern = new RegExp("(to )|(by )")
     match = clause.match pattern
     if match?
@@ -37,6 +45,16 @@ class Finder
       value = value.replace match[0], ""
       value = value.split(" ")[0]
       return value
+    # TODO: FIX THIS HACK!
+    pattern = /\d+ time(s)|( )/g
+    match = pattern.exec clause
+    if match?
+      value = clause.slice match.index
+      value = value.replace "times", ""
+      if not isNaN parseInt value
+        value = parseInt value
+      return value
+
 
   unit: (clause) ->
     for entry, definition of @dict.units
