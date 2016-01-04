@@ -1,5 +1,5 @@
-Add a light called 'test' and turn it on.
+Add a light called 'test' and blink 3 times.
 
-Set the color to red and blink 3 times.
+After 2 seconds, set the color to red
 
-# Commented out!
+After 3 seconds, set the color to blue and after another 3 seconds, set the color to yellow

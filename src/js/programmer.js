@@ -11,50 +11,84 @@
       return string = string[0].toUpperCase() + string.slice(1);
     };
 
-    Programmer.prototype.indent = function(string) {
-      return "  " + string;
+    Programmer.prototype.indent = function(string, level) {
+      var indent;
+      level = level != null ? level : 0;
+      indent = Array(level + 1).join(" ");
+      return string = indent + string;
+    };
+
+    Programmer.prototype.convertTime = function(value, unit) {
+      if (unit === 'milliseconds') {
+        return value;
+      }
+      if (unit === 'seconds') {
+        return value * 1000;
+      }
+      if (unit === 'minutes') {
+        return value * 1000 * 60;
+      }
+      if (unit === 'hours') {
+        return value * 1000 * 60 * 60;
+      }
+      if (unit === 'days') {
+        return value * 1000 * 60 * 60 * 24;
+      }
     };
 
     Programmer.prototype.process = function(script) {
-      var i, len, object, operation, property, ref, syntax, type, value, verb;
+      var adverb, closeAdverbWithValue, i, indent, len, milliseconds, object, operation, property, ref, syntax, type, unit, value, verb;
       syntax = [];
+      indent = 2;
       for (i = 0, len = script.length; i < len; i++) {
         operation = script[i];
-        verb = operation.verb;
-        ref = operation.object.ref;
-        type = this.capitalize(operation.object.type);
-        object = operation.object;
-        property = operation.property;
-        value = isNaN(operation.value) ? "'" + operation.value + "'" : operation.value;
-        if (verb === 'create') {
-          syntax.push("\n  # Create " + type + " called '" + ref + "'");
-          syntax.push("  new " + type + "('" + ref + "', photon)");
+        if (operation.type === 'adverbial phrase') {
+          adverb = operation.adverb;
+          if (adverb === 'delay') {
+            value = operation.value;
+            unit = operation.unit;
+            milliseconds = this.convertTime(operation.value, operation.unit);
+            syntax.push("\n\n" + this.indent("setTimeout () ->", indent));
+            indent += 2;
+            closeAdverbWithValue = milliseconds;
+          }
         }
-        if (verb === 'set') {
-          syntax.push("\n  # Set the property '" + property + "' of '" + ref + "' to " + value);
-          syntax.push("  " + type + ".get('" + ref + "').set('" + property + "', " + value + ")");
-          syntax.push("\n.then () ->\n");
+        if (operation.type === 'verb phrase') {
+          verb = operation.verb;
+          ref = operation.object.ref;
+          type = this.capitalize(operation.object.type);
+          object = operation.object;
+          property = operation.property;
+          value = isNaN(operation.value) ? "'" + operation.value + "'" : operation.value;
+          if (verb === 'create') {
+            syntax.push("\n" + this.indent("# Create " + type + " called '" + ref + "'", indent));
+            syntax.push(this.indent("new " + type + "('" + ref + "', photon)", indent));
+          }
+          if (verb === 'set') {
+            syntax.push("\n" + this.indent("# Set the property '" + property + "' of '" + ref + "' to " + value, indent));
+            syntax.push(this.indent(type + ".get('" + ref + "').set('" + property + "', " + value + ")", indent));
+          }
+          if (verb === 'increase') {
+            syntax.push("\n" + this.indent("# Increasing the property '" + property + "' of '" + ref + "' by " + value, indent));
+            syntax.push(this.indent + (type + ".get('" + ref + "').inc('" + property + "', " + value + ")"), indent);
+          }
+          if (verb === 'decrease') {
+            syntax.push("\n" + this.indent("# Decreasing the property '" + property + "' of '" + ref + "' by " + value, indent));
+            syntax.push(this.indent(type + ".get('" + ref + "').dec('" + property + "', " + value + ")", indent));
+          }
+          if (verb === 'do') {
+            syntax.push("\n" + this.indent("# Blink " + value + " times", indent));
+            syntax.push(this.indent(type + ".get('" + ref + "').do('blink', " + value + ")", indent));
+          }
+          if (verb === 'log') {
+            syntax.push("\n" + this.indent("# Logging", indent));
+            syntax.push(this.indent, "console.log " + type + ".get('" + ref + "')", indent);
+          }
         }
-        if (verb === 'increase') {
-          syntax.push("\n  # Increasing the property '" + property + "' of '" + ref + "' by " + value);
-          syntax.push("  " + type + ".get('" + ref + "').inc('" + property + "', " + value + ").then () ->");
-          syntax.push("\n.then () ->\n");
-        }
-        if (verb === 'decrease') {
-          syntax.push("\n  # Decreasing the property '" + property + "' of '" + ref + "' by " + value);
-          syntax.push("  " + type + ".get('" + ref + "').dec('" + property + "', " + value + ").then () ->");
-          syntax.push("\n.then () ->\n");
-        }
-        if (verb === 'do') {
-          syntax.push("\n  # Blink " + value + " times");
-          syntax.push("  " + type + ".get('" + ref + "').do('blink', " + value + ")");
-          syntax.push("\n.then () ->\n");
-        }
-        if (verb === 'log') {
-          syntax.push("\n  # Logging");
-          syntax.push("  console.log " + type + ".get('" + ref + "')");
-          syntax.push("\n.then () ->\n");
-        }
+      }
+      if (closeAdverbWithValue != null) {
+        indent -= 2;
+        syntax.push("\n" + this.indent(", " + closeAdverbWithValue, indent) + "\n");
       }
       return syntax.join("\n");
     };
@@ -69,8 +103,10 @@
       output.push("photon = new Photon()\n");
       output.push("console.log '# Running script #'");
       output.push("photon.connect()\n.then () ->");
+      output.push("  console.log 'Connected!'\n");
+      output.push("  # Set event listener");
+      output.push("  photon.on 'button', () ->\n    console.log 'button pushed'");
       output.push(code);
-      output.push(this.indent("console.log '# End of script #'"));
       return output.join("\n");
     };
 

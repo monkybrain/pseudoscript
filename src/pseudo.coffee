@@ -59,6 +59,8 @@ segments = []
 for line in lines
   segments.push parser.parse line
 
+console.log segments
+
 code = ''
 for segment in segments
   # Assemble program

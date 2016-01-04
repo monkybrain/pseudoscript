@@ -30,9 +30,7 @@
 
     Objekt.prototype["do"] = function(action, times) {
       console.log(("Performing action '" + action + "' " + times + " time") + (times !== 1 ? "s" : ""));
-      return this.photon["do"](action, times).then(function(result) {
-        return console.log('Done!');
-      }, function(err) {
+      return this.photon["do"](action, times).then(function(result) {}, function(err) {
         return console.error(err);
       });
     };
@@ -56,9 +54,7 @@
         }
       }
       if (this.photon) {
-        return this.photon.set(property, value).then(function(result) {
-          return console.log("Done!");
-        }, function(err) {
+        return this.photon.set(property, value).then(function(result) {}, function(err) {
           return console.error(err);
         });
       }

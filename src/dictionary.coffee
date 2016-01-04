@@ -45,28 +45,23 @@ dictionary =
     'turn .*? down by':
       type: 'decrease'
 
-  # QUESTIONS
-  questions:
-    'is .*? ?':
-      type: 'question'
-    'what .*? \?':
-      type: 'question'
-  conditionals:
-  # CONDITIONALS
-    'if .*? (then)|(,)':
-      type: 'conditional'
 
   adverbs:
 #    '^(in)|(after) \d+ (seconds)|(s)|(minutes)|(min)|(milliseconds)|(ms)|(hours)|(h)':
 #      type: 'delay'
-    'in \d+ s':
+    '^(in)|(after) \\d+':
       type: 'delay'
+
+  events:
+    'when .*? button':
+      event:
+        'button'
 
   units:
     milliseconds:
       pattern: /\d+\s+(milliseconds)|(ms)\b/g
     seconds:
-      pattern: /\d+\s+(seconds)|(sec)\b/g
+      pattern: /\d+\s+(seconds)|(sec)|(s)\b/g
     minutes:
       pattern: /\d+\s+(minutes)|(min)|(m)\b/g
     hours:

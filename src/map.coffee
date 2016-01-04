@@ -24,7 +24,7 @@ class Objekt
 
     @photon.do(action, times).then(
       (result) ->
-       console.log 'Done!'
+        # console.log 'Done!'
       (err) ->
        console.error err
      )
@@ -52,7 +52,7 @@ class Objekt
     if @photon
       @photon.set(property, value).then(
         (result) ->
-          console.log "Done!"
+          # console.log "Done!"
         (err) ->
           console.error err
       )

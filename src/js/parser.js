@@ -14,12 +14,25 @@
       this.map = map;
     }
 
+    Finder.prototype.adverb = function(clause) {
+      var definition, entry, match, ref;
+      console.log(clause);
+      ref = this.dict.adverbs;
+      for (entry in ref) {
+        definition = ref[entry];
+        match = clause.match(new RegExp(entry));
+        if (match != null) {
+          return definition;
+        }
+      }
+    };
+
     Finder.prototype.verb = function(clause) {
       var definition, entry, match, ref;
       ref = this.dict.verbs;
       for (entry in ref) {
         definition = ref[entry];
-        match = clause.match(entry);
+        match = clause.match(new RegExp(entry));
         if (match != null) {
           return definition;
         }
@@ -152,7 +165,7 @@
     };
 
     Parser.prototype.parse = function(line) {
-      var clause, clauses, i, len, object, property, reference, type, unit, value, verb;
+      var adverb, clause, clauses, i, len, match, object, property, reference, type, unit, value, verb;
       clauses = this.separate(line);
       clauses = clauses.map(function(clause) {
         return {
@@ -161,6 +174,19 @@
       });
       for (i = 0, len = clauses.length; i < len; i++) {
         clause = clauses[i];
+
+        /* ADVERB */
+        adverb = this.find.adverb(clause.text);
+        if (adverb != null) {
+          clause.type = 'adverbial phrase';
+          clause.adverb = adverb.type;
+          match = clause.adverb.match(/(delay)|(interval)/g);
+          if (match != null) {
+            clause.value = this.find.value(clause.text);
+            clause.unit = this.find.unit(clause.text);
+          }
+          continue;
+        }
 
         /* VERB */
         verb = this.find.verb(clause.text);

@@ -9,9 +9,16 @@ class Finder
     @dict = dictionary
     @map = map
 
+  adverb: (clause) ->
+    console.log clause
+    for entry, definition of @dict.adverbs
+      match = clause.match new RegExp entry
+      if match?
+        return definition
+
   verb: (clause) ->
     for entry, definition of @dict.verbs
-      match = clause.match entry
+      match = clause.match new RegExp entry
       if match?
         return definition
 
@@ -107,6 +114,17 @@ class Parser
       text: clause
 
     for clause in clauses
+
+      ### ADVERB ###
+      adverb = @find.adverb clause.text
+      if adverb?
+        clause.type = 'adverbial phrase'
+        clause.adverb = adverb.type
+        match = clause.adverb.match /(delay)|(interval)/g
+        if match?
+          clause.value = @find.value clause.text
+          clause.unit = @find.unit clause.text
+        continue
 
       ### VERB ###
       verb = @find.verb clause.text

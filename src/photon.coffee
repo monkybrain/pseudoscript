@@ -25,10 +25,6 @@ class Photon
 
             Photon.photon = devices[0]
 
-            # TODO: MOVE EVENT LISTENER TO APPROPRIATE PLACE, JUST TESTING NOW!
-            Photon.photon.onEvent 'dark', (data) ->
-              console.log "Incoming event! Dark: " + JSON.stringify(data)
-
             resolve "connected"
 
           (err) ->
@@ -58,6 +54,9 @@ class Photon
           reject err
         else
           resolve data
+
+  on: (event, callback) ->
+    Photon.photon.onEvent event, callback
 
 module.exports = Photon
 

@@ -83,6 +83,8 @@
     segments.push(parser.parse(line));
   }
 
+  console.log(segments);
+
   code = '';
 
   for (j = 0, len1 = segments.length; j < len1; j++) {

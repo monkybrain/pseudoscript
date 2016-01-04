@@ -15,14 +15,19 @@
   console.log('# Running script #');
 
   photon.connect().then(function() {
+    console.log('Connected!');
+    photon.on('button', function() {
+      return console.log('button pushed');
+    });
     new Light('test', photon);
-    return Light.get('test').set('on', true);
-  }).then(function() {
-    return Light.get('test').set('color', 'red');
-  }).then(function() {
-    return Light.get('test')["do"]('blink', 3);
-  }).then(function() {
-    return console.log('# End of script #');
+    Light.get('test')["do"]('blink', 3);
+    setTimeout(function() {
+      return Light.get('test').set('color', 'red');
+    }, 2000);
+    return setTimeout(function() {
+      Light.get('test').set('color', 'blue');
+      return Light.get('test').set('color', 'yellow');
+    }, 3000);
   });
 
 }).call(this);

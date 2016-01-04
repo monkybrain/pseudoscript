@@ -53,22 +53,14 @@
         type: 'decrease'
       }
     },
-    questions: {
-      'is .*? ?': {
-        type: 'question'
-      },
-      'what .*? \?': {
-        type: 'question'
-      }
-    },
-    conditionals: {
-      'if .*? (then)|(,)': {
-        type: 'conditional'
-      }
-    },
     adverbs: {
-      'in \d+ s': {
+      '^(in)|(after) \\d+': {
         type: 'delay'
+      }
+    },
+    events: {
+      'when .*? button': {
+        event: 'button'
       }
     },
     units: {
@@ -76,7 +68,7 @@
         pattern: /\d+\s+(milliseconds)|(ms)\b/g
       },
       seconds: {
-        pattern: /\d+\s+(seconds)|(sec)\b/g
+        pattern: /\d+\s+(seconds)|(sec)|(s)\b/g
       },
       minutes: {
         pattern: /\d+\s+(minutes)|(min)|(m)\b/g
