@@ -6,15 +6,17 @@ class Objekt
   @word: 'object'
 
   @members = []
+  @scope = null
 
   @index = 0
 
   constructor: (ref, photon) ->
-    if ref? then @ref = ref
+    if ref? then @ref = ref else @ref = @constructor.word + @constructor.index
     if photon? then @photon = photon
     @children = []
     @constructor.members.push this
     @constructor.index++
+    @constructor.scope = @ref
 
   add: (object) ->
     @children.push object.ref
@@ -71,6 +73,9 @@ class Objekt
     ref in @constructor.members
 
   @get: (ref) ->
+    if not ref?
+      ref = @scope
+
     for member in @.members
       if ref is member.ref
         return member
@@ -103,6 +108,7 @@ class Room extends Objekt
 class Button extends Objekt
 
   @word: 'button'
+
   @events:
     'pushed': null
 

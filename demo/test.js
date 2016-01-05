@@ -20,19 +20,14 @@
 
   photon.connect().then(function() {
     console.log('Connected!');
-    new Button('but1', photon);
-    new Light('light 1', photon);
-    Light.get('light 1').set('brightness', 10);
+    new Light('test1', photon);
     setTimeout(function() {
-      Light.get('light 1').set('brightness', 100);
-      return Light.get('light 1').set('color', 'red');
+      Light.get().set('brightness', 100);
+      return Light.get().set('color', 'red');
     }, 1000);
-    setInterval(function() {
-      return Light.get('light 1').set('color', 'random');
+    return setInterval(function() {
+      return Light.get().set('color', 'random');
     }, 5000);
-    return Objekt.get('but1').on('pushed', function() {
-      return Light.get('light 1').set('color', 'blue');
-    });
   });
 
 }).call(this);

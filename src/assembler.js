@@ -71,8 +71,7 @@
           if (ref != null) {
             syntax.push(this.indent("\n  # Setting callback for event '" + event + "' of '" + ref + "'", indent));
             syntax.push(this.indent("Objekt.get('" + ref + "').on '" + event + "', () ->\n", indent));
-          }
-          if (type != null) {
+          } else if (type != null) {
             syntax.push(this.indent("\n  # Setting callback for event '" + event + "' of current " + type, indent));
             syntax.push(this.indent(type + ".get().on '" + event + "', () ->\n", indent));
           }
@@ -91,15 +90,20 @@
           property = operation.property;
           value = isNaN(operation.value) ? "'" + operation.value + "'" : operation.value;
           if (verb === 'create') {
-            syntax.push(this.indent("# Create " + type + " called '" + ref + "'", indent));
-            syntax.push(this.indent("new " + type + "('" + ref + "', photon)\n", indent));
+            if (ref != null) {
+              syntax.push(this.indent("# Create " + type + " called '" + ref + "'", indent));
+              syntax.push(this.indent("new " + type + "('" + ref + "', photon)\n", indent));
+            } else {
+              syntax.push(this.indent("# Create anonymous " + type, indent));
+              syntax.push(this.indent("new " + type + "(null, photon)\n", indent));
+            }
           }
           if (verb === 'set') {
-            syntax.push(this.indent("# Set the property '" + property + "' of '" + ref + "' to " + value, indent));
             if (ref != null) {
+              syntax.push(this.indent("# Set the property '" + property + "' of '" + ref + "' to " + value, indent));
               syntax.push(this.indent("Objekt.get('" + ref + "').set('" + property + "', " + value + ")\n", indent));
-            }
-            if (type != null) {
+            } else if (type != null) {
+              syntax.push(this.indent("# Set the property '" + property + "' of current " + type, indent));
               syntax.push(this.indent(type + ".get().set('" + property + "', " + value + ")\n", indent));
             }
           }

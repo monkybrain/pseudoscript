@@ -43,7 +43,7 @@
             object.ref = ref;
           }
           if (ref == null) {
-            object.type = this.object(clause);
+            object.type = this.capitalize(this.object(clause));
           }
           ref2 = this.map;
           for (key in ref2) {
@@ -263,7 +263,13 @@
         /* OBJECT - TYPE */
         type = this.find.object(clause.text);
         if (type != null) {
-          object.type = type;
+          if (object != null) {
+            object.type = type;
+          } else {
+            object = {
+              type: type
+            };
+          }
           this.scope.object = clause.object = object;
         } else {
           clause.object = this.scope.object;
@@ -295,7 +301,6 @@
             clause.unit = this.scope.unit;
           }
         }
-        console.log(this.scope);
       }
       return clauses;
     };

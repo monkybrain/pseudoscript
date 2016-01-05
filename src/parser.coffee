@@ -32,7 +32,7 @@ class Finder
 
         # If no reference -> find type
         if not ref?
-          object.type = @object clause
+          object.type = @capitalize @object clause
 
         # Find event
         for key, value of @map
@@ -190,7 +190,10 @@ class Parser
 
       type = @find.object clause.text
       if type?
-        object.type = type
+        if object?
+          object.type = type
+        else
+          object = type: type
         @scope.object = clause.object = object
       else
         clause.object = @scope.object
@@ -217,8 +220,6 @@ class Parser
           @scope.unit = clause.unit = unit
         else
           clause.unit = @scope.unit
-
-      console.log @scope
 
     clauses
 

@@ -12,11 +12,15 @@
 
     Objekt.members = [];
 
+    Objekt.scope = null;
+
     Objekt.index = 0;
 
     function Objekt(ref, photon) {
       if (ref != null) {
         this.ref = ref;
+      } else {
+        this.ref = this.constructor.word + this.constructor.index;
       }
       if (photon != null) {
         this.photon = photon;
@@ -24,6 +28,7 @@
       this.children = [];
       this.constructor.members.push(this);
       this.constructor.index++;
+      this.constructor.scope = this.ref;
     }
 
     Objekt.prototype.add = function(object) {
@@ -78,6 +83,9 @@
 
     Objekt.get = function(ref) {
       var i, len, member, ref1;
+      if (ref == null) {
+        ref = this.scope;
+      }
       ref1 = this.members;
       for (i = 0, len = ref1.length; i < len; i++) {
         member = ref1[i];
