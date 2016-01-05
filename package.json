@@ -23,8 +23,7 @@
   },
   "homepage": "https://github.com/monkybrain/pseudoscript#readme",
   "dependencies": {
-    "linebyline": "^1.3.0",
-    "monky-tools": "0.0.3",
+    "monky-tools": "0.0.4",
     "promise": "^7.1.1",
     "shelljs": "^0.5.3",
     "spark": "^1.0.0",
