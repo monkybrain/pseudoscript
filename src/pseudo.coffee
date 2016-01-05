@@ -1,8 +1,12 @@
+# Node modules
+fs = require "fs"
+util = require "util"
+
 # External modules
 argv = require("yargs").argv
 shell = require "shelljs"
-fs = require "fs"
 
+# monky-tools
 log = require("monky-tools").console.log
 error = require("monky-tools").console.error
 
@@ -60,7 +64,7 @@ for line in lines
 
 # if '-s' -> log segments
 if argv.s?
-  console.log segments
+  util.inspect segments
 
 code = ''
 for segment in segments

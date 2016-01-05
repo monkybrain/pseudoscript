@@ -75,10 +75,18 @@ class Programmer
       if operation.type is 'event phrase'
 
         event = operation.event
+        ref = operation.object.ref
+        type = operation.object.type
 
-        syntax.push @indent "\n  # Setting callback for event '#{event}'", indent
+        console.log operation
 
-        syntax.push @indent "#{object}.on '#{event}', () ->", indent
+        if ref?
+          syntax.push @indent "\n  # Setting callback for event '#{event}' of '#{ref}'", indent
+          syntax.push @indent "Objekt.get('#{ref}').on '#{event}', () ->\n", indent
+
+        if type?
+          syntax.push @indent "\n  # Setting callback for event '#{event}' of current #{type}", indent
+          syntax.push @indent "#{type}.get().on '#{event}', () ->\n", indent
 
         indent += 2
 
@@ -87,9 +95,11 @@ class Programmer
       if operation.type is 'verb phrase'
 
         verb = operation.verb
-        ref = operation.object.ref
+        if operation.object.ref?
+          ref = operation.object.ref
         # TYPE: Capitalize (for Class name) - TODO: BEAUTIFY!
-        type = @capitalize(operation.object.type)
+        if operation.object.type?
+          type = @capitalize(operation.object.type)
         object = operation.object
         property = operation.property
         # VALUE: If not number -> add quotes
@@ -109,7 +119,12 @@ class Programmer
           syntax.push @indent "# Set the property '#{property}' of '#{ref}' to #{value}", indent
 
           # Add code
-          syntax.push @indent "#{type}.get('#{ref}').set('#{property}', #{value})\n", indent
+
+          if ref?
+            syntax.push @indent "Objekt.get('#{ref}').set('#{property}', #{value})\n", indent
+          if type?
+            syntax.push @indent "#{type}.get().set('#{property}', #{value})\n", indent
+
 
         if verb is 'increase'
 
@@ -155,8 +170,11 @@ class Programmer
   wrap: (code) ->
     output = []
     output.push "map = require '../src/modules/base'"
+    output.push "Objekt= map.Objekt"
     output.push "Room = map.Room"
-    output.push "Light = map.Light\n"
+    output.push "Light = map.Light"
+    output.push "Button = map.Button"
+    output.push "\n"
     output.push "Photon = require '../src/photon'"
     output.push "photon = new Photon()\n"
     output.push "console.log '# Running script #'"

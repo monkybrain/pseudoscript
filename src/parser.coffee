@@ -22,16 +22,25 @@ class Finder
     for entry, definition of @dict.events
       match = clause.match new RegExp entry
       if match?
-        # Find object
-        object = @object clause
+
+        object = {}
+
+        # Find reference...
+        ref = @reference clause
+        if ref?
+          object.ref = ref
+
+        # If no reference -> find type
+        if not ref?
+          object.type = @object clause
+
         # Find event
         for key, value of @map
-          if key is @capitalize object
-            if value.events?
-              for k, v of value.events
-                match = clause.match k
-                if match?
-                  return object: object, event: match[0]
+          if value.events?
+            for k, v of value.events
+              match = clause.match k
+              if match?
+                return object: object, event: match[0]
 
   verb: (clause) ->
     for entry, definition of @dict.verbs
@@ -47,11 +56,11 @@ class Finder
 
   property: (clause, object) ->
     for key, obj of @map
-      if obj.word is object
-        for property of obj.properties
-          match = clause.match property
-          if match?
-            return property
+      # if obj.word is object
+      for property of obj.properties
+        match = clause.match property
+        if match?
+          return property
 
   value: (clause) ->
 
@@ -107,7 +116,7 @@ class Parser
     @scope =
       verb: null
       object:
-        class: null
+        type: null
         ref: null
       indirect:
         class: null
@@ -149,7 +158,6 @@ class Parser
         clause.type = 'event phrase'
         clause.object = event.object
         clause.event = event.event
-        console.log clause
         continue
 
       ### VERB ###
@@ -170,20 +178,22 @@ class Parser
       else
         clause.verb = @scope.verb
 
-      ### OBJECT - TYPE ###
-      type = @find.object clause.text
-      if type?
-        object = type: type
+      ### OBJECT - REFERENCE ###
+      ref = @find.reference clause.text
+      if ref?
+        object = ref: ref
         @scope.object = clause.object = object
       else
         clause.object = @scope.object
 
-      ### OBJECT - REFERENCE ###
-      reference = @find.reference clause.text
-      if reference?
-        @scope.object.ref = clause.object.ref = reference
+      ### OBJECT - TYPE ###
+
+      type = @find.object clause.text
+      if type?
+        object.type = type
+        @scope.object = clause.object = object
       else
-        clause.object.ref = @scope.object.ref
+        clause.object = @scope.object
 
       ### PROPERTY ###
       property = @find.property clause.text, @scope.object.type
@@ -207,6 +217,8 @@ class Parser
           @scope.unit = clause.unit = unit
         else
           clause.unit = @scope.unit
+
+      console.log @scope
 
     clauses
 

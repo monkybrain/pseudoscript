@@ -3,6 +3,8 @@ Promise = require "promise"
 class Objekt
 # 'Object' already taken...
 
+  @word: 'object'
+
   @members = []
 
   @index = 0
@@ -69,9 +71,12 @@ class Objekt
     ref in @constructor.members
 
   @get: (ref) ->
-    for member in @.membersd
+    for member in @.members
       if ref is member.ref
         return member
+
+  on: (event, callback) ->
+    @photon.on event, callback
 
 class Light extends Objekt
 
@@ -101,12 +106,17 @@ class Button extends Objekt
   @events:
     'pushed': null
 
+  @properties:
+    'active': true
+
   constructor: (ref, photon) ->
     super(ref, photon)
     @events = Button.events
+    @properties = Button.properties
 
 
 objects = {
+  Objekt: Objekt
   Light: Light
   Room: Room
   Button: Button
