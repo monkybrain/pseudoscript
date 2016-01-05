@@ -129,8 +129,18 @@
 
     Room.word = 'room';
 
+    Room.events = {
+      'dark': {
+        event: 'dark'
+      },
+      'light': {
+        event: 'light'
+      }
+    };
+
     function Room(ref, photon) {
       Room.__super__.constructor.call(this, ref, photon);
+      this.events = Room.events;
     }
 
     return Room;
@@ -143,7 +153,9 @@
     Button.word = 'button';
 
     Button.events = {
-      'pushed': null
+      '\\b((push)|(pushed)|(pushes))\\b': {
+        event: 'pushed'
+      }
     };
 
     Button.properties = {

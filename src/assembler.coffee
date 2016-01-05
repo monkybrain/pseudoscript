@@ -49,7 +49,7 @@ class Programmer
 
           milliseconds = @convertTime operation.value, operation.unit
 
-          syntax.push @indent "\n  # Setting timeout to #{milliseconds} ms"
+          syntax.push  "\n" + @indent "# Setting timeout to #{milliseconds} ms", indent
 
           syntax.push @indent "setTimeout () ->\n", indent
 

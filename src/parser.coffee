@@ -19,28 +19,27 @@ class Finder
         return definition
 
   event: (clause) ->
-    for entry, definition of @dict.events
-      match = clause.match new RegExp entry
-      if match?
+    match = clause.match new RegExp @dict.event
+    if match?
 
-        object = {}
+      object = {}
 
-        # Find reference...
-        ref = @reference clause
-        if ref?
-          object.ref = ref
+      # Find reference...
+      ref = @reference clause
+      if ref?
+        object.ref = ref
 
-        # If no reference -> find type
-        if not ref?
-          object.type = @capitalize @object clause
+      # If no reference -> find type
+      if not ref?
+        object.type = @capitalize @object clause
 
-        # Find event
-        for key, value of @map
-          if value.events?
-            for k, v of value.events
-              match = clause.match k
-              if match?
-                return object: object, event: match[0]
+      # Find event
+      for key, value of @map
+        if value.events?
+          for k, v of value.events
+            match = clause.match k
+            if match?
+              return object: object, event: v.event
 
   verb: (clause) ->
     for entry, definition of @dict.verbs

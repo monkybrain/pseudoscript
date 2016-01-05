@@ -37,7 +37,7 @@ class Objekt
 
     console.log "Setting property '#{property}' of '#{this.ref}' to #{value}"
 
-    # Factorize this!
+    # Check if valid property and value (TODO: CLEAN THIS MESS UP!)
     for key of @properties
       if property is key
         found = true
@@ -102,15 +102,23 @@ class Room extends Objekt
 
   @word: 'room'
 
+  @events:
+    'dark':
+      event: 'dark'
+    'light':
+      event: 'light'
+
   constructor: (ref, photon) ->
     super(ref, photon)
+    @events = Room.events
 
 class Button extends Objekt
 
   @word: 'button'
 
   @events:
-    'pushed': null
+    '\\b((push)|(pushed)|(pushes))\\b':
+      event: 'pushed'
 
   @properties:
     'active': true

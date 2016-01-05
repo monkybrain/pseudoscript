@@ -48,7 +48,7 @@
             value = operation.value;
             unit = operation.unit;
             milliseconds = this.convertTime(operation.value, operation.unit);
-            syntax.push(this.indent("\n  # Setting timeout to " + milliseconds + " ms"));
+            syntax.push("\n" + this.indent("# Setting timeout to " + milliseconds + " ms", indent));
             syntax.push(this.indent("setTimeout () ->\n", indent));
             indent += 2;
             closeAdverbWithValue = milliseconds;

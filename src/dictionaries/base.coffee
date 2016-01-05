@@ -46,16 +46,13 @@ dictionary =
       type: 'decrease'
 
   adverbs:
-    '^(in)|(after) \\d+':
+    '^(in)|(after)|(wait) \\d+':
       type: 'delay'
     '^(every) \\d+':
       type: 'interval'
 
-  events:
-    'when .*?':
-      # TODO: MAKE DYNAMIC!
-      event:
-        'pushed'
+  event: '(when)|(upon).*?'
+
 
   units:
     milliseconds:

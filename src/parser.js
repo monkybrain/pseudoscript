@@ -31,34 +31,30 @@
     };
 
     Finder.prototype.event = function(clause) {
-      var definition, entry, k, key, match, object, ref, ref1, ref2, ref3, v, value;
-      ref1 = this.dict.events;
-      for (entry in ref1) {
-        definition = ref1[entry];
-        match = clause.match(new RegExp(entry));
-        if (match != null) {
-          object = {};
-          ref = this.reference(clause);
-          if (ref != null) {
-            object.ref = ref;
-          }
-          if (ref == null) {
-            object.type = this.capitalize(this.object(clause));
-          }
-          ref2 = this.map;
-          for (key in ref2) {
-            value = ref2[key];
-            if (value.events != null) {
-              ref3 = value.events;
-              for (k in ref3) {
-                v = ref3[k];
-                match = clause.match(k);
-                if (match != null) {
-                  return {
-                    object: object,
-                    event: match[0]
-                  };
-                }
+      var k, key, match, object, ref, ref1, ref2, v, value;
+      match = clause.match(new RegExp(this.dict.event));
+      if (match != null) {
+        object = {};
+        ref = this.reference(clause);
+        if (ref != null) {
+          object.ref = ref;
+        }
+        if (ref == null) {
+          object.type = this.capitalize(this.object(clause));
+        }
+        ref1 = this.map;
+        for (key in ref1) {
+          value = ref1[key];
+          if (value.events != null) {
+            ref2 = value.events;
+            for (k in ref2) {
+              v = ref2[k];
+              match = clause.match(k);
+              if (match != null) {
+                return {
+                  object: object,
+                  event: v.event
+                };
               }
             }
           }

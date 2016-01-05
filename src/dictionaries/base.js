@@ -54,18 +54,14 @@
       }
     },
     adverbs: {
-      '^(in)|(after) \\d+': {
+      '^(in)|(after)|(wait) \\d+': {
         type: 'delay'
       },
       '^(every) \\d+': {
         type: 'interval'
       }
     },
-    events: {
-      'when .*?': {
-        event: 'pushed'
-      }
-    },
+    event: '(when)|(upon).*?',
     units: {
       milliseconds: {
         pattern: /\d+\s+(milliseconds)|(ms)\b/g

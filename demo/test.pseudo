@@ -1,9 +1,11 @@
-Add a light and set the brightness to 10
+Add a room called 'bedroom'
 
 Add a button
 
-After 1 second, turn the brightness of the light up to 100 and set the color to red
+Add a light called 'test' and set the brightness to 20
 
-Every 5 seconds, set the color to random
+When the button is pushed, set the color to blue and after 1 second, set the color back to red
 
-When the button is pushed, set the color to blue
+When the 'bedroom' gets dark, set the brightness to 200
+
+Upon light in the 'bedroom', set the brightness to 20
