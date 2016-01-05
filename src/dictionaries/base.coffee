@@ -45,19 +45,17 @@ dictionary =
     'turn .*? down by':
       type: 'decrease'
 
-
   adverbs:
-#    '^(in)|(after) \d+ (seconds)|(s)|(minutes)|(min)|(milliseconds)|(ms)|(hours)|(h)':
-#      type: 'delay'
     '^(in)|(after) \\d+':
       type: 'delay'
     '^(every) \\d+':
       type: 'interval'
 
   events:
-    'when.*?button':
+    'when .*?':
+      # TODO: MAKE DYNAMIC!
       event:
-        'button'
+        'pushed'
 
   units:
     milliseconds:

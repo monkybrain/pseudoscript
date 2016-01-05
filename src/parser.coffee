@@ -5,6 +5,9 @@ error = tools.console.error
 
 class Finder
 
+  capitalize: (string) ->
+    string = string[0].toUpperCase() + string[1..]
+
   constructor: (dictionary, map) ->
     @dict = dictionary
     @map = map
@@ -19,7 +22,16 @@ class Finder
     for entry, definition of @dict.events
       match = clause.match new RegExp entry
       if match?
-        return definition
+        # Find object
+        object = @object clause
+        # Find event
+        for key, value of @map
+          if key is @capitalize object
+            if value.events?
+              for k, v of value.events
+                match = clause.match k
+                if match?
+                  return object: object, event: match[0]
 
   verb: (clause) ->
     for entry, definition of @dict.verbs
@@ -135,7 +147,9 @@ class Parser
       event = @find.event clause.text
       if event?
         clause.type = 'event phrase'
+        clause.object = event.object
         clause.event = event.event
+        console.log clause
         continue
 
       ### VERB ###

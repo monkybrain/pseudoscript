@@ -1,7 +1,0 @@
-Add a light called 'test' and set the brightness to 100
-
-After 1 second, set the color to yellow
-
-Every 3 seconds, set the color to random
-
-When button is pressed, set the brightness to 10

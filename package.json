@@ -7,7 +7,7 @@
     "doc": "docs"
   },
   "bin": {
-    "pseudo": "src/js/pseudo.js"
+    "pseudo": "src/pseudo.js"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

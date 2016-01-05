@@ -69,7 +69,7 @@ class Objekt
     ref in @constructor.members
 
   @get: (ref) ->
-    for member in @.members
+    for member in @.membersd
       if ref is member.ref
         return member
 
@@ -95,9 +95,21 @@ class Room extends Objekt
   constructor: (ref, photon) ->
     super(ref, photon)
 
+class Button extends Objekt
+
+  @word: 'button'
+  @events:
+    'pushed': null
+
+  constructor: (ref, photon) ->
+    super(ref, photon)
+    @events = Button.events
+
+
 objects = {
   Light: Light
   Room: Room
+  Button: Button
 }
 
 module.exports = objects

@@ -7,15 +7,15 @@ log = require("monky-tools").console.log
 error = require("monky-tools").console.error
 
 # Internal modules
-dictionary = require "./dictionary"
-map = require "./map"
+dictionary = require "./dictionaries/base"
+map = require "./modules/base"
 Parser = require "./parser"
-Programmer = require "./programmer"
+Assembler = require "./assembler"
 Photon = require "./photon"
 
 # Create instances
 parser = new Parser(dictionary, map)
-programmer = new Programmer(map)
+assembler = new Assembler(map)
 
 if argv._[0]?
   filename = argv._[0]
@@ -50,7 +50,6 @@ lines = lines.map (line) ->
 lines = lines.filter (line) ->
   return line isnt ''
 
-
 # Trim strings
 lines = lines.map (line) ->
   line.trim()
@@ -59,16 +58,34 @@ segments = []
 for line in lines
   segments.push parser.parse line
 
-console.log segments
+# if '-s' -> log segments
+if argv.s?
+  console.log segments
 
 code = ''
 for segment in segments
   # Assemble program
-  code += programmer.process segment
+  code += assembler.process segment
 
-script = programmer.wrap code
+script = assembler.wrap code
 
-log script
+# Compile and run
+index = filename.lastIndexOf('.')
+output = filename[0...index] + ".coffee"
 
-script.to "temp.coffee"
-shell.exec "coffee temp.coffee"
+# If '-l' -> show generated coffeescript
+if argv.l?
+  log script
+
+script.to output
+
+cleanup = () ->
+  if not argv.c?
+    shell.rm output
+
+if argv.r?
+  shell.exec "coffee " + output, () ->
+    cleanup()
+else
+  cleanup()
+

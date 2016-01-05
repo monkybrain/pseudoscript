@@ -1,0 +1,9 @@
+# Add a button called 'button'.
+
+Add a light called 'light 1' and set the brightness to 10
+
+After 1 second, turn the brightness up to 100 and set the color to red
+
+Every 5 seconds, set the color to random
+
+When 'button' is pushed, set the color to blue
