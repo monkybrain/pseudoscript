@@ -67,7 +67,6 @@
           event = operation.event;
           ref = operation.object.ref;
           type = operation.object.type;
-          console.log(operation);
           if (ref != null) {
             syntax.push(this.indent("\n  # Setting callback for event '" + event + "' of '" + ref + "'", indent));
             syntax.push(this.indent("PhotonObject.select('" + ref + "').on '" + event + "', () ->\n", indent));
@@ -77,6 +76,9 @@
           }
           indent += 2;
           closeEvent = true;
+        }
+        if (operation.type === 'conditional phrase') {
+          console.log(operation);
         }
         if (operation.type === 'verb phrase') {
           verb = operation.verb;

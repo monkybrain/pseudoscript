@@ -128,6 +128,64 @@
       }
     };
 
+    Finder.prototype.conditional = function(clause) {
+      var end, k, k2, lefthand, match, pattern, ref1, result, results, righthand, start, v, v2;
+      ref1 = this.dict.conditionals;
+      results = [];
+      for (k in ref1) {
+        v = ref1[k];
+        pattern = new RegExp(k);
+        match = clause.match(pattern);
+        if (match != null) {
+          result = {
+            type: v.type
+          };
+          if (result.type === 'if') {
+            results.push((function() {
+              var ref2, results1;
+              ref2 = this.dict.comparisons;
+              results1 = [];
+              for (k2 in ref2) {
+                v2 = ref2[k2];
+                pattern = new RegExp(k2);
+                match = clause.match(pattern);
+                if (match != null) {
+                  result.test = v2.type;
+                  pattern = /if .*? is/;
+                  if (match != null) {
+                    start = clause.indexOf("if") + "if".length;
+                    end = clause.indexOf("is");
+                    lefthand = clause.slice(start, end).trim();
+                    start = clause.indexOf("than") + "than".length;
+                    righthand = clause.slice(start).trim();
+                    if (!isNaN(lefthand)) {
+                      lefthand = parseFloat(lefthand);
+                    }
+                    if (!isNaN(righthand)) {
+                      righthand = parseFloat(righthand);
+                    }
+                    result.lefthand = lefthand;
+                    result.righthand = righthand;
+                    results1.push(result);
+                  } else {
+                    results1.push(void 0);
+                  }
+                } else {
+                  results1.push(void 0);
+                }
+              }
+              return results1;
+            }).call(this));
+          } else {
+            results.push(void 0);
+          }
+        } else {
+          results.push(void 0);
+        }
+      }
+      return results;
+    };
+
     Finder.prototype.unit = function(clause) {
       var definition, entry, match, ref1;
       ref1 = this.dict.units;
@@ -198,7 +256,7 @@
     };
 
     Parser.prototype.parse = function(line) {
-      var adverb, clause, clauses, event, i, len, match, object, property, ref, type, unit, value, verb;
+      var adverb, clause, clauses, conditional, event, i, len, match, object, property, ref, type, unit, value, verb;
       clauses = this.separate(line);
       clauses = clauses.map(function(clause) {
         return {
@@ -227,6 +285,15 @@
           clause.type = 'event phrase';
           clause.object = event.object;
           clause.event = event.event;
+          continue;
+        }
+
+        /* CONDITIONALS */
+        conditional = this.find.conditional(clause.text);
+        if (conditional != null) {
+          console.log(conditional);
+          clause.type = 'conditional phrase';
+          clause.conditional = conditional;
           continue;
         }
 

@@ -20,7 +20,7 @@
       return new Promise(function(resolve, reject) {
         var credentials;
         credentials = fs.readFileSync("credentials.json", "utf8");
-        credentials = JSON.parse(credentials);
+        credentials = JSON.parse(credentials.photon);
         Spark.login(credentials);
         return Spark.on('login', function() {
           var devices;

@@ -30,6 +30,9 @@ dictionary =
       action: 'blink'
       value: 3
 
+    'send':
+      type: 'send'
+
     # CREATE
     '(create)|(add)|(connect)':
       type: 'create'
@@ -56,6 +59,17 @@ dictionary =
 
   event: '(when)|(upon).*?'
 
+  conditionals:
+    '\\b((if)|(in case))\\b':
+      type: 'if'
+
+  comparisons:
+    '\\bis ((equal)|(the same as)) to\\b':
+      type: '=='
+    '\\bis ((greater)|(larger)|(bigger)|(higher)) than\\b':
+      type: '>'
+    '\\bis ((smaller)|(less)|(lower)) than\\b':
+      type: '<'
 
   units:
     milliseconds:

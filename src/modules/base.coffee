@@ -1,7 +1,23 @@
 Promise = require "promise"
+mailgun = require "mailgun-js"
+fs = require "fs"
+credentials = JSON.parse fs.readFileSync "credentials.json", "utf8"
+
+class Mailer
+
+  @mailgun = mailgun credentials.mailgun
+  @from = "pseudoscript <wizard@pseudoscript.org>"
+
+  @send: (data) ->
+    message = {
+      from: Mailer.from
+      to: if data.to? then data.to else "philip@berge.io"
+      subject: if data.subject? then data.subject else "test"
+      text: if data.text? then data.text else "testing 1, 2, 3..."
+    }
+    Mailer.mailgun.messages().send message
 
 class PhotonObject
-# 'Object' already taken...
 
   @word: 'object'
 
@@ -143,6 +159,7 @@ objects = {
   Light: Light
   Room: Room
   Button: Button
+  Mailer: Mailer
 }
 
 module.exports = objects

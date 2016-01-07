@@ -21,12 +21,12 @@
   photon.connect().then(function() {
     console.log('Connected!');
     new Button(null, photon);
-    new Light('test', photon);
-    PhotonObject.select('test').set('brightness', 100);
+    new Light(null, photon);
+    Light.select().set('brightness', 100);
     return Button.select().on('pushed', function() {
-      PhotonObject.select('test').set('color', 'red');
+      Light.select().set('color', 'red');
       return setTimeout(function() {
-        return PhotonObject.select('test').set('color', 'blue');
+        return Light.select().set('color', 'blue');
       }, 1000);
     });
   });

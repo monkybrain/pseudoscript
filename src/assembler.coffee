@@ -78,8 +78,6 @@ class Programmer
         ref = operation.object.ref
         type = operation.object.type
 
-        console.log operation
-
         if ref?
           syntax.push @indent "\n  # Setting callback for event '#{event}' of '#{ref}'", indent
           syntax.push @indent "PhotonObject.select('#{ref}').on '#{event}', () ->\n", indent
@@ -91,6 +89,10 @@ class Programmer
         indent += 2
 
         closeEvent = true
+
+      if operation.type is 'conditional phrase'
+
+        console.log operation
 
       if operation.type is 'verb phrase'
 

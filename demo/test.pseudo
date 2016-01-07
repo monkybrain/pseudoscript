@@ -4,6 +4,8 @@ Add a light, set the brightness to 100
 
 When the button is pushed, set the color to red and after 1 second, set the color back to blue
 
+if brightness is greater than 100
+
 # When the button is pushed, set the color to green and the brightness to 100 and after 1 second, set the color back to blue
 
 # When the 'bedroom' gets dark, set the brightness to 200

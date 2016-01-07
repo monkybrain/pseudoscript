@@ -15,7 +15,7 @@ class Photon
     new Promise (resolve, reject) ->
 
       credentials = fs.readFileSync "credentials.json", "utf8"
-      credentials = JSON.parse(credentials)
+      credentials = JSON.parse credentials.photon
       Spark.login credentials
       Spark.on 'login', () ->
 

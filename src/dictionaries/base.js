@@ -37,6 +37,9 @@
         action: 'blink',
         value: 3
       },
+      'send': {
+        type: 'send'
+      },
       '(create)|(add)|(connect)': {
         type: 'create'
       },
@@ -65,6 +68,22 @@
       }
     },
     event: '(when)|(upon).*?',
+    conditionals: {
+      '\\b((if)|(in case))\\b': {
+        type: 'if'
+      }
+    },
+    comparisons: {
+      '\\bis ((equal)|(the same as)) to\\b': {
+        type: '=='
+      },
+      '\\bis ((greater)|(larger)|(bigger)|(higher)) than\\b': {
+        type: '>'
+      },
+      '\\bis ((smaller)|(less)|(lower)) than\\b': {
+        type: '<'
+      }
+    },
     units: {
       milliseconds: {
         pattern: /\d+\s+(milliseconds)|(ms)\b/g

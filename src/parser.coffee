@@ -87,6 +87,35 @@ class Finder
         value = parseInt value
       return value
 
+  conditional: (clause) ->
+    for k,v of @dict.conditionals
+      pattern = new RegExp k
+      match = clause.match pattern
+      if match?
+        result = type: v.type
+        if result.type is 'if'
+          for k2, v2 of @dict.comparisons
+            pattern = new RegExp k2
+            match = clause.match pattern
+            if match?
+              result.test = v2.type
+              # Find values
+              pattern = /if .*? is/
+              if match?
+                # Get left hand expression
+                start = clause.indexOf("if") + "if".length
+                end = clause.indexOf "is"
+                lefthand = clause.slice(start, end).trim()
+                # Get right hand expression
+                start = clause.indexOf("than") + "than".length
+                righthand = clause.slice(start).trim()
+                if not isNaN lefthand
+                  lefthand = parseFloat lefthand
+                if not isNaN righthand
+                  righthand = parseFloat righthand
+                result.lefthand = lefthand
+                result.righthand = righthand
+                result
 
   unit: (clause) ->
     for entry, definition of @dict.units
@@ -157,6 +186,14 @@ class Parser
         clause.type = 'event phrase'
         clause.object = event.object
         clause.event = event.event
+        continue
+
+      ### CONDITIONALS ###
+      conditional = @find.conditional clause.text
+      if conditional?
+        console.log conditional
+        clause.type = 'conditional phrase'
+        clause.conditional = conditional
         continue
 
       ### VERB ###
