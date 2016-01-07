@@ -31,6 +31,15 @@ class Photon
             reject err
         )
 
+  get: (property) ->
+    new Promise (resolve, reject) ->
+
+      Photon.photon.getVariable property, (err, data) ->
+        if err?
+          reject err
+        else
+          resolve data
+
   set: (property, value) ->
     new Promise (resolve, reject) ->
 

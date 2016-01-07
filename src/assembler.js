@@ -70,10 +70,10 @@
           console.log(operation);
           if (ref != null) {
             syntax.push(this.indent("\n  # Setting callback for event '" + event + "' of '" + ref + "'", indent));
-            syntax.push(this.indent("Objekt.get('" + ref + "').on '" + event + "', () ->\n", indent));
+            syntax.push(this.indent("PhotonObject.select('" + ref + "').on '" + event + "', () ->\n", indent));
           } else if (type != null) {
             syntax.push(this.indent("\n  # Setting callback for event '" + event + "' of current " + type, indent));
-            syntax.push(this.indent(type + ".get().on '" + event + "', () ->\n", indent));
+            syntax.push(this.indent(type + ".select().on '" + event + "', () ->\n", indent));
           }
           indent += 2;
           closeEvent = true;
@@ -101,27 +101,36 @@
           if (verb === 'set') {
             if (ref != null) {
               syntax.push(this.indent("# Set the property '" + property + "' of '" + ref + "' to " + value, indent));
-              syntax.push(this.indent("Objekt.get('" + ref + "').set('" + property + "', " + value + ")\n", indent));
+              syntax.push(this.indent("PhotonObject.select('" + ref + "').set('" + property + "', " + value + ")\n", indent));
             } else if (type != null) {
               syntax.push(this.indent("# Set the property '" + property + "' of current " + type, indent));
-              syntax.push(this.indent(type + ".get().set('" + property + "', " + value + ")\n", indent));
+              syntax.push(this.indent(type + ".select().set('" + property + "', " + value + ")\n", indent));
+            }
+          }
+          if (verb === 'get') {
+            if (ref != null) {
+              syntax.push(this.indent("# Get the property '" + property + "' of '" + ref + "'", indent));
+              syntax.push(this.indent("PhotonObject.select('" + ref + "').get('" + property + "').then (data) -> console.log data.result\n", indent));
+            } else if (type != null) {
+              syntax.push(this.indent("# Get the property '" + property + "' of current " + type, indent));
+              syntax.push(this.indent(type + ".select().get('" + property + "').then (data) -> console.log data.result\n", indent));
             }
           }
           if (verb === 'increase') {
             syntax.push("\n" + this.indent("# Increasing the property '" + property + "' of '" + ref + "' by " + value, indent));
-            syntax.push(this.indent + (type + ".get('" + ref + "').inc('" + property + "', " + value + ")"), indent);
+            syntax.push(this.indent + (type + ".select('" + ref + "').inc('" + property + "', " + value + ")"), indent);
           }
           if (verb === 'decrease') {
             syntax.push("\n" + this.indent("# Decreasing the property '" + property + "' of '" + ref + "' by " + value, indent));
-            syntax.push(this.indent(type + ".get('" + ref + "').dec('" + property + "', " + value + ")", indent));
+            syntax.push(this.indent(type + ".select('" + ref + "').dec('" + property + "', " + value + ")", indent));
           }
           if (verb === 'do') {
             syntax.push(this.indent("# Blink " + value + " times", indent));
-            syntax.push(this.indent(type + ".get('" + ref + "').do('blink', " + value + ")\n", indent));
+            syntax.push(this.indent(type + ".select('" + ref + "').do('blink', " + value + ")\n", indent));
           }
           if (verb === 'log') {
             syntax.push("\n" + this.indent("# Logging", indent));
-            syntax.push(this.indent, "console.log " + type + ".get('" + ref + "')", indent);
+            syntax.push(this.indent, "console.log " + type + ".select('" + ref + "')", indent);
           }
         }
       }
@@ -139,7 +148,7 @@
       var output;
       output = [];
       output.push("map = require '../src/modules/base'");
-      output.push("Objekt= map.Objekt");
+      output.push("PhotonObject = map.PhotonObject");
       output.push("Room = map.Room");
       output.push("Light = map.Light");
       output.push("Button = map.Button");

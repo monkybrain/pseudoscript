@@ -29,6 +29,9 @@
       'turn .*? down to': {
         type: 'set'
       },
+      'get': {
+        type: 'get'
+      },
       'blink': {
         type: 'do',
         action: 'blink',

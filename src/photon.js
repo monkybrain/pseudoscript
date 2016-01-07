@@ -35,6 +35,18 @@
       });
     };
 
+    Photon.prototype.get = function(property) {
+      return new Promise(function(resolve, reject) {
+        return Photon.photon.getVariable(property, function(err, data) {
+          if (err != null) {
+            return reject(err);
+          } else {
+            return resolve(data);
+          }
+        });
+      });
+    };
+
     Photon.prototype.set = function(property, value) {
       return new Promise(function(resolve, reject) {
         value = value.toString();

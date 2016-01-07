@@ -21,6 +21,9 @@ dictionary =
     'turn .*? down to':
       type: 'set'
 
+    'get':
+      type: 'get'
+
     # DO
     'blink':
       type: 'do'

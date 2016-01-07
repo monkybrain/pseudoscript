@@ -1,6 +1,6 @@
 Promise = require "promise"
 
-class Objekt
+class PhotonObject
 # 'Object' already taken...
 
   @word: 'object'
@@ -32,6 +32,15 @@ class Objekt
       (err) ->
        console.error err
      )
+
+  get: (property) ->
+    console.log "Getting property '#{property}' of '#{this.ref}'"
+    @photon.get(property).then(
+      (result) ->
+        result
+      (err) ->
+        console.error err
+    )
 
   set: (property, value) ->
 
@@ -72,7 +81,7 @@ class Objekt
   alreadyUsing: (ref) ->
     ref in @constructor.members
 
-  @get: (ref) ->
+  @select: (ref) ->
     if not ref?
       ref = @scope
 
@@ -83,7 +92,7 @@ class Objekt
   on: (event, callback) ->
     @photon.on event, callback
 
-class Light extends Objekt
+class Light extends PhotonObject
 
   @word: 'light'
 
@@ -98,7 +107,7 @@ class Light extends Objekt
     super(ref, photon)
     @properties = Light.properties
 
-class Room extends Objekt
+class Room extends PhotonObject
 
   @word: 'room'
 
@@ -112,7 +121,7 @@ class Room extends Objekt
     super(ref, photon)
     @events = Room.events
 
-class Button extends Objekt
+class Button extends PhotonObject
 
   @word: 'button'
 
@@ -130,7 +139,7 @@ class Button extends Objekt
 
 
 objects = {
-  Objekt: Objekt
+  PhotonObject: PhotonObject
   Light: Light
   Room: Room
   Button: Button

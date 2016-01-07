@@ -82,11 +82,11 @@ class Programmer
 
         if ref?
           syntax.push @indent "\n  # Setting callback for event '#{event}' of '#{ref}'", indent
-          syntax.push @indent "Objekt.get('#{ref}').on '#{event}', () ->\n", indent
+          syntax.push @indent "PhotonObject.select('#{ref}').on '#{event}', () ->\n", indent
 
         else if type?
           syntax.push @indent "\n  # Setting callback for event '#{event}' of current #{type}", indent
-          syntax.push @indent "#{type}.get().on '#{event}', () ->\n", indent
+          syntax.push @indent "#{type}.select().on '#{event}', () ->\n", indent
 
         indent += 2
 
@@ -119,11 +119,19 @@ class Programmer
 
           if ref?
             syntax.push @indent "# Set the property '#{property}' of '#{ref}' to #{value}", indent
-            syntax.push @indent "Objekt.get('#{ref}').set('#{property}', #{value})\n", indent
+            syntax.push @indent "PhotonObject.select('#{ref}').set('#{property}', #{value})\n", indent
           else if type?
             syntax.push @indent "# Set the property '#{property}' of current #{type}", indent
-            syntax.push @indent "#{type}.get().set('#{property}', #{value})\n", indent
+            syntax.push @indent "#{type}.select().set('#{property}', #{value})\n", indent
 
+        if verb is 'get'
+
+          if ref?
+            syntax.push @indent "# Get the property '#{property}' of '#{ref}'", indent
+            syntax.push @indent "PhotonObject.select('#{ref}').get('#{property}').then (data) -> console.log data.result\n", indent
+          else if type?
+            syntax.push @indent "# Get the property '#{property}' of current #{type}", indent
+            syntax.push @indent "#{type}.select().get('#{property}').then (data) -> console.log data.result\n", indent
 
         if verb is 'increase'
 
@@ -131,7 +139,7 @@ class Programmer
           syntax.push "\n" + @indent "# Increasing the property '#{property}' of '#{ref}' by #{value}", indent
 
           # Add code
-          syntax.push @indent + "#{type}.get('#{ref}').inc('#{property}', #{value})", indent
+          syntax.push @indent + "#{type}.select('#{ref}').inc('#{property}', #{value})", indent
 
         if verb is 'decrease'
 
@@ -139,7 +147,7 @@ class Programmer
           syntax.push "\n" + @indent "# Decreasing the property '#{property}' of '#{ref}' by #{value}", indent
 
           # Add code
-          syntax.push @indent "#{type}.get('#{ref}').dec('#{property}', #{value})", indent
+          syntax.push @indent "#{type}.select('#{ref}').dec('#{property}', #{value})", indent
 
         if verb is 'do'
 
@@ -147,7 +155,7 @@ class Programmer
           syntax.push @indent "# Blink #{value} times", indent
 
           # Add code
-          syntax.push @indent "#{type}.get('#{ref}').do('blink', #{value})\n", indent
+          syntax.push @indent "#{type}.select('#{ref}').do('blink', #{value})\n", indent
 
         if verb is 'log'
 
@@ -155,7 +163,7 @@ class Programmer
           syntax.push "\n" + @indent "# Logging", indent
 
           # Add code
-          syntax.push @indent, "console.log #{type}.get('#{ref}')", indent
+          syntax.push @indent, "console.log #{type}.select('#{ref}')", indent
 
     if closeAdverbWithValue?
       indent -= 2
@@ -169,7 +177,7 @@ class Programmer
   wrap: (code) ->
     output = []
     output.push "map = require '../src/modules/base'"
-    output.push "Objekt= map.Objekt"
+    output.push "PhotonObject = map.PhotonObject"
     output.push "Room = map.Room"
     output.push "Light = map.Light"
     output.push "Button = map.Button"
