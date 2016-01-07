@@ -189,12 +189,12 @@ class Parser
         continue
 
       ### CONDITIONALS ###
-      conditional = @find.conditional clause.text
+      ###conditional = @find.conditional clause.text
       if conditional?
         console.log conditional
         clause.type = 'conditional phrase'
         clause.conditional = conditional
-        continue
+        continue###
 
       ### VERB ###
       verb = @find.verb clause.text

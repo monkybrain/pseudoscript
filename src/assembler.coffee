@@ -191,7 +191,7 @@ class Programmer
     output.push "photon.connect()\n.then () ->"
     output.push "  console.log 'Connected!'\n"
     output.push code
-    # output.push @indent "console.log '# End of script #'", 2
+
     output.join "\n"
 
 module.exports = Programmer

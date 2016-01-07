@@ -14,9 +14,8 @@ class Photon
   connect: () ->
     new Promise (resolve, reject) ->
 
-      credentials = fs.readFileSync "credentials.json", "utf8"
-      credentials = JSON.parse credentials.photon
-      Spark.login credentials
+      credentials = JSON.parse fs.readFileSync "credentials.json", "utf8"
+      Spark.login credentials.photon
       Spark.on 'login', () ->
 
         devices = Spark.listDevices()

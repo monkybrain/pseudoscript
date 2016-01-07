@@ -256,7 +256,7 @@
     };
 
     Parser.prototype.parse = function(line) {
-      var adverb, clause, clauses, conditional, event, i, len, match, object, property, ref, type, unit, value, verb;
+      var adverb, clause, clauses, event, i, len, match, object, property, ref, type, unit, value, verb;
       clauses = this.separate(line);
       clauses = clauses.map(function(clause) {
         return {
@@ -289,13 +289,14 @@
         }
 
         /* CONDITIONALS */
-        conditional = this.find.conditional(clause.text);
-        if (conditional != null) {
-          console.log(conditional);
-          clause.type = 'conditional phrase';
-          clause.conditional = conditional;
-          continue;
-        }
+
+        /*conditional = @find.conditional clause.text
+        if conditional?
+          console.log conditional
+          clause.type = 'conditional phrase'
+          clause.conditional = conditional
+          continue
+         */
 
         /* VERB */
         verb = this.find.verb(clause.text);

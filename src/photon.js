@@ -19,9 +19,8 @@
     Photon.prototype.connect = function() {
       return new Promise(function(resolve, reject) {
         var credentials;
-        credentials = fs.readFileSync("credentials.json", "utf8");
-        credentials = JSON.parse(credentials.photon);
-        Spark.login(credentials);
+        credentials = JSON.parse(fs.readFileSync("credentials.json", "utf8"));
+        Spark.login(credentials.photon);
         return Spark.on('login', function() {
           var devices;
           devices = Spark.listDevices();
