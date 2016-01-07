@@ -4,223 +4,11 @@
 
   tools = require("monky-tools");
 
+  Finder = require("./finder");
+
   log = tools.console.log;
 
   error = tools.console.error;
-
-  Finder = (function() {
-    Finder.prototype.capitalize = function(string) {
-      return string = string[0].toUpperCase() + string.slice(1);
-    };
-
-    function Finder(dictionary, map) {
-      this.dict = dictionary;
-      this.map = map;
-    }
-
-    Finder.prototype.adverb = function(clause) {
-      var definition, entry, match, ref1;
-      ref1 = this.dict.adverbs;
-      for (entry in ref1) {
-        definition = ref1[entry];
-        match = clause.match(new RegExp(entry));
-        if (match != null) {
-          return definition;
-        }
-      }
-    };
-
-    Finder.prototype.event = function(clause) {
-      var k, key, match, object, ref, ref1, ref2, v, value;
-      match = clause.match(new RegExp(this.dict.event));
-      if (match != null) {
-        object = {};
-        ref = this.reference(clause);
-        if (ref != null) {
-          object.ref = ref;
-        }
-        if (ref == null) {
-          object.type = this.capitalize(this.object(clause));
-        }
-        ref1 = this.map;
-        for (key in ref1) {
-          value = ref1[key];
-          if (value.events != null) {
-            ref2 = value.events;
-            for (k in ref2) {
-              v = ref2[k];
-              match = clause.match(k);
-              if (match != null) {
-                return {
-                  object: object,
-                  event: v.event
-                };
-              }
-            }
-          }
-        }
-      }
-    };
-
-    Finder.prototype.verb = function(clause) {
-      var definition, entry, match, ref1;
-      ref1 = this.dict.verbs;
-      for (entry in ref1) {
-        definition = ref1[entry];
-        match = clause.match(new RegExp(entry));
-        if (match != null) {
-          return definition;
-        }
-      }
-    };
-
-    Finder.prototype.object = function(clause) {
-      var key, match, object, ref1;
-      ref1 = this.map;
-      for (key in ref1) {
-        object = ref1[key];
-        match = clause.match(object.word);
-        if (match != null) {
-          return object.word;
-        }
-      }
-    };
-
-    Finder.prototype.property = function(clause, object) {
-      var key, match, obj, property, ref1;
-      ref1 = this.map;
-      for (key in ref1) {
-        obj = ref1[key];
-        for (property in obj.properties) {
-          match = clause.match(property);
-          if (match != null) {
-            return property;
-          }
-        }
-      }
-    };
-
-    Finder.prototype.value = function(clause) {
-      var match, pattern, value, verb;
-      verb = this.verb(clause);
-      if (verb != null) {
-        if (verb.value != null) {
-          return verb.value;
-        }
-      }
-      pattern = new RegExp("(to )|(by )");
-      match = clause.match(pattern);
-      if (match != null) {
-        value = clause.slice(match.index);
-        value = value.replace(match[0], "");
-        value = value.split(" ")[0];
-        return value;
-      }
-      pattern = /\d+ time(s)|( )/g;
-      match = pattern.exec(clause);
-      if (match != null) {
-        value = clause.slice(match.index);
-        value = value.replace("times", "");
-        if (!isNaN(parseInt(value))) {
-          value = parseInt(value);
-        }
-        return value;
-      }
-    };
-
-    Finder.prototype.conditional = function(clause) {
-      var end, k, k2, lefthand, match, pattern, ref1, result, results, righthand, start, v, v2;
-      ref1 = this.dict.conditionals;
-      results = [];
-      for (k in ref1) {
-        v = ref1[k];
-        pattern = new RegExp(k);
-        match = clause.match(pattern);
-        if (match != null) {
-          result = {
-            type: v.type
-          };
-          if (result.type === 'if') {
-            results.push((function() {
-              var ref2, results1;
-              ref2 = this.dict.comparisons;
-              results1 = [];
-              for (k2 in ref2) {
-                v2 = ref2[k2];
-                pattern = new RegExp(k2);
-                match = clause.match(pattern);
-                if (match != null) {
-                  result.test = v2.type;
-                  pattern = /if .*? is/;
-                  if (match != null) {
-                    start = clause.indexOf("if") + "if".length;
-                    end = clause.indexOf("is");
-                    lefthand = clause.slice(start, end).trim();
-                    start = clause.indexOf("than") + "than".length;
-                    righthand = clause.slice(start).trim();
-                    if (!isNaN(lefthand)) {
-                      lefthand = parseFloat(lefthand);
-                    }
-                    if (!isNaN(righthand)) {
-                      righthand = parseFloat(righthand);
-                    }
-                    result.lefthand = lefthand;
-                    result.righthand = righthand;
-                    results1.push(result);
-                  } else {
-                    results1.push(void 0);
-                  }
-                } else {
-                  results1.push(void 0);
-                }
-              }
-              return results1;
-            }).call(this));
-          } else {
-            results.push(void 0);
-          }
-        } else {
-          results.push(void 0);
-        }
-      }
-      return results;
-    };
-
-    Finder.prototype.unit = function(clause) {
-      var definition, entry, match, ref1;
-      ref1 = this.dict.units;
-      for (entry in ref1) {
-        definition = ref1[entry];
-        match = clause.match(definition.pattern);
-        if (match != null) {
-          return entry;
-        }
-      }
-    };
-
-    Finder.prototype.reference = function(clause) {
-      var end, indices, match, pattern, reference, start;
-      pattern = /"|'/g;
-      indices = [];
-      while (true) {
-        match = pattern.exec(clause);
-        if (match != null) {
-          indices.push(match.index);
-        } else {
-          break;
-        }
-      }
-      if (indices.length > 0) {
-        start = indices[0] + 1;
-        end = indices[1];
-        reference = clause.slice(start, end);
-      }
-      return reference;
-    };
-
-    return Finder;
-
-  })();
 
   Parser = (function() {
     function Parser(dictionary, map) {
@@ -256,7 +44,7 @@
     };
 
     Parser.prototype.parse = function(line) {
-      var adverb, clause, clauses, event, i, len, match, object, property, ref, type, unit, value, verb;
+      var adverb, clause, clauses, end, event, i, k2, lefthand, len, match, object, pattern, property, ref, ref1, result, righthand, start, text, type, unit, v2, value, verb;
       clauses = this.separate(line);
       clauses = clauses.map(function(clause) {
         return {
@@ -289,14 +77,41 @@
         }
 
         /* CONDITIONALS */
-
-        /*conditional = @find.conditional clause.text
-        if conditional?
-          console.log conditional
-          clause.type = 'conditional phrase'
-          clause.conditional = conditional
-          continue
-         */
+        result = this.find.conditional(clause.text);
+        if (result != null) {
+          text = clause.text;
+          clause.type = 'conditional phrase';
+          clause.subtype = result.type;
+          if (result.type === 'if') {
+            ref1 = this.dict.comparisons;
+            for (k2 in ref1) {
+              v2 = ref1[k2];
+              pattern = new RegExp(k2);
+              match = text.match(pattern);
+              if (match != null) {
+                clause.test = v2.type;
+                pattern = /if .*? is/;
+                if (match != null) {
+                  start = text.indexOf("if") + "if".length;
+                  end = text.indexOf("is");
+                  lefthand = text.slice(start, end).trim();
+                  start = text.indexOf("than") + "than".length;
+                  righthand = text.slice(start).trim();
+                  if (!isNaN(lefthand)) {
+                    lefthand = parseFloat(lefthand);
+                  }
+                  if (!isNaN(righthand)) {
+                    righthand = parseFloat(righthand);
+                  }
+                  clause.lefthand = lefthand;
+                  clause.righthand = righthand;
+                  console.log(clause);
+                }
+              }
+            }
+          }
+          continue;
+        }
 
         /* VERB */
         verb = this.find.verb(clause.text);

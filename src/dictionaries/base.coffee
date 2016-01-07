@@ -73,16 +73,14 @@ dictionary =
 
   units:
     milliseconds:
-      pattern: /\d+\s+(milliseconds)|(ms)\b/g
+      pattern: /\d+\s+((milliseconds)|(ms))\b/g
     seconds:
-      pattern: /\d+\s+(seconds)|(sec)|(s)\b/g
+      pattern: /\d+\s+((seconds)|(sec)|(s))\b/g
     minutes:
-      pattern: /\d+\s+(minutes)|(min)|(m)\b/g
+      pattern: /\d+\s+((minutes)|(min)|(m))\b/g
     hours:
-      pattern: /\d+\s+(hours)|(h)\b/g
+      pattern: /\d+\s+((hours)|(h))\b/g
     days:
-      pattern: /\d+\s+(days)|(d)\b/g
-
-
+      pattern: /\d+\s+((days)|(d))\b/g
 
 module.exports = dictionary

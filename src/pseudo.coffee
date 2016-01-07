@@ -64,7 +64,7 @@ for line in lines
 
 # if '-s' -> log segments
 if argv.s?
-  util.inspect segments
+  console.log util.inspect segments, false, 4
 
 code = ''
 for segment in segments
