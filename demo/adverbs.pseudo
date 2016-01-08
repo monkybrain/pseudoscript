@@ -1,3 +1,6 @@
+Wait 1 second and then set the brightness of the light to 20, the temperature of the room 'living room' to 20
+
+
 # Wait 1 second and then set light brightness 20
 # Set color light 'fisk' to red and 'blubb' brightness to 20
 Set temperature of room 'living room' to 20 and 'kitchen' to 200
