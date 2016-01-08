@@ -13,19 +13,32 @@ class Set
     for mod in modules
       match = segment.match mod.lexical.base
       if match?
-        object = @scope.object.type = mod.lexical.base
+
+        # Set 'object' to corresponding word # TODO: FIX, NOT SO ELEGANT
+        object = mod.lexical.base
 
         # Find reference
         ref = Util.find.string(segment, object)
-        if ref?
-          @scope.object.ref = ref
 
+        # Update scope
+        @scope.object.type = object
+        @scope.object.ref = ref
+
+        # Set module
         module = mod
+
+        # Unset 'using scope' flag
         usingScope = false
+
         break
+
     if not object?
       object = @scope.object.type
-      ref = @scope.object.ref
+      ref = Util.find.string(segment, object)
+      if ref?
+        @scope.object.ref = ref
+      else
+        ref = @scope.object.ref
       for mod in modules
         if object is mod.lexical.base
           module = mod
@@ -39,32 +52,37 @@ class Set
     for key, value of module.properties
       match = segment.match key
       if match?
-        property = key
+        property = @scope.property = key
+        break
+    if not property?
+      property = @scope.property
+    if not property?
+      console.error "No property specified"
+      return
 
-        # Remove verb and property
-        if usingScope
-          index = segment.indexOf property
-          value = segment.slice index + property.length + 1
+    # Remove verb and property
+    indices = [
+      {index: segment.indexOf(property), string: property},
+      {index: segment.indexOf(ref), string: ref},
+      {index: segment.indexOf(object), string: object}
+    ]
 
-        if not usingScope
-          if ref?
-            index = segment.indexOf ref
-            value = segment.slice index + ref.length + 1
-          else
-            index = segment.indexOf object
-            value = segment.slice index + object.length + 1
+    indices.sort (a, b) ->
+      a.index < b.index
+    index = indices[0]
+    value = segment.slice index.index + index.string.length + 1
 
-        # Remove preposition (if exists)
-        pattern = /\bto\b/g
-        value = value.replace(pattern, "").trim()
+    # Remove preposition (if exists)
+    pattern = /\bto\b/g
+    value = value.replace(pattern, "").trim()
 
-        operation =
-          object:
-            type: module.self
-            ref: ref
-          property: property
-          value: value
-        return operation
+    operation =
+      object:
+        type: module.self
+        ref: ref
+      property: property
+      value: value
+    return operation
 
   split: (text) ->
     # Define delimiter pattern

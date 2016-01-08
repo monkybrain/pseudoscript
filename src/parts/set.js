@@ -15,16 +15,15 @@
     }
 
     Set.prototype.parse = function(segment) {
-      var i, index, j, key, len, len1, match, mod, module, object, operation, pattern, property, ref, ref1, usingScope, value;
+      var i, index, indices, j, key, len, len1, match, mod, module, object, operation, pattern, property, ref, ref1, usingScope, value;
       for (i = 0, len = modules.length; i < len; i++) {
         mod = modules[i];
         match = segment.match(mod.lexical.base);
         if (match != null) {
-          object = this.scope.object.type = mod.lexical.base;
+          object = mod.lexical.base;
           ref = Util.find.string(segment, object);
-          if (ref != null) {
-            this.scope.object.ref = ref;
-          }
+          this.scope.object.type = object;
+          this.scope.object.ref = ref;
           module = mod;
           usingScope = false;
           break;
@@ -32,7 +31,12 @@
       }
       if (object == null) {
         object = this.scope.object.type;
-        ref = this.scope.object.ref;
+        ref = Util.find.string(segment, object);
+        if (ref != null) {
+          this.scope.object.ref = ref;
+        } else {
+          ref = this.scope.object.ref;
+        }
         for (j = 0, len1 = modules.length; j < len1; j++) {
           mod = modules[j];
           if (object === mod.lexical.base) {
@@ -53,33 +57,45 @@
         value = ref1[key];
         match = segment.match(key);
         if (match != null) {
-          property = key;
-          if (usingScope) {
-            index = segment.indexOf(property);
-            value = segment.slice(index + property.length + 1);
-          }
-          if (!usingScope) {
-            if (ref != null) {
-              index = segment.indexOf(ref);
-              value = segment.slice(index + ref.length + 1);
-            } else {
-              index = segment.indexOf(object);
-              value = segment.slice(index + object.length + 1);
-            }
-          }
-          pattern = /\bto\b/g;
-          value = value.replace(pattern, "").trim();
-          operation = {
-            object: {
-              type: module.self,
-              ref: ref
-            },
-            property: property,
-            value: value
-          };
-          return operation;
+          property = this.scope.property = key;
+          break;
         }
       }
+      if (property == null) {
+        property = this.scope.property;
+      }
+      if (property == null) {
+        console.error("No property specified");
+        return;
+      }
+      indices = [
+        {
+          index: segment.indexOf(property),
+          string: property
+        }, {
+          index: segment.indexOf(ref),
+          string: ref
+        }, {
+          index: segment.indexOf(object),
+          string: object
+        }
+      ];
+      indices.sort(function(a, b) {
+        return a.index < b.index;
+      });
+      index = indices[0];
+      value = segment.slice(index.index + index.string.length + 1);
+      pattern = /\bto\b/g;
+      value = value.replace(pattern, "").trim();
+      operation = {
+        object: {
+          type: module.self,
+          ref: ref
+        },
+        property: property,
+        value: value
+      };
+      return operation;
     };
 
     Set.prototype.split = function(text) {

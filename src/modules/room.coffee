@@ -1,5 +1,7 @@
 class Room
 
+  @self: 'Room'
+
   @properties:
     'dark':
       type: 'boolean'

@@ -5,6 +5,8 @@
   Room = (function() {
     function Room() {}
 
+    Room.self = 'Room';
+
     Room.properties = {
       'dark': {
         type: 'boolean',
