@@ -6,8 +6,8 @@ error = tools.console.error
 
 class Parser
 
-  constructor: (map) ->
-    @map = map
+  constructor: (modules) ->
+    @modules = modules
     @scope =
       verb: null
       object:

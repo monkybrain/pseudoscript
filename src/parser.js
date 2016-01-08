@@ -11,8 +11,8 @@
   error = tools.console.error;
 
   Parser = (function() {
-    function Parser(map) {
-      this.map = map;
+    function Parser(modules) {
+      this.modules = modules;
       this.scope = {
         verb: null,
         object: {

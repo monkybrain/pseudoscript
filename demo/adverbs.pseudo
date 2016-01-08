@@ -1,3 +1,7 @@
-After 1 minute and 30 seconds set color green brightness 100
-Every 2:30:10 set the color of the light to green and the brightness to 200
-At 2:30 pm
+Set the color of light 'ceiling' to red and the brightness to 20
+# Set the color of the light to green, the brightness to 20 and the property on to false
+# after 1 minute set color of light 'ceiling' green, brightness 20, on false
+# Every 2 minutes set room temperature 20 and color red wait 1 second set brightness 10
+# Every 2:30:10 set the color of the light to green and the brightness to 200
+# Every 2:30:10 set the color of the light to green and the temperature of the room to 20
+# At 2:30 pm

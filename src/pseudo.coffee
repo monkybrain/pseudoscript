@@ -12,14 +12,14 @@ error = require("monky-tools").console.error
 
 # Internal modules
 dictionary = require "./dictionaries/base"
-map = require "./modules/base"
+modules = require "./modules/modules"
 Parser = require "./parser"
 Assembler = require "./assembler"
 Photon = require "./photon"
 
 # Create instances
-parser = new Parser(map)
-assembler = new Assembler(map)
+parser = new Parser(modules)
+assembler = new Assembler(modules)
 
 if argv._[0]?
   filename = argv._[0]
@@ -62,7 +62,7 @@ segments = []
 for line in lines
   segments.push parser.parse line
 
-console.log segments
+console.log util.inspect segments, false, 8
 return
 
 # if '-s' -> log segments
