@@ -1,9 +1,11 @@
-Wait 1 second and then set the brightness of the light to 20, the temperature of the room 'living room' to 20
+Wait 1 second and then set the temperature of the room 'living room' to 20 and of the 'kitchen' to 30
+Wait 1 s, set temperature room 'living room' 20, 'kitchen' 30
+Set light brightness 20, color red
 
 
 # Wait 1 second and then set light brightness 20
 # Set color light 'fisk' to red and 'blubb' brightness to 20
-Set temperature of room 'living room' to 20 and 'kitchen' to 200
+# Set temperature of room 'living room' to 20 and 'kitchen' to 200
 # Set the color of the light to green, the brightness of light 'bedroom' to 20 and the color of the light 'fisk' to green
 # after 1 minute set color of light 'ceiling' green, brightness 20, on false
 # Every 2 minutes set temperature of room to 20, wait 1 second, set brightness of the light 'test' to 10
