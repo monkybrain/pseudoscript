@@ -26,7 +26,7 @@
 
   Photon = require("./photon");
 
-  parser = new Parser(dictionary, map);
+  parser = new Parser(map);
 
   assembler = new Assembler(map);
 
@@ -84,6 +84,10 @@
     line = lines[i];
     segments.push(parser.parse(line));
   }
+
+  console.log(segments);
+
+  return;
 
   if (argv.s != null) {
     console.log(util.inspect(segments, false, 4));

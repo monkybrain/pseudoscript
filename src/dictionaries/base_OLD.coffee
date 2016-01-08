@@ -1,33 +1,5 @@
 dictionary =
 
-  adverbs:
-    delay:
-      pattern: /\b((in)|(after)|(wait))\s+\d+/g
-    interval:
-      pattern: /\b(every)\s+\d+/g
-    at:
-      pattern: /\bat\b/g
-
-  units:
-    time:
-      words:
-        milliseconds:
-          patterns: [/\d+\s?((millisecond(s)?)|(ms))(\b|\d+)/g]
-        seconds:
-          patterns: [/\d+\s?((second(s)?)|(sec)|(s))(\b|\d+)/g]
-        minutes:
-          patterns: [/\d+\s?((minute(s)?)|(min)|(m))(\b|\d+)/g]
-        hours:
-          patterns: [/\d+\s?((hour(s)?)|(h))(\b|\d+)/g]
-        days:
-          patterns: [/\d+\s?((day(s)?)|(d))(\b|\d+)/g]
-      order:
-        interval: ['seconds', 'minutes', 'hours', 'days']
-        specific: ['minutes', 'hours']
-        # For ':' matching
-
-
-
   verbs:
   # SET
     '(turn on)|(turn .*? on)':
@@ -79,6 +51,11 @@ dictionary =
     'turn .*? down by':
       type: 'decrease'
 
+  adverbs:
+    '^(in)|(after)|(wait) \\d+':
+      type: 'delay'
+    '^(every) \\d+':
+      type: 'interval'
 
   event: '(when)|(upon).*?'
 
@@ -93,5 +70,18 @@ dictionary =
       type: '>'
     '\\bis ((smaller)|(less)|(lower)) than\\b':
       type: '<'
+
+  units:
+    time:
+      milliseconds:
+        pattern: /\d+\s+((milliseconds)|(ms))\b/g
+      seconds:
+        pattern: /\d+\s+((seconds)|(sec)|(s))\b/g
+      minutes:
+        pattern: /\d+\s+((minutes)|(min)|(m))\b/g
+      hours:
+        pattern: /\d+\s+((hours)|(h))\b/g
+      days:
+        pattern: /\d+\s+((days)|(d))\b/g
 
 module.exports = dictionary

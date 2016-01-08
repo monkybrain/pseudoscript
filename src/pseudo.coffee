@@ -18,7 +18,7 @@ Assembler = require "./assembler"
 Photon = require "./photon"
 
 # Create instances
-parser = new Parser(dictionary, map)
+parser = new Parser(map)
 assembler = new Assembler(map)
 
 if argv._[0]?
@@ -61,6 +61,9 @@ lines = lines.map (line) ->
 segments = []
 for line in lines
   segments.push parser.parse line
+
+console.log segments
+return
 
 # if '-s' -> log segments
 if argv.s?

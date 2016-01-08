@@ -1,10 +1,12 @@
-Add a button
+After 1 seconds, turn on the light
 
-Add a light called 'light' and set the color to red
+# Add a button
 
-When the button is pushed, set the color to green and after 1 second, set the color back to red
+# Add a light called 'light' and set the color to red
 
-if the brightness is equal to 100
+# When the button is pushed, set the color to green and after 1 second, set the color back to red
+
+# if the brightness is equal to 100
 
 # When the button is pushed, set the color to green and the brightness to 100 and after 1 second, set the color back to blue
 
