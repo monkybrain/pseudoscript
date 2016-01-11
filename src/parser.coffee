@@ -32,10 +32,14 @@ class Parser
     if result?
       segments.push result
 
-    ### SET ###
-    result = Parts.set.test line
-    if result?
-      segments.push result
+    ### VERBS ###
+    for verb in Parts.verbs
+      result = verb.test line
+      if result?
+        segments.push result
+      ###result = Parts.Set.test line
+      if result?
+        segments.push result###
 
     segments
 

@@ -1,4 +1,6 @@
-class Room
+Module = require "./module"
+
+class Room extends Module
 
   @self: 'Room'
 

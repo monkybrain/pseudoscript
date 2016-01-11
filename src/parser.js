@@ -32,7 +32,7 @@
     };
 
     Parser.prototype.parse = function(line) {
-      var result, segments;
+      var i, len, ref, result, segments, verb;
       line = this.process(line);
       segments = [];
 
@@ -42,10 +42,19 @@
         segments.push(result);
       }
 
-      /* SET */
-      result = Parts.set.test(line);
-      if (result != null) {
-        segments.push(result);
+      /* VERBS */
+      ref = Parts.verbs;
+      for (i = 0, len = ref.length; i < len; i++) {
+        verb = ref[i];
+        result = verb.test(line);
+        if (result != null) {
+          segments.push(result);
+        }
+
+        /*result = Parts.Set.test line
+        if result?
+          segments.push result
+         */
       }
       return segments;
     };

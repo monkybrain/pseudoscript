@@ -1,40 +1,36 @@
 modules = require "../modules/modules"
-Util = require "./util"
+Find = require "./find"
+Scope = require "./scope"
 
 class Set
 
-  constructor: (dict) ->
-    @dict = dict
-    @scope = object: {}
+  @lexical:
+    base: 'set'
+    synonyms: []
 
-  parse: (segment) ->
+  @parse: (segment) ->
 
-    # Find object
-    for mod in modules
-      match = segment.match mod.lexical.base
-      if match?
+    object = Find.object segment
+    module = Find.module segment
 
-        # Set 'object' to corresponding word # TODO: FIX, NOT SO ELEGANT
-        object = mod.lexical.base
+    # Find reference
+    ref = Find.reference segment
 
-        # Find reference
-        ref = Util.find.string(segment, object)
+    # Update scope
+    Scope.object = object
+    Scope.ref = ref
 
-        # Update scope
-        @scope.object.type = object
-        @scope.object.ref = ref
+    # Set module
+    current = module
 
-        # Set module
-        module = mod
+    console.log current
 
-        # Unset 'using scope' flag
-        usingScope = false
-
-        break
+    # Unset 'using scope' flag
+    usingScope = false
 
     if not object?
       object = @scope.object.type
-      ref = Util.find.string(segment, object)
+      ref = Find.reference(segment, object)
       if ref?
         @scope.object.ref = ref
       else
@@ -44,12 +40,13 @@ class Set
           module = mod
           break
       usingScope = true
+
     if not object?
       console.error "No object"
       return object: null
 
     # Find property
-    for key, value of module.properties
+    for key, value of current.properties
       match = segment.match key
       if match?
         property = @scope.property = key
@@ -78,13 +75,13 @@ class Set
 
     operation =
       object:
-        type: module.self
+        type: current.self
         ref: ref
       property: property
       value: value
     return operation
 
-  split: (text) ->
+  @split: (text) ->
     # Define delimiter pattern
     pattern = /and|,|&/g
     # Split by pattern
@@ -93,7 +90,7 @@ class Set
     parts.map (part) ->
       part.trim()
 
-  test: (text) ->
+  @test: (text) ->
     pattern = /\bset .*( to)? \b(.*)\b/g
     match = text.match pattern
     if match?

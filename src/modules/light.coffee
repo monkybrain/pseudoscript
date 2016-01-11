@@ -1,4 +1,6 @@
-class Light
+Module = "./module"
+
+class Light extends Module
 
   @self: 'Light'
 

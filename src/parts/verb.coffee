@@ -1,0 +1,3 @@
+class Verb
+
+  @fisk: "test"
