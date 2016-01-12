@@ -1,8 +1,8 @@
 Find = require "./../find"
-Verb = require "./../verb"
+Verb = require "./verb"
 Scope = require "./../scope"
 
-class Add extends Verb
+class Add
 
   @lexical:
     base: 'add'

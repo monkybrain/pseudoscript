@@ -6,15 +6,12 @@ class Find
   constructor: () ->
 
   @object: (text) ->
-
-    # Look for words corresponding to loaded modules
     for module in modules
       match = text.match module.lexical.base
       if match?
         return module.self
 
   @module: (object) ->
-
     for module in modules
       match = object.match module.self
       if match?

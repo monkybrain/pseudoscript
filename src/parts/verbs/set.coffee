@@ -1,47 +1,21 @@
+### VERB: SET (BASED ON GET) ###
+
 modules = require "../../modules/modules"
 Find = require "./../find"
 Scope = require "./../scope"
+Get = require "./get"
 
-class Set
+class Set extends Get
 
   @lexical:
     base: 'set'
     synonyms: []
 
-  @parse: (segment) ->
+  @getValue: (segment, object, ref, property) ->
 
-    ### FIND OBJECT AND REFERENCE ###
-
-    # Parse segment for object
-    for module in modules
-      match = segment.match module.lexical.base
-      if match?
-        object = module.self
-        break
-
-    # If no object -> fall back on scope
-    if not object?
-      object = Scope.current.object
-      ref = Scope.current.ref
-
-    # If object but no reference -> get reference from scope
-    else
-      ref = Scope.modules[object].ref
-
-    ### FIND PROPERTY ###
-
-    # Look for all properties associated with module
+    # Get module
     module = Find.module object
-    for key, value of module.properties
-      match = segment.match key
-      if match?
-        property = key
 
-    # If no property -> fall back on scope
-    if not property?
-      property = Scope.modules[object].property
-
-    ### FIND VALUE ###
     try
       type = module.properties[property].type
     catch err
@@ -50,22 +24,53 @@ class Set
     if type is 'number'
       value = parseFloat Find.number segment
 
+    if type is 'string'
+
+      # pattern = /to .*/g
+      # match = segment.match pattern
+      # if match?
+      #   preposition = match[0]
+
+      # Get indices of object, ref and property
+      occurrences = [
+        {string: module.lexical.base, index: segment.indexOf module.lexical.base},
+        {string: ref, index: segment.indexOf ref},
+        {string: property, index: segment.indexOf property}
+      ]
+
+      # Sort by highest index and get last occurrence
+      occurrences.sort (a, b) ->
+        a.index < b.index
+      occurrence = occurrences[0]
+
+      # value = segment.slice index.index + index.string.length + 1
+      value = segment.slice occurrence.index + occurrence.string.length + 1
+
+      # Remove preposition (if exists)
+      pattern = /\bto\b/g
+      value = value.replace(pattern, "").trim()
+
+    return value
+
+  @parse: (segment) ->
+
+    # Get object
+    [object, ref] = @getObject segment
+
+    # Get property
+    property = @getProperty segment, object
+
+    # Get value
+    value = @getValue segment, object, ref, property
+
     # TODO: Implement 'boolean' and 'string'
 
     # Update scope
     Scope.current = object: object, ref: ref, property: property, value: value
     Scope.modules[object] = ref: ref, property: property, value: value
 
-    object: object, ref: ref, property: property, value: value
-
-  @split: (text) ->
-    # Define delimiter pattern
-    pattern = /and|,|&/g
-    # Split by pattern
-    parts = text.split pattern
-    # Return array of trimmed strings
-    parts.map (part) ->
-      part.trim()
+    # Return parsed info
+    return object: object, ref: ref, property: property, value: value
 
   @test: (text) ->
     pattern = /\bset .*( to)? \b(.*)\b/g
@@ -76,5 +81,7 @@ class Set
         @parse segment
 
       return type: 'verb', subtype: 'set', operations: segments
+
+console.log Set
 
 module.exports = Set

@@ -8,8 +8,13 @@ class Module
     for key, value of @constructor.properties
       @properties[key] = value.default
 
-  @add: (module, ref) ->
-    Module.members.push module: module, ref: ref
+  @add: (ref) ->
+    Module.members.push module: this.self, ref: ref
     this.members.push ref
+
+  @fetch: (ref) ->
+    for member in @members
+      if ref is member.ref
+        return member
 
 module.exports = Module

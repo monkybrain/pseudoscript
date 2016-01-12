@@ -41,6 +41,7 @@
       /* ADVERB */
       result = Parts.adverb.test(line);
       if (result != null) {
+        console.log(result);
         segments.push(result);
       }
 

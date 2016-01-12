@@ -15,12 +15,23 @@
       }
     }
 
-    Module.add = function(module, ref) {
+    Module.add = function(ref) {
       Module.members.push({
-        module: module,
+        module: this.self,
         ref: ref
       });
       return this.members.push(ref);
+    };
+
+    Module.fetch = function(ref) {
+      var i, len, member, ref1;
+      ref1 = this.members;
+      for (i = 0, len = ref1.length; i < len; i++) {
+        member = ref1[i];
+        if (ref === member.ref) {
+          return member;
+        }
+      }
     };
 
     return Module;

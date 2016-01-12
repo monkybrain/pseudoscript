@@ -1,0 +1,16 @@
+{
+  "name": "pseudoscript",
+  "version": "0.0.1",
+  "description": "Translates pseudo code in to CoffeeScript/JavaScript.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/monkybrain/pseudoscript.git"
+  },
+  "author": "Philip Prophet (monkybrain)",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/monkybrain/pseudoscript/issues"
+  },
+  "homepage": "https://github.com/monkybrain/pseudoscript#readme",
+  "dependencies": {}
+}
