@@ -1,5 +1,4 @@
 Find = require "./../find"
-Verb = require "./verb"
 Scope = require "./../scope"
 
 class Add

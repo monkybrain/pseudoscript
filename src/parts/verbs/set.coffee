@@ -83,6 +83,4 @@ class Set extends Get
 
       return type: 'verb', subtype: 'set', operations: segments
 
-console.log Set
-
 module.exports = Set

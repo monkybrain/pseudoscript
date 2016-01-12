@@ -111,8 +111,6 @@
 
   })(Get);
 
-  console.log(Set);
-
   module.exports = Set;
 
 }).call(this);

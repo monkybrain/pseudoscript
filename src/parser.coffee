@@ -31,7 +31,6 @@ class Parser
     ### ADVERB ###
     result = Parts.adverb.test line
     if result?
-      console.log result
       segments.push result
 
     ### VERBS ###
