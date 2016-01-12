@@ -7,10 +7,6 @@
   Find = (function() {
     function Find() {}
 
-    Find.test = function() {
-      return console.log("test");
-    };
-
     Find.object = function(text) {
       var i, len, match, module;
       for (i = 0, len = modules.length; i < len; i++) {
@@ -49,6 +45,15 @@
         start = indices[0] + 1;
         end = indices[1];
         return text.slice(start, end);
+      }
+    };
+
+    Find.number = function(text) {
+      var match, pattern;
+      pattern = /\b\d+\b/g;
+      match = text.match(pattern);
+      if (match != null) {
+        return match[0];
       }
     };
 

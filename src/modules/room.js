@@ -9,11 +9,13 @@
   Room = (function(superClass) {
     extend(Room, superClass);
 
-    function Room() {
-      return Room.__super__.constructor.apply(this, arguments);
-    }
-
     Room.self = 'Room';
+
+    Room.lexical = {
+      base: 'room'
+    };
+
+    Room.members = [];
 
     Room.properties = {
       'dark': {
@@ -30,9 +32,9 @@
       }
     };
 
-    Room.lexical = {
-      base: 'room'
-    };
+    function Room() {
+      Room.__super__.constructor.call(this);
+    }
 
     return Room;
 

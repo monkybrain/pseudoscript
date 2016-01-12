@@ -2,7 +2,9 @@ modules = require "../modules/modules"
 
 class Scope
 
-  @object: null
-  @ref: null
+  @modules: []
+  @current: {}
+  @type: null
+  @subtype: null
 
 module.exports = Scope

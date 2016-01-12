@@ -4,6 +4,11 @@ class Room extends Module
 
   @self: 'Room'
 
+  @lexical:
+    base: 'room'
+
+  @members = []
+
   @properties:
     'dark':
       type: 'boolean'
@@ -15,7 +20,7 @@ class Room extends Module
       type: 'number'
       set: true
 
-  @lexical:
-    base: 'room'
+  constructor: () ->
+    super()
 
 module.exports = Room

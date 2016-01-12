@@ -6,13 +6,13 @@
 
   Adverb = require("./adverb");
 
-  Set = require("./set");
+  Set = require("./verbs/set");
 
-  Add = require("./add");
+  Add = require("./verbs/add");
 
   module.exports = {
     adverb: new Adverb(dict),
-    verbs: [Set, Add]
+    verbs: [Add, Set]
   };
 
 }).call(this);

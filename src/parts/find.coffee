@@ -5,9 +5,6 @@ class Find
 
   constructor: () ->
 
-  @test: () ->
-    console.log "test"
-
   @object: (text) ->
 
     # Look for words corresponding to loaded modules
@@ -41,5 +38,12 @@ class Find
       start = indices[0] + 1
       end = indices[1]
       return text[start...end]
+
+  @number: (text) ->
+    pattern = /\b\d+\b/g
+    match = text.match pattern
+    if match?
+      return match[0]
+
 
 module.exports = Find

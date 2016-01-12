@@ -1,5 +1,6 @@
 tools = require "monky-tools"
 Parts = require "./parts/parts"
+Scope = require "./parts/scope"
 
 log = tools.console.log
 error = tools.console.error
@@ -36,10 +37,9 @@ class Parser
     for verb in Parts.verbs
       result = verb.test line
       if result?
+        Scope.type = 'verb'
+        Scope.subtype = verb.lexical.base
         segments.push result
-      ###result = Parts.Set.test line
-      if result?
-        segments.push result###
 
     segments
 

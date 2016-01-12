@@ -1,9 +1,11 @@
-Find = require "./find"
-Verb = require "./verb"
+Find = require "./../find"
+Verb = require "./../verb"
+Scope = require "./../scope"
 
 class Add extends Verb
 
   @lexical:
+    base: 'add'
     synonyms: ['add', 'create']
     regex: () ->
       synonyms = this.synonyms.map (synonym) ->
@@ -27,7 +29,11 @@ class Add extends Verb
 
       # Get module
       module = Find.module object
-      module.members.push ref
+      module.add ref
+
+      # Update scope
+      Scope.modules[object] = ref: ref
+      Scope.current = object: object, ref: ref
 
       return type: 'verb', verb: 'add', object: object, ref: ref
 

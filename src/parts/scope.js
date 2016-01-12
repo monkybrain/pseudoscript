@@ -7,9 +7,13 @@
   Scope = (function() {
     function Scope() {}
 
-    Scope.object = null;
+    Scope.modules = [];
 
-    Scope.ref = null;
+    Scope.current = {};
+
+    Scope.type = null;
+
+    Scope.subtype = null;
 
     return Scope;
 

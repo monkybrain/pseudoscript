@@ -3,9 +3,25 @@
   var Module;
 
   Module = (function() {
-    function Module() {}
-
     Module.members = [];
+
+    function Module() {
+      var key, ref1, value;
+      this.properties = {};
+      ref1 = this.constructor.properties;
+      for (key in ref1) {
+        value = ref1[key];
+        this.properties[key] = value["default"];
+      }
+    }
+
+    Module.add = function(module, ref) {
+      Module.members.push({
+        module: module,
+        ref: ref
+      });
+      return this.members.push(ref);
+    };
 
     return Module;
 
