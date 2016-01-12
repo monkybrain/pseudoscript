@@ -9,7 +9,7 @@ class Get
 
   @lexical:
     base: 'get'
-    synonyms: []
+    synonyms: ['get']
 
   @getObject: (segment) ->
 

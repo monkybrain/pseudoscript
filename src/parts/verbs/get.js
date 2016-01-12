@@ -18,7 +18,7 @@
 
     Get.lexical = {
       base: 'get',
-      synonyms: []
+      synonyms: ['get']
     };
 
     Get.getObject = function(segment) {

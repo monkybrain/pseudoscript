@@ -24,7 +24,7 @@
 
     Set.lexical = {
       base: 'set',
-      synonyms: []
+      synonyms: ['set']
     };
 
     Set.getValue = function(segment, object, ref, property) {

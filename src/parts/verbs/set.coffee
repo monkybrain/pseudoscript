@@ -9,7 +9,7 @@ class Set extends Get
 
   @lexical:
     base: 'set'
-    synonyms: []
+    synonyms: ['set']
 
   @getValue: (segment, object, ref, property) ->
 
@@ -73,6 +73,7 @@ class Set extends Get
     return object: object, ref: ref, property: property, value: value
 
   @test: (text) ->
+
     pattern = /\bset .*( to)? \b(.*)\b/g
     match = text.match pattern
     console.log match
