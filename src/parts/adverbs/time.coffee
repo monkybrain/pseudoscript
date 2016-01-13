@@ -59,7 +59,7 @@ class Time extends Adverb
       value = pattern.exec(result)[0]
 
       # Find unit
-      pattern = new RegExp "\\b" + units + "\\b", "g"
+      pattern = new RegExp "(\\b)|(\\d+))" + units + "(\\b)|(\\d+)", "g"
       unit = @getUnit pattern.exec(result)[0]
 
       # Assemble time object
