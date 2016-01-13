@@ -14,7 +14,8 @@ class Parser
   @phrasify: (line) ->
 
     # Assemble regex pattern from keywords
-    pattern = Util.regex.group Parts.keywords
+    keywords = Util.regex.group Parts.keywords
+    pattern = Util.regex.bound keywords
 
     # Get indices of all keywords
     indices = []
@@ -52,9 +53,10 @@ class Parser
     for phrase in phrases
 
       ### ADVERB ###
-      result = Parts.adverb.test phrase
-      if result?
-        segments.push result
+      for adverb in Parts.adverbs
+        result = adverb.test phrase
+        if result?
+          segments.push result
 
       ### VERBS ###
       for verb in Parts.verbs

@@ -31,49 +31,55 @@ class Time extends Adverb
   @getUnit: (expression) ->
     for k, v of @units
       for unit in v
-        pattern = Util.regex.bound unit
+        pattern = unit
         if expression.match(pattern)?
           return k
 
   @getTime: (text) ->
 
+    ###
     # Assemble pattern: number + unit (e.g. '1 minute', '37 s')
-    # FIXME: \s space adding hack!
     units = Util.regex.group @getUnits()
-    pattern = new RegExp "\\d+\\s+?\\b" + units + "\\b", "g"
+    # pattern = new RegExp "(\\d+\\s)" + units, "g"
+    pattern = new RegExp "\\d+" + units, "g"
+    ###
+
+    units = Util.regex.group @getUnits()
+    # pattern = "\\d+\\s*" + units + "((\\d+)|(\\b))+"
+    pattern = "\\d+\\s*" + units
+    pattern = new RegExp pattern, "g"
+    console.log pattern
+
 
     # Find time expressions
     results = []
     loop
       result = pattern.exec text
+      console.log text
+      console.log result
       if result?
-        results.push result[0]
+        [all, value, unit] = result
+        results.push [value, unit]
       else break
 
-    # Parse expressions
-    expressions = []
+    # Parse time expressions
+    time = {}
     for result in results
 
-      # Find value
-      pattern = /\b\d+\b/g
-      value = pattern.exec(result)[0]
+      # Deconstruct result
+      [value, unit] = result
 
-      # Find unit
-      pattern = new RegExp "(\\b)|(\\d+))" + units + "(\\b)|(\\d+)", "g"
-      unit = @getUnit pattern.exec(result)[0]
+      # Convert string value to float
+      value = parseFloat value
 
-      # Assemble time object
-      time = {}
-      time[unit] = value
+      # Get unit
+      unit = @getUnit unit
 
-      # Push time object to array
-      expressions.push time
+      # If unit already used -> add new value, else -> create new key
+      time[unit] = if time[unit]? then time[unit] += value else value
 
-    # DEBUG: Write to console
-    console.log expressions
-
-    # Converted to milliseconds and return
-    return @time2ms time
+    # Convert to seconds and return
+    return @time2sec time
 
   @test: (text) ->
 
@@ -84,32 +90,29 @@ class Time extends Adverb
     # Find preposition
     match = text.match pattern
     if match?
+
       preposition = match[0]
 
-    # Get type of adverb by preposition
-    type = @getType preposition
+      # Get type of adverb by preposition
+      type = @getType preposition
 
-    # Get time (in milliseconds)
-    time = @getTime text
+      # Get time (in milliseconds)
+      time = @getTime text
 
-    return type: type, time: time
+      return type: type, time: time
 
-  @time2ms: (time) ->
-    milliseconds = 0
+  @time2sec: (time) ->
+    seconds = 0
     if time.days?
-      milliseconds += time.days * 1000 * 60 * 60 * 24
+      seconds += time.days * 60 * 60 * 24
     if time.hours?
-      milliseconds += time.hours * 1000 * 60 * 60
+      seconds += time.hours * 60 * 60
     if time.minutes?
-      milliseconds += time.minutes * 1000 * 60
+      seconds += time.minutes * 60
     if time.seconds?
-      milliseconds += time.seconds * 1000
+      seconds += time.seconds
     if time.milliseconds?
-      milliseconds += time.milliseconds
-    milliseconds
-
-# str = "After 7 days 4 h 2 min 45 seconds"
-str = "Every 2m45s"
-console.log Time.test(str.toLowerCase())
+      seconds += time.milliseconds / 1000
+    seconds
 
 module.exports = Time

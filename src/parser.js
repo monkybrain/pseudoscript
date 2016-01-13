@@ -22,8 +22,9 @@
     };
 
     Parser.phrasify = function(line) {
-      var i, index, indices, j, len, pattern, phrases, result;
-      pattern = Util.regex.group(Parts.keywords);
+      var i, index, indices, j, keywords, len, pattern, phrases, result;
+      keywords = Util.regex.group(Parts.keywords);
+      pattern = Util.regex.bound(keywords);
       indices = [];
       while (true) {
         result = pattern.exec(line);
@@ -50,7 +51,7 @@
     };
 
     Parser.parse = function(line) {
-      var j, k, len, len1, phrase, phrases, ref, result, segments, verb;
+      var adverb, j, k, l, len, len1, len2, phrase, phrases, ref, ref1, result, segments, verb;
       line = this.process(line);
       segments = [];
       phrases = this.phrasify(line);
@@ -58,15 +59,19 @@
         phrase = phrases[j];
 
         /* ADVERB */
-        result = Parts.adverb.test(phrase);
-        if (result != null) {
-          segments.push(result);
+        ref = Parts.adverbs;
+        for (k = 0, len1 = ref.length; k < len1; k++) {
+          adverb = ref[k];
+          result = adverb.test(phrase);
+          if (result != null) {
+            segments.push(result);
+          }
         }
 
         /* VERBS */
-        ref = Parts.verbs;
-        for (k = 0, len1 = ref.length; k < len1; k++) {
-          verb = ref[k];
+        ref1 = Parts.verbs;
+        for (l = 0, len2 = ref1.length; l < len2; l++) {
+          verb = ref1[l];
           result = verb.test(phrase);
           if (result != null) {
             Scope.type = 'verb';

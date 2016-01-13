@@ -11,11 +11,12 @@ log = require("monky-tools").console.log
 error = require("monky-tools").console.error
 
 # Internal modules
-dictionary = require "./dictionaries/base"
+# dictionary = require "./dictionaries/base"
 modules = require "./modules/modules"
 Parser = require "./parser"
 Assembler = require "./assembler"
 Photon = require "./photon"
+Preprocessor = require "./preprocessor"
 
 # Create instances
 assembler = new Assembler(modules)
@@ -51,15 +52,16 @@ lines = lines.map (line) ->
   line
 
 lines = lines.filter (line) ->
-  return line isnt ''
+  line isnt ''
 
-# Trim strings
+# Preprocess and trim strings
 lines = lines.map (line) ->
+  line = Preprocessor.process line
   line.trim()
 
-segments = []
-for line in lines
-  segments.push Parser.parse line
+# Parse
+segments = lines.map (line) ->
+  Parser.parse line
 
 console.log util.inspect segments, false, 8
 return
