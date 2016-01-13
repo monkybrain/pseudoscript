@@ -13,7 +13,7 @@
       if (adverb != null) {
         result = {
           type: 'adverb',
-          subtype: adverb
+          adverb: adverb
         };
         if (adverb === 'delay' || adverb === 'interval') {
           result.time = this.interval(text);

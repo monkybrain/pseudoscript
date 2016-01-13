@@ -18,7 +18,6 @@ Assembler = require "./assembler"
 Photon = require "./photon"
 
 # Create instances
-parser = new Parser(modules)
 assembler = new Assembler(modules)
 
 if argv._[0]?
@@ -60,7 +59,7 @@ lines = lines.map (line) ->
 
 segments = []
 for line in lines
-  segments.push parser.parse line
+  segments.push Parser.parse line
 
 console.log util.inspect segments, false, 8
 return

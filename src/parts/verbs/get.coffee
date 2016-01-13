@@ -72,13 +72,20 @@ class Get
     return property
 
   @split: (text) ->
+
     # Define delimiter pattern
     pattern = /and|,|&/g
+
     # Split by pattern
     parts = text.split pattern
+
     # Return array of trimmed strings
-    parts.map (part) ->
+    parts = parts.map (part) ->
       part.trim()
+
+    # If empty -> remove from array (to prevent trailing 'and's)
+    parts = parts.filter (part) ->
+      part isnt ''
 
   @parse: (segment) ->
 
@@ -103,6 +110,6 @@ class Get
       segments = split.map (segment) =>
         @parse segment
 
-      return type: 'verb', subtype: 'get', operations: segments
+      return type: 'verb', verb: 'get', operations: segments
 
 module.exports = Get

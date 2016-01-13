@@ -91,7 +91,6 @@
       var match, pattern, segments, split;
       pattern = /\bset .*( to)? \b(.*)\b/g;
       match = text.match(pattern);
-      console.log(match);
       if (match != null) {
         split = this.split(match[0]);
         segments = split.map((function(_this) {
@@ -101,7 +100,7 @@
         })(this));
         return {
           type: 'verb',
-          subtype: 'set',
+          verb: 'set',
           operations: segments
         };
       }

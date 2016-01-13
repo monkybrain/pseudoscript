@@ -84,8 +84,11 @@
       var parts, pattern;
       pattern = /and|,|&/g;
       parts = text.split(pattern);
-      return parts.map(function(part) {
+      parts = parts.map(function(part) {
         return part.trim();
+      });
+      return parts = parts.filter(function(part) {
+        return part !== '';
       });
     };
 
@@ -122,7 +125,7 @@
         })(this));
         return {
           type: 'verb',
-          subtype: 'get',
+          verb: 'get',
           operations: segments
         };
       }

@@ -6,7 +6,7 @@ class Adverb
   test: (text) ->
     adverb = @find text
     if adverb?
-      result = type: 'adverb', subtype: adverb
+      result = type: 'adverb', adverb: adverb
       if adverb is 'delay' or adverb is 'interval'
         result.time =  @interval text
       if adverb is 'at'

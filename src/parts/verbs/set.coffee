@@ -76,12 +76,11 @@ class Set extends Get
 
     pattern = /\bset .*( to)? \b(.*)\b/g
     match = text.match pattern
-    console.log match
     if match?
       split = @split match[0]
       segments = split.map (segment) =>
         @parse segment
 
-      return type: 'verb', subtype: 'set', operations: segments
+      return type: 'verb', verb: 'set', operations: segments
 
 module.exports = Set

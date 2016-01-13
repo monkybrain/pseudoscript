@@ -72,7 +72,7 @@ class Finder
       value = value.replace match[0], ""
       value = value.split(" ")[0]
       return value
-    # TODO: FIX THIS HACK!
+    # FIXME: FIX THIS HACK!
     pattern = /\d+ time(s)|( )/g
     match = pattern.exec clause
     if match?

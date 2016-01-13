@@ -1,72 +1,68 @@
 tools = require "monky-tools"
 Parts = require "./parts/parts"
 Scope = require "./parts/scope"
+Util = require "./util"
 
 log = tools.console.log
 error = tools.console.error
 
 class Parser
 
-  constructor: (modules) ->
-    @modules = modules
-    @scope =
-      verb: null
-      object:
-        type: null
-        ref: null
-      indirect:
-        class: null
-        ref: null
-      property: null
-
-  process: (line) ->
+  @process: (line) ->
     line = line.toLowerCase()
 
-  segmentize: (line) ->
+  @phrasify: (line) ->
+
+    # Assemble regex pattern from keywords
+    pattern = Util.regex.group Parts.keywords
+
+    # Get indices of all keywords
     indices = []
-    for keyword in Parts.keywords
-      pattern = new RegExp keyword, "g"
-      loop
-        result = pattern.exec line
-        if result?
-          indices.push result.index
-        else break
+    loop
+      result = pattern.exec line
+      if result?
+        indices.push result.index
+      else break
 
-    segments = []
-
+    # Sort indices (ascending)
     indices.sort (a, b) ->
       a > b
 
-    for index in [0...indices.length]
-      if not indices[index+1]?
-        console.log "got here"
-        segments.push line[indices[index]...]
+    # FIXME: CONFUSING TERMINOLOGY BELOW? (index, indices, i)
+
+    # Divide line into segments
+    phrases = []
+    for index, i in indices
+      if not indices[i+1]?
+        phrases.push line[index...]
         break
       else
-        segments.push line[indices[index]...indices[index+1]]
+        phrases.push line[index...indices[i+1]]
 
-    segments
+    phrases
 
-  parse: (line) ->
+  @parse: (line) ->
 
     line = @process line
 
     segments = []
 
-    console.log @segmentize line
+    phrases = @phrasify line
 
-    ### ADVERB ###
-    result = Parts.adverb.test line
-    if result?
-      segments.push result
+    for phrase in phrases
 
-    ### VERBS ###
-    for verb in Parts.verbs
-      result = verb.test line
+      ### ADVERB ###
+      result = Parts.adverb.test phrase
       if result?
-        Scope.type = 'verb'
-        Scope.subtype = verb.lexical.base
         segments.push result
+
+      ### VERBS ###
+      for verb in Parts.verbs
+        result = verb.test phrase
+        if result?
+          Scope.type = 'verb'
+          Scope.subtype = verb.lexical.base
+          segments.push result
 
     segments
 
