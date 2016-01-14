@@ -1,3 +1,5 @@
+### IMPORTS ###
+
 # node modules
 fs = require "fs"
 util = require "util"
@@ -18,46 +20,40 @@ Preprocessor = require "./core/preprocessor"
 # user modules
 modules = require "./modules/modules"
 
-# Get filename
-if argv._[0]?
-  filename = argv._[0]
-else
-  error "Error: no input!"
-  return
-
-# Read file
-try
-  file = fs.readFileSync filename, "utf8"
-catch err
-  error "Error: could not open #{filename}"
-  return
 
 
+### SCRIPT ###
 
-### PREPROCESSOR ###
+# Get filename (exit on error)
+if argv._[0]? then filename = argv._[0]
+else error "Error: no input!"; return
+
+# Read pseudoscript file (exit on error)
+try file = fs.readFileSync filename, "utf8"
+catch err; error "Error: could not open #{filename}"; return
+
+# Preprocessor: prepare input for parsing
 lines = Preprocessor.process file
 
+# Parser: deconstruct input
+segments = lines.map (line) -> Parser.parse line
 
+# Assembler: assemble output
+code = segments.map (segment) -> Assembler.parse segment
 
-### PARSER ###
-segments = lines.map (line) ->
-  Parser.parse line
+# TODO: REWRITE COMPILE AND CLEANUP FUNCTIONS
 
-# if '-s' -> log segments
+# Process arguments
+
+# -s: segments
 if argv.s?
   console.log util.inspect segments, false, 8
 
+# Echo code
+log code.join "\n"
 
-
-### ASSEMBLER ###
-code = []
-for segment in segments
-  # Assemble program
-  code.push Assembler.parse segment
-
-console.log code.join "\n"
 return
-
+###
 script = assembler.wrap code
 
 # Compile and run
@@ -80,3 +76,4 @@ if argv.r?
 else
   cleanup()
 
+###
