@@ -6,7 +6,7 @@
     adverbs: {
       time: {
         units: {
-          milliseconds: ["milisecond(s)?", "ms"],
+          milliseconds: ["millisecond(s)?", "ms"],
           seconds: ["second(s)?", "sec(s)?", "s"],
           minutes: ["minute(s)?", "min(s)?", "m"],
           hours: ["hour(s)?", "h"],

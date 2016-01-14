@@ -72,7 +72,7 @@
         v = ref[k];
         for (i = 0, len = v.length; i < len; i++) {
           unit = v[i];
-          pattern = unit;
+          pattern = new RegExp("\\b" + unit + "\\b");
           if (expression.match(pattern) != null) {
             return k;
           }
@@ -81,45 +81,80 @@
     };
 
     Time.getTime = function(text) {
-
-      /*
-       * Assemble pattern: number + unit (e.g. '1 minute', '37 s')
-      units = Util.regex.group @getUnits()
-       * pattern = new RegExp "(\\d+\\s)" + units, "g"
-      pattern = new RegExp "\\d+" + units, "g"
-       */
-      var all, i, len, pattern, result, results, time, unit, units, value;
-      units = Util.regex.group(this.getUnits());
-      pattern = "\\d+\\s*" + units;
-      pattern = new RegExp(pattern, "g");
-      console.log(pattern);
+      var i, j, len, len1, match, pattern, result, results, results1, unit, units, value, whitespace, whole;
+      units = this.getUnits();
       results = [];
-      while (true) {
-        result = pattern.exec(text);
-        console.log(text);
-        console.log(result);
-        if (result != null) {
-          all = result[0], value = result[1], unit = result[2];
+      for (i = 0, len = units.length; i < len; i++) {
+        unit = units[i];
+        pattern = "(\\d+)(\\s+)?(" + unit + ")((\\d+)|(\\b)|(\\s+))";
+        match = text.match(pattern);
+        if (match != null) {
+          whole = match[0], value = match[1], whitespace = match[2], unit = match[3];
           results.push([value, unit]);
-        } else {
-          break;
         }
       }
-      time = {};
-      for (i = 0, len = results.length; i < len; i++) {
-        result = results[i];
-        value = result[0], unit = result[1];
-        value = parseFloat(value);
-        unit = this.getUnit(unit);
-        time[unit] = time[unit] != null ? time[unit] += value : value;
+      console.log(results);
+      results1 = [];
+      for (j = 0, len1 = results.length; j < len1; j++) {
+        result = results[j];
+        results1.push(console.log(this.getUnit(result[1])));
       }
-      return this.time2sec(time);
+      return results1;
+
+      /*
+       * Assemble pattern: number + unit (e.g. '1 minute', '37s')
+      units = Util.regex.group @getUnits()
+      pattern = new RegExp "\\d+(\\s+)?(" + units + ")", "g"
+      
+      console.log pattern
+      
+       * Find time expressions
+      results = []
+      loop
+        result = pattern.exec text
+        if result?
+      
+          console.log result
+      
+           * Get value (i.e. find digits)
+          matches = result[0].match /\d+/g
+          value = matches[0]
+      
+           * Get unit
+          matches = result[0].match new RegExp units + "(\\b)|(\\s)", "g"
+          for match in matches
+            if match isnt ''
+              unit = match
+      
+          results.push [value, unit]
+        else break
+       */
+
+      /*
+       * Parse time expressions
+      time = {}
+      for result in results
+      
+         * Deconstruct result
+        [value, unit] = result
+      
+         * Convert string value to float
+        value = parseFloat value
+      
+         * Get unit
+        unit = @getUnit unit
+      
+         * If unit already used -> add new value, else -> create new key
+        time[unit] = if time[unit]? then time[unit] += value else value
+      
+       * Convert to seconds and return
+      return @time2sec time
+       */
     };
 
     Time.test = function(text) {
       var match, pattern, preposition, time, type;
-      pattern = Util.regex.group(this.getPrepositions());
-      pattern = Util.regex.bound(pattern);
+      pattern = Util.regex.bound(Util.regex.group(this.getPrepositions()));
       match = text.match(pattern);
       if (match != null) {
         preposition = match[0];

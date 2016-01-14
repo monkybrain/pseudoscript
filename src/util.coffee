@@ -5,8 +5,6 @@ class Util
       pattern = expressions.map (expression) ->
         "(" + expression + ")"
       pattern = pattern.join "|"
-      console.log pattern
-      return "(" + pattern + ")"
     bound: (pattern) ->
       new RegExp "\\b(" + pattern + ")\\b", "g"
 

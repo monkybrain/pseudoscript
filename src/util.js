@@ -11,9 +11,7 @@
         pattern = expressions.map(function(expression) {
           return "(" + expression + ")";
         });
-        pattern = pattern.join("|");
-        console.log(pattern);
-        return "(" + pattern + ")";
+        return pattern = pattern.join("|");
       },
       bound: function(pattern) {
         return new RegExp("\\b(" + pattern + ")\\b", "g");

@@ -1,5 +1,5 @@
 # Add a light called 'ceiling light' and after two minute set the brightness to 20
 # Add light 'ceiling light', wait 2 minute, set brightness 20
-Wait 3 milliseconds
+Wait 4 h 34minutes32s
 # After two minutes set the brightness to 20
 # Vänta två minuter and set the brightness to 20

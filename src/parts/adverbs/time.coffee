@@ -31,37 +31,58 @@ class Time extends Adverb
   @getUnit: (expression) ->
     for k, v of @units
       for unit in v
-        pattern = unit
+        pattern = new RegExp "\\b#{unit}\\b"
         if expression.match(pattern)?
           return k
 
   @getTime: (text) ->
 
-    ###
-    # Assemble pattern: number + unit (e.g. '1 minute', '37 s')
-    units = Util.regex.group @getUnits()
-    # pattern = new RegExp "(\\d+\\s)" + units, "g"
-    pattern = new RegExp "\\d+" + units, "g"
-    ###
+    units = @getUnits()
+    results = []
+    for unit in units
+      pattern = "(\\d+)(\\s+)?(#{unit})((\\d+)|(\\b)|(\\s+))"
+      match = text.match pattern
+      if match?
+        # Deconstruct match
+        [whole, value, whitespace, unit] = match
+        # Push 'value' and 'unit' to array (while discarding 'whole' & 'whitespace')
+        results.push [value, unit]
+    console.log results
 
+    for result in results
+      console.log @getUnit result[1]
+
+    ###
+    # Assemble pattern: number + unit (e.g. '1 minute', '37s')
     units = Util.regex.group @getUnits()
-    # pattern = "\\d+\\s*" + units + "((\\d+)|(\\b))+"
-    pattern = "\\d+\\s*" + units
-    pattern = new RegExp pattern, "g"
+    pattern = new RegExp "\\d+(\\s+)?(" + units + ")", "g"
+
     console.log pattern
-
 
     # Find time expressions
     results = []
     loop
       result = pattern.exec text
-      console.log text
-      console.log result
       if result?
-        [all, value, unit] = result
+
+        console.log result
+
+        # Get value (i.e. find digits)
+        matches = result[0].match /\d+/g
+        value = matches[0]
+
+        # Get unit
+        matches = result[0].match new RegExp units + "(\\b)|(\\s)", "g"
+        for match in matches
+          if match isnt ''
+            unit = match
+
         results.push [value, unit]
       else break
 
+    ###
+
+    ###
     # Parse time expressions
     time = {}
     for result in results
@@ -81,11 +102,12 @@ class Time extends Adverb
     # Convert to seconds and return
     return @time2sec time
 
+    ###
+
   @test: (text) ->
 
     # Assemble regex pattern from prepositions
-    pattern = Util.regex.group @getPrepositions()
-    pattern = Util.regex.bound pattern
+    pattern = Util.regex.bound Util.regex.group @getPrepositions()
 
     # Find preposition
     match = text.match pattern
