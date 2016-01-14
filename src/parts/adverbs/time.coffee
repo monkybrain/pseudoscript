@@ -37,52 +37,21 @@ class Time extends Adverb
 
   @getTime: (text) ->
 
+    # Match number + unit (e.g. '1 minute', '37s')
     units = @getUnits()
     results = []
     for unit in units
+      # Pattern for matching number + unit
       pattern = "(\\d+)(\\s+)?(#{unit})((\\d+)|(\\b)|(\\s+))"
       match = text.match pattern
       if match?
+
         # Deconstruct match
         [whole, value, whitespace, unit] = match
+
         # Push 'value' and 'unit' to array (while discarding 'whole' & 'whitespace')
         results.push [value, unit]
-    console.log results
 
-    for result in results
-      console.log @getUnit result[1]
-
-    ###
-    # Assemble pattern: number + unit (e.g. '1 minute', '37s')
-    units = Util.regex.group @getUnits()
-    pattern = new RegExp "\\d+(\\s+)?(" + units + ")", "g"
-
-    console.log pattern
-
-    # Find time expressions
-    results = []
-    loop
-      result = pattern.exec text
-      if result?
-
-        console.log result
-
-        # Get value (i.e. find digits)
-        matches = result[0].match /\d+/g
-        value = matches[0]
-
-        # Get unit
-        matches = result[0].match new RegExp units + "(\\b)|(\\s)", "g"
-        for match in matches
-          if match isnt ''
-            unit = match
-
-        results.push [value, unit]
-      else break
-
-    ###
-
-    ###
     # Parse time expressions
     time = {}
     for result in results
@@ -101,8 +70,6 @@ class Time extends Adverb
 
     # Convert to seconds and return
     return @time2sec time
-
-    ###
 
   @test: (text) ->
 

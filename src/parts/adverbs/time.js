@@ -81,7 +81,7 @@
     };
 
     Time.getTime = function(text) {
-      var i, j, len, len1, match, pattern, result, results, results1, unit, units, value, whitespace, whole;
+      var i, j, len, len1, match, pattern, result, results, time, unit, units, value, whitespace, whole;
       units = this.getUnits();
       results = [];
       for (i = 0, len = units.length; i < len; i++) {
@@ -93,63 +93,15 @@
           results.push([value, unit]);
         }
       }
-      console.log(results);
-      results1 = [];
+      time = {};
       for (j = 0, len1 = results.length; j < len1; j++) {
         result = results[j];
-        results1.push(console.log(this.getUnit(result[1])));
+        value = result[0], unit = result[1];
+        value = parseFloat(value);
+        unit = this.getUnit(unit);
+        time[unit] = time[unit] != null ? time[unit] += value : value;
       }
-      return results1;
-
-      /*
-       * Assemble pattern: number + unit (e.g. '1 minute', '37s')
-      units = Util.regex.group @getUnits()
-      pattern = new RegExp "\\d+(\\s+)?(" + units + ")", "g"
-      
-      console.log pattern
-      
-       * Find time expressions
-      results = []
-      loop
-        result = pattern.exec text
-        if result?
-      
-          console.log result
-      
-           * Get value (i.e. find digits)
-          matches = result[0].match /\d+/g
-          value = matches[0]
-      
-           * Get unit
-          matches = result[0].match new RegExp units + "(\\b)|(\\s)", "g"
-          for match in matches
-            if match isnt ''
-              unit = match
-      
-          results.push [value, unit]
-        else break
-       */
-
-      /*
-       * Parse time expressions
-      time = {}
-      for result in results
-      
-         * Deconstruct result
-        [value, unit] = result
-      
-         * Convert string value to float
-        value = parseFloat value
-      
-         * Get unit
-        unit = @getUnit unit
-      
-         * If unit already used -> add new value, else -> create new key
-        time[unit] = if time[unit]? then time[unit] += value else value
-      
-       * Convert to seconds and return
-      return @time2sec time
-       */
+      return this.time2sec(time);
     };
 
     Time.test = function(text) {
