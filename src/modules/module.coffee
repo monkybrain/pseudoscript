@@ -1,5 +1,7 @@
 class Module
 
+  @index: 0
+
   @members: []
 
   constructor: () ->
@@ -11,6 +13,7 @@ class Module
   @add: (ref) ->
     Module.members.push module: this.self, ref: ref
     this.members.push ref
+    this.index++
 
   @fetch: (ref) ->
     for member in @members

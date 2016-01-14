@@ -3,6 +3,8 @@
   var Module;
 
   Module = (function() {
+    Module.index = 0;
+
     Module.members = [];
 
     function Module() {
@@ -20,7 +22,8 @@
         module: this.self,
         ref: ref
       });
-      return this.members.push(ref);
+      this.members.push(ref);
+      return this.index++;
     };
 
     Module.fetch = function(ref) {

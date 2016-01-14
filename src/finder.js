@@ -80,6 +80,23 @@
       }
     };
 
+    Finder.prototype.objects = function(clause) {
+      var key, match, matches, object, ref1, results;
+      matches = [];
+      ref1 = this.map;
+      results = [];
+      for (key in ref1) {
+        object = ref1[key];
+        match = clause.match(object.word);
+        if (match != null) {
+          results.push(matches.push(match));
+        } else {
+          results.push(void 0);
+        }
+      }
+      return results;
+    };
+
     Finder.prototype.property = function(clause, object) {
       var key, match, obj, property, ref1;
       ref1 = this.map;

@@ -26,11 +26,6 @@ class Set extends Get
 
     if type is 'string'
 
-      # pattern = /to .*/g
-      # match = segment.match pattern
-      # if match?
-      #   preposition = match[0]
-
       # Get indices of object, ref and property
       occurrences = [
         {string: module.lexical.base, index: segment.indexOf module.lexical.base},
@@ -47,8 +42,11 @@ class Set extends Get
       value = segment.slice occurrence.index + occurrence.string.length + 1
 
       # Remove preposition (if exists)
-      pattern = /\bto\b/g
-      value = value.replace(pattern, "").trim()
+      pattern = /(\bto\b)/
+      match = value.match pattern
+      if match?
+        index = match.index + "to".length
+        value = value[index...].trim()
 
     return value
 
@@ -82,5 +80,13 @@ class Set extends Get
         @parse segment
 
       return type: 'verb', verb: 'set', operations: segments
+
+  @syntax: (phrase) ->
+    syntax = []
+    for operation in phrase.operations
+      {object: object, ref: ref, property: property, value: value} = operation
+      syntax.push "# Setting '#{property}' of '#{ref}' to '#{value}'"
+      syntax.push "#{object}.select('#{ref}').set('#{property}', '#{value}')\n"
+    syntax
 
 module.exports = Set

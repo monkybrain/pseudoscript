@@ -28,7 +28,7 @@
     };
 
     Set.getValue = function(segment, object, ref, property) {
-      var err, error, module, occurrence, occurrences, pattern, type, value;
+      var err, error, index, match, module, occurrence, occurrences, pattern, type, value;
       module = Find.module(object);
       try {
         type = module.properties[property].type;
@@ -57,8 +57,12 @@
         });
         occurrence = occurrences[0];
         value = segment.slice(occurrence.index + occurrence.string.length + 1);
-        pattern = /\bto\b/g;
-        value = value.replace(pattern, "").trim();
+        pattern = /(\bto\b)/;
+        match = value.match(pattern);
+        if (match != null) {
+          index = match.index + "to".length;
+          value = value.slice(index).trim();
+        }
       }
       return value;
     };
@@ -104,6 +108,19 @@
           operations: segments
         };
       }
+    };
+
+    Set.syntax = function(phrase) {
+      var i, len, object, operation, property, ref, ref1, syntax, value;
+      syntax = [];
+      ref1 = phrase.operations;
+      for (i = 0, len = ref1.length; i < len; i++) {
+        operation = ref1[i];
+        object = operation.object, ref = operation.ref, property = operation.property, value = operation.value;
+        syntax.push("# Setting '" + property + "' of '" + ref + "' to '" + value + "'");
+        syntax.push(object + ".select('" + ref + "').set('" + property + "', '" + value + "')\n");
+      }
+      return syntax;
     };
 
     return Set;

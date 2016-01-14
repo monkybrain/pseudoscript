@@ -88,7 +88,7 @@ class Time extends Adverb
       # Get time (in milliseconds)
       time = @getTime text
 
-      return type: type, time: time
+      return type: 'adverb', adverb: type, time: time
 
   @time2sec: (time) ->
     seconds = 0
@@ -103,5 +103,15 @@ class Time extends Adverb
     if time.milliseconds?
       seconds += time.milliseconds / 1000
     seconds
+
+  @syntax: (phrase) ->
+    {adverb: adverb, time: time} = phrase
+    if adverb is 'delay'
+      open = ["# Setting timeout to #{time} seconds", "setTimeout () ->\n"]
+      close = [", (#{time}*1000)\n"]
+    if adverb is 'interval'
+      open = ["# Setting interval to #{time} seconds", "setInterval () ->\n"]
+      close = [", (#{time}*1000)\n"]
+    return [open, close]
 
 module.exports = Time

@@ -11,6 +11,15 @@ class Find
       if match?
         return module.self
 
+  # TODO: Merge 'object' and 'objects'?
+  @objects: (text) ->
+    matches = []
+    for module in modules
+      match = text.match module.lexical.base
+      if match?
+        matches.push module.self
+    matches
+
   @module: (object) ->
     for module in modules
       match = object.match module.self

@@ -35,6 +35,9 @@
       if (match != null) {
         ref1 = Add.parse(text), object = ref1[0], ref = ref1[1];
         module = Find.module(object);
+        if (ref == null) {
+          ref = module.lexical.base + module.index;
+        }
         module.add(ref);
         Scope.modules[object] = {
           ref: ref
@@ -50,6 +53,12 @@
           ref: ref
         };
       }
+    };
+
+    Add.syntax = function(phrase) {
+      var object, ref, syntax;
+      object = phrase.object, ref = phrase.ref;
+      return syntax = ["# Adding new " + object + " called '" + ref + "'", "new " + object + "('" + ref + "')\n"];
     };
 
     return Add;

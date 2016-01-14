@@ -18,6 +18,19 @@
       }
     };
 
+    Find.objects = function(text) {
+      var i, len, match, matches, module;
+      matches = [];
+      for (i = 0, len = modules.length; i < len; i++) {
+        module = modules[i];
+        match = text.match(module.lexical.base);
+        if (match != null) {
+          matches.push(module.self);
+        }
+      }
+      return matches;
+    };
+
     Find.module = function(object) {
       var i, len, match, module;
       for (i = 0, len = modules.length; i < len; i++) {

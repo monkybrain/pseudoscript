@@ -1,197 +1,62 @@
-class Programmer
+verbs = require "./parts/verbs/verbs"
+adverbs = require "./parts/adverbs/adverbs"
 
-  constructor: (map) ->
-    @map = map
+class Assembler
 
-  capitalize: (string) ->
-    string = string[0].toUpperCase() + string[1..]
+  @indent:
+    interval: 2
+    level: 0
+    inc: () ->
+      this.level += 2
+    dec: () ->
+      this.level -= 2
+    set: (level) ->
+      this.level = level
+    exec: (syntax) ->
+      indent = ""
+      for i in [0...this.level]
+        indent += " "
+      indent + syntax
 
-  indent: (string, level) ->
-    level = if level? then level else 0
-    indent = Array(level+1).join " "
-    string = indent + string
+  @parse: (segment) ->
 
-  convertTime: (value, unit) ->
+    # Store indentation level
+    level = @indent.level
 
-    if unit is 'milliseconds'
-      return value
-
-    if unit is 'seconds'
-      return value * 1000
-
-    if unit is 'minutes'
-      return value * 1000 * 60
-
-    if unit is 'hours'
-      return value * 1000 * 60 * 60
-
-    if unit is 'days'
-      return value * 1000 * 60 * 60 * 24
-
-  process: (script) ->
-
-    # Empty syntax container
     syntax = []
+    closures = []
 
-    indent = 2
+    # Handle segment phrase by phrase
+    for phrase in segment
 
-    # Loop throught operations in script
-    for operation in script
+      # TODO: HARMONIZE VERB AND ADVERBS STRUCTURES
+      if phrase.type is 'verb'
+        for verb in verbs
+          if phrase.verb is verb.lexical.base
+            for line in verb.syntax phrase
+              syntax.push @indent.exec line
 
-      if operation.type is 'adverbial phrase'
+            # syntax.push @indent.exec verb.syntax phrase
 
-        adverb = operation.adverb
+      if phrase.type is 'adverb'
+        for adverb in adverbs
+          if phrase.adverb in Object.keys(adverb.types)
+            [open, close] = adverb.syntax phrase
+            for line in open
+              syntax.push @indent.exec line
+            closures.push close
 
-        if adverb is 'delay'
+            # Increase indentation
+            @indent.inc()
 
-          value = operation.value
-          unit = operation.unit
+    # Handle closures (reverse order and dedent accordingly)
+    for closure in closures.reverse()
+      @indent.dec()
+      syntax.push @indent.exec closure
 
-          milliseconds = @convertTime operation.value, operation.unit
-
-          syntax.push  "\n" + @indent "# Setting timeout to #{milliseconds} ms", indent
-
-          syntax.push @indent "setTimeout () ->\n", indent
-
-          indent += 2
-
-          closeAdverbWithValue = milliseconds
-
-        if adverb is 'interval'
-
-          value = operation.value
-          unit = operation.unit
-
-          milliseconds = @convertTime operation.value, operation.unit
-
-          syntax.push @indent "\n  # Setting interval to #{milliseconds} ms"
-
-          syntax.push @indent "setInterval () ->\n", indent
-
-          indent += 2
-
-          closeAdverbWithValue = milliseconds
-
-      if operation.type is 'event phrase'
-
-        event = operation.event
-        ref = operation.object.ref
-        type = operation.object.type
-
-        if ref?
-          syntax.push @indent "\n  # Setting callback for event '#{event}' of '#{ref}'", indent
-          syntax.push @indent "PhotonObject.select('#{ref}').on '#{event}', () ->\n", indent
-
-        else if type?
-          syntax.push @indent "\n  # Setting callback for event '#{event}' of current #{type}", indent
-          syntax.push @indent "#{type}.select().on '#{event}', () ->\n", indent
-
-        indent += 2
-
-        closeEvent = true
-
-      if operation.type is 'conditional phrase'
-
-        console.log operation
-
-      if operation.type is 'verb phrase'
-
-        verb = operation.verb
-        if operation.object.ref?
-          ref = operation.object.ref
-        # TYPE: Capitalize (for Class name) - TODO: BEAUTIFY!
-        if operation.object.type?
-          type = @capitalize(operation.object.type)
-        object = operation.object
-        property = operation.property
-        # VALUE: If not number -> add quotes
-        value = if isNaN operation.value then "'#{operation.value}'" else operation.value
-
-        if verb is 'create'
-
-          # Add code
-          if ref?
-            syntax.push @indent "# Create #{type} called '#{ref}'", indent
-            syntax.push @indent "new #{type}('#{ref}', photon)\n", indent
-          else
-            syntax.push @indent "# Create anonymous #{type}", indent
-            syntax.push @indent "new #{type}(null, photon)\n", indent
-
-        if verb is 'set'
-
-          if ref?
-            syntax.push @indent "# Set the property '#{property}' of '#{ref}' to #{value}", indent
-            syntax.push @indent "PhotonObject.select('#{ref}').set('#{property}', #{value})\n", indent
-          else if type?
-            syntax.push @indent "# Set the property '#{property}' of current #{type}", indent
-            syntax.push @indent "#{type}.select().set('#{property}', #{value})\n", indent
-
-        if verb is 'get'
-
-          if ref?
-            syntax.push @indent "# Get the property '#{property}' of '#{ref}'", indent
-            syntax.push @indent "PhotonObject.select('#{ref}').get('#{property}').then (data) -> console.log data.result\n", indent
-          else if type?
-            syntax.push @indent "# Get the property '#{property}' of current #{type}", indent
-            syntax.push @indent "#{type}.select().get('#{property}').then (data) -> console.log data.result\n", indent
-
-        if verb is 'increase'
-
-          # Add autogenerated comment
-          syntax.push "\n" + @indent "# Increasing the property '#{property}' of '#{ref}' by #{value}", indent
-
-          # Add code
-          syntax.push @indent + "#{type}.select('#{ref}').inc('#{property}', #{value})", indent
-
-        if verb is 'decrease'
-
-          # Add autogenerated comment
-          syntax.push "\n" + @indent "# Decreasing the property '#{property}' of '#{ref}' by #{value}", indent
-
-          # Add code
-          syntax.push @indent "#{type}.select('#{ref}').dec('#{property}', #{value})", indent
-
-        if verb is 'do'
-
-          # Add autogenerated comment TODO: FIX SO THIS ACTUALLY REFLECTS THE ACTION!
-          syntax.push @indent "# Blink #{value} times", indent
-
-          # Add code
-          syntax.push @indent "#{type}.select('#{ref}').do('blink', #{value})\n", indent
-
-        if verb is 'log'
-
-          # Add autogenerated comment TODO: FIX SO THIS ACTUALLY REFLECTS THE ACTION!
-          syntax.push "\n" + @indent "# Logging", indent
-
-          # Add code
-          syntax.push @indent, "console.log #{type}.select('#{ref}')", indent
-
-    if closeAdverbWithValue?
-      indent -= 2
-      syntax.push @indent(", " + closeAdverbWithValue, indent) + "\n"
-
-    if closeEvent?
-      indent -= 2
+    # Reset indentation level (NEEDED?)
+    # @indent.set level
 
     syntax.join "\n"
 
-  wrap: (code) ->
-    output = []
-    output.push "map = require '../src/modules/base'"
-    output.push "PhotonObject = map.PhotonObject"
-    output.push "Room = map.Room"
-    output.push "Light = map.Light"
-    output.push "Button = map.Button"
-    output.push "\n"
-    output.push "Photon = require '../src/photon'"
-    output.push "photon = new Photon()\n"
-    output.push "console.log '# Running script #'"
-
-    output.push "photon.connect()\n.then () ->"
-    output.push "  console.log 'Connected!'\n"
-    output.push code
-
-    output.join "\n"
-
-module.exports = Programmer
+module.exports = Assembler

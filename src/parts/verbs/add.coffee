@@ -1,6 +1,8 @@
 Find = require "./../find"
 Scope = require "./../scope"
 
+# ISSUE: ADD OPERATIONS (AS IN SET/GET) TO ALLOW MULTIPLE 'ADDINGS' AT ONCE
+
 class Add
 
   @lexical:
@@ -28,6 +30,12 @@ class Add
 
       # Get module
       module = Find.module object
+
+      # If no reference specified -> generate based on index
+      if not ref?
+        ref = module.lexical.base + module.index
+
+      # Add object to module members
       module.add ref
 
       # Update scope
@@ -35,5 +43,14 @@ class Add
       Scope.current = object: object, ref: ref
 
       return type: 'verb', verb: 'add', object: object, ref: ref
+
+  @syntax: (phrase) ->
+    {object: object, ref: ref} = phrase
+    syntax = [
+      "# Adding new #{object} called '#{ref}'",
+      "new #{object}('#{ref}')\n"
+    ]
+
+
 
 module.exports = Add

@@ -18,9 +18,6 @@ Assembler = require "./assembler"
 Photon = require "./photon"
 Preprocessor = require "./preprocessor"
 
-# Create instances
-assembler = new Assembler(modules)
-
 if argv._[0]?
   filename = argv._[0]
 else
@@ -33,47 +30,35 @@ catch err
   error "Error: could not open #{filename}"
   return
 
-# Split lines by newline and dot
-lines = file.split /(\n)|(\.)/g
-
 # Remove empty lines, nulls and dots.
+###
 lines = lines.filter (line) ->
   if line is '' then return false
   else if line is '.' then return false
   else if line is '\n' then return false
   else if not line? then return false
   else return true
+###
 
-# Remove comments
-lines = lines.map (line) ->
-  index = line.indexOf "#"
-  if index isnt -1
-    line = line[...index]
-  line
+### PREPROCESSOR ###
+lines = Preprocessor.process file
 
-lines = lines.filter (line) ->
-  line isnt ''
-
-# Preprocess and trim strings
-lines = lines.map (line) ->
-  line = Preprocessor.process line
-  line.trim()
-
-# Parse
+### PARSER ###
 segments = lines.map (line) ->
   Parser.parse line
 
-console.log util.inspect segments, false, 8
-return
-
 # if '-s' -> log segments
 if argv.s?
-  console.log util.inspect segments, false, 4
+  console.log util.inspect segments, false, 8
 
-code = ''
+### ASSEMBLER ###
+code = []
 for segment in segments
   # Assemble program
-  code += assembler.process segment
+  code.push Assembler.parse segment
+
+console.log code.join "\n"
+return
 
 script = assembler.wrap code
 

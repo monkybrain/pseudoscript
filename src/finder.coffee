@@ -48,6 +48,14 @@ class Finder
       if match?
         return object.word
 
+  # TODO: Merge 'objects' and 'object'?
+  objects: (clause) ->
+    matches = []
+    for key, object of @map
+      match = clause.match object.word
+      if match?
+        matches.push match
+
   property: (clause, object) ->
     for key, obj of @map
 # if obj.word is object

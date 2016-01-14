@@ -1,5 +1,5 @@
-# Add a light called 'ceiling light' and after two minute set the brightness to 20
-# Add light 'ceiling light', wait 2 minute, set brightness 20
-Wait 4 h 34minutes32s
-# After two minutes set the brightness to 20
-# Vänta två minuter and set the brightness to 20
+Add a light called 'fisk' to the room
+After 1 minute set the color to red and after 10 s set the color blue
+Every 2 seconds set the color to blue
+# Add a light called 'ceiling light', after two minutes set the brightness to 20 and after 1 minute set the color to red
+# comment
