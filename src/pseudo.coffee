@@ -11,9 +11,9 @@ log = require("monky-tools").console.log
 error = require("monky-tools").console.error
 
 # core modules
-Parser = require "./../core/parser"
-Assembler = require "./../core/assembler"
-Preprocessor = require "./../core/preprocessor"
+Parser = require "./core/parser"
+Assembler = require "./core/assembler"
+Preprocessor = require "./core/preprocessor"
 
 # user modules
 modules = require "./modules/modules"

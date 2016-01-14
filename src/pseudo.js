@@ -16,11 +16,11 @@
 
   error = require("monky-tools").console.error;
 
-  Parser = require("./../core/parser");
+  Parser = require("./core/parser");
 
-  Assembler = require("./../core/assembler");
+  Assembler = require("./core/assembler");
 
-  Preprocessor = require("./../core/preprocessor");
+  Preprocessor = require("./core/preprocessor");
 
   modules = require("./modules/modules");
 

@@ -6,7 +6,7 @@
 
   Adverb = require("./adverb");
 
-  Util = require("../../../core/util");
+  Util = require(".././util");
 
   dict = require("../../dictionaries/dictionary").adverbs;
 
