@@ -1,9 +1,10 @@
 Find = require "./../find"
 Scope = require "./../scope"
+Verb = require "./verb"
 
 # ISSUE: ADD OPERATIONS (AS IN SET/GET) TO ALLOW MULTIPLE 'ADDINGS' AT ONCE
 
-class Add
+class Add extends Verb
 
   @lexical:
     base: 'add'

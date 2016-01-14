@@ -4,9 +4,9 @@
 
   tools = require("monky-tools");
 
-  Parts = require("./parts/parts");
+  Parts = require("./../src/parts/parts");
 
-  Scope = require("./parts/scope");
+  Scope = require("./../src/parts/scope");
 
   Util = require("./util");
 

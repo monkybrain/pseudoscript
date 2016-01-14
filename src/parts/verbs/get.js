@@ -3,7 +3,9 @@
 /* VERB: GET */
 
 (function() {
-  var Find, Get, Module, Scope, modules;
+  var Find, Get, Module, Scope, Verb, modules,
+    extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+    hasProp = {}.hasOwnProperty;
 
   modules = require("../../modules/modules");
 
@@ -13,8 +15,14 @@
 
   Find = require("./../find");
 
-  Get = (function() {
-    function Get() {}
+  Verb = require("./verb");
+
+  Get = (function(superClass) {
+    extend(Get, superClass);
+
+    function Get() {
+      return Get.__super__.constructor.apply(this, arguments);
+    }
 
     Get.lexical = {
       base: 'get',
@@ -80,18 +88,6 @@
       return property;
     };
 
-    Get.split = function(text) {
-      var parts, pattern;
-      pattern = /and|,|&/g;
-      parts = text.split(pattern);
-      parts = parts.map(function(part) {
-        return part.trim();
-      });
-      return parts = parts.filter(function(part) {
-        return part !== '';
-      });
-    };
-
     Get.parse = function(segment) {
       var object, property, ref, ref1;
       ref1 = this.getObject(segment), object = ref1[0], ref = ref1[1];
@@ -133,7 +129,7 @@
 
     return Get;
 
-  })();
+  })(Verb);
 
   module.exports = Get;
 

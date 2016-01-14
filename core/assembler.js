@@ -3,9 +3,9 @@
   var Assembler, adverbs, verbs,
     indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
-  verbs = require("./parts/verbs/verbs");
+  verbs = require("./../src/parts/verbs/verbs");
 
-  adverbs = require("./parts/adverbs/adverbs");
+  adverbs = require("./../src/parts/adverbs/adverbs");
 
   Assembler = (function() {
     function Assembler() {}

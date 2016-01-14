@@ -1,5 +1,5 @@
-verbs = require "./parts/verbs/verbs"
-adverbs = require "./parts/adverbs/adverbs"
+verbs = require "./../src/parts/verbs/verbs"
+adverbs = require "./../src/parts/adverbs/adverbs"
 
 class Assembler
 

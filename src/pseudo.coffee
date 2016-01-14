@@ -1,8 +1,8 @@
-# Node modules
+# node modules
 fs = require "fs"
 util = require "util"
 
-# External modules
+# npm modules
 argv = require("yargs").argv
 shell = require "shelljs"
 
@@ -10,38 +10,34 @@ shell = require "shelljs"
 log = require("monky-tools").console.log
 error = require("monky-tools").console.error
 
-# Internal modules
-# dictionary = require "./dictionaries/base"
-modules = require "./modules/modules"
-Parser = require "./parser"
-Assembler = require "./assembler"
-Photon = require "./photon"
-Preprocessor = require "./preprocessor"
+# core modules
+Parser = require "./../core/parser"
+Assembler = require "./../core/assembler"
+Preprocessor = require "./../core/preprocessor"
 
+# user modules
+modules = require "./modules/modules"
+
+# Get filename
 if argv._[0]?
   filename = argv._[0]
 else
   error "Error: no input!"
   return
 
+# Read file
 try
   file = fs.readFileSync filename, "utf8"
 catch err
   error "Error: could not open #{filename}"
   return
 
-# Remove empty lines, nulls and dots.
-###
-lines = lines.filter (line) ->
-  if line is '' then return false
-  else if line is '.' then return false
-  else if line is '\n' then return false
-  else if not line? then return false
-  else return true
-###
+
 
 ### PREPROCESSOR ###
 lines = Preprocessor.process file
+
+
 
 ### PARSER ###
 segments = lines.map (line) ->
@@ -50,6 +46,8 @@ segments = lines.map (line) ->
 # if '-s' -> log segments
 if argv.s?
   console.log util.inspect segments, false, 8
+
+
 
 ### ASSEMBLER ###
 code = []

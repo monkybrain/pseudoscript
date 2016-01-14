@@ -4,8 +4,9 @@ modules = require "../../modules/modules"
 Module = require "../../modules/module"
 Scope = require "./../scope"
 Find = require "./../find"
+Verb = require "./verb"
 
-class Get
+class Get extends Verb
 
   @lexical:
     base: 'get'
@@ -70,22 +71,6 @@ class Get
       property = Scope.modules[object].property
 
     return property
-
-  @split: (text) ->
-
-    # Define delimiter pattern
-    pattern = /and|,|&/g
-
-    # Split by pattern
-    parts = text.split pattern
-
-    # Return array of trimmed strings
-    parts = parts.map (part) ->
-      part.trim()
-
-    # If empty -> remove from array (to prevent trailing 'and's)
-    parts = parts.filter (part) ->
-      part isnt ''
 
   @parse: (segment) ->
 

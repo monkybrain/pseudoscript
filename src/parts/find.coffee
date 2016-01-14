@@ -1,5 +1,4 @@
 modules = require "../modules/modules"
-# dict = require "../dictionaries/base"
 
 class Find
 
