@@ -3,7 +3,7 @@
   var Preprocessor, dict,
     indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
-  dict = require("./../src/dictionaries/dictionary");
+  dict = require("./../dictionaries/dictionary");
 
   Preprocessor = (function() {
     function Preprocessor() {}

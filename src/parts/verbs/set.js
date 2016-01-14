@@ -105,7 +105,8 @@
         return {
           type: 'verb',
           verb: 'set',
-          operations: segments
+          operations: segments,
+          input: text
         };
       }
     };

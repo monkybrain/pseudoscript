@@ -79,7 +79,7 @@ class Set extends Get
       segments = split.map (segment) =>
         @parse segment
 
-      return type: 'verb', verb: 'set', operations: segments
+      return type: 'verb', verb: 'set', operations: segments, input: text
 
   @syntax: (phrase) ->
     syntax = []

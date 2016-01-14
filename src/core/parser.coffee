@@ -1,6 +1,6 @@
 tools = require "monky-tools"
-Parts = require "./../src/parts/parts"
-Scope = require "./../src/parts/scope"
+Parts = require "./../parts/parts"
+Scope = require "./../parts/scope"
 Util = require "./util"
 
 log = tools.console.log

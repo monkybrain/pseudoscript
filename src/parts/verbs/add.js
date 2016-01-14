@@ -58,7 +58,8 @@
           type: 'verb',
           verb: 'add',
           object: object,
-          ref: ref
+          ref: ref,
+          input: text
         };
       }
     };

@@ -1,3 +1,5 @@
+### DICTIONARY: ENGLISH ###
+
 dictionary =
 
   adverbs:

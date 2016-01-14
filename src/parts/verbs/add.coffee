@@ -43,7 +43,7 @@ class Add extends Verb
       Scope.modules[object] = ref: ref
       Scope.current = object: object, ref: ref
 
-      return type: 'verb', verb: 'add', object: object, ref: ref
+      return type: 'verb', verb: 'add', object: object, ref: ref, input: text
 
   @syntax: (phrase) ->
     {object: object, ref: ref} = phrase

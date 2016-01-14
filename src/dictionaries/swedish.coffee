@@ -1,3 +1,7 @@
+### DICTIONARY: SWEDISH ###
+
+### NOT TESTED, JUST PROOF OF CONCEPT ###
+
 dictionary =
 
   adverbs:

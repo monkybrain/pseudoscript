@@ -1,4 +1,4 @@
-dict = require "./../src/dictionaries/dictionary"
+dict = require "./../dictionaries/dictionary"
 
 class Preprocessor
 
