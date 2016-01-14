@@ -17,10 +17,6 @@ Parser = require "./core/parser"
 Assembler = require "./core/assembler"
 Preprocessor = require "./core/preprocessor"
 
-# user modules
-modules = require "./modules/modules"
-
-
 
 ### SCRIPT ###
 

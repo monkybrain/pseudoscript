@@ -5,7 +5,7 @@
 /* IMPORTS */
 
 (function() {
-  var Assembler, Parser, Preprocessor, argv, code, err, error, error1, file, filename, fs, i, index, len, lines, log, modules, segment, segments, shell, util;
+  var Assembler, Parser, Preprocessor, argv, code, err, error, error1, file, filename, fs, i, index, len, lines, log, segment, segments, shell, util;
 
   fs = require("fs");
 
@@ -24,8 +24,6 @@
   Assembler = require("./core/assembler");
 
   Preprocessor = require("./core/preprocessor");
-
-  modules = require("./modules/modules");
 
 
   /* SCRIPT */
