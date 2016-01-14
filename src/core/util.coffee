@@ -5,6 +5,8 @@ class Util
       pattern = expressions.map (expression) ->
         "(" + expression + ")"
       pattern = pattern.join "|"
+    enclose: (expression) ->
+      "(" + expression + ")"
     bound: (pattern) ->
       new RegExp "\\b(" + pattern + ")\\b", "g"
 

@@ -42,6 +42,17 @@
       }
     };
 
+    Find.word = function(object) {
+      var i, len, match, module;
+      for (i = 0, len = modules.length; i < len; i++) {
+        module = modules[i];
+        match = object.match(module.self);
+        if (match != null) {
+          return module.lexical.base;
+        }
+      }
+    };
+
     Find.reference = function(text) {
       var end, indices, match, pattern, start;
       indices = [];
@@ -59,6 +70,14 @@
         end = indices[1];
         return text.slice(start, end);
       }
+    };
+
+    Find.references = function(text) {
+      var matches;
+      matches = text.match(/'[^']*'/g);
+      return matches.map(function(match) {
+        return match.replace(/'/g, '');
+      });
     };
 
     Find.number = function(text) {

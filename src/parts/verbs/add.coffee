@@ -1,6 +1,7 @@
 Find = require "./../find"
 Scope = require "./../scope"
 Verb = require "./verb"
+Util = require "./../../core/util"
 
 # ISSUE: ADD OPERATIONS (AS IN SET/GET) TO ALLOW MULTIPLE 'ADDINGS' AT ONCE
 
@@ -15,9 +16,82 @@ class Add extends Verb
       return new RegExp "\\b(#{synonyms.join("|")})\\b", "g"
 
   @parse: (text) ->
-    object = Find.object text
+
+    direct = {}
+    indirect = {}
+
+    refs = Find.references text
+    objects = Find.objects text
+
+    # Check if indirect object present
+    match = text.match /to/g
+    if match?
+
+      # Find indirect object type
+      group = objects.map (object) ->
+        Find.word object
+      group = "(" + Util.regex.group(group) + ")"
+      match = text.match new RegExp "(to\\s+?)" + group
+      if match?
+        indirect.object = match[2]
+
+      # Find indirect object ref
+      group = refs.map (ref) ->
+        "'" + ref + "'"
+      group = "(" + Util.regex.group(group) + ")"
+      match = text.match new RegExp "(to\\s+?\\w+?\\s+?)" + group
+      if match?
+        indirect.ref = match[2]
+
+      console.log indirect.object
+
+      ###for ref in refs
+        match = text.match new RegExp "to\\s+?'" + ref + "'", "g"
+        if match?
+          [indirect.ref] = match###
+
+
+    # If two refs,
+    if refs.length is 2
+
+      for ref in refs
+        pattern = new RegExp "to\\s+?" + ref, "g"
+        match = text.match pattern
+        if match?
+          indirect.ref = ref
+          [direct.ref] = refs.filter (ref) ->
+            ref isnt indirect.ref
+
+    console.log direct
+    console.log indirect
+
+
+    #### Exclude refs
+    refs = Find.references text
+    noRefs = text
+    for ref in refs
+      noRefs = noRefs.replace "'#{ref}'", ""
+    ###
+    # Find all objects
+    objects = Find.objects noRefs
+
+    # If only one object -> set as direct object
+    if objects.length is 1
+      [object] = objects
+
+    # If two objects -> find direct and indirect objects
+    if objects.length is 2
+      group = Util.regex.group objects.map (object) -> Find.word object
+      match = text.match group
+
+      if match?
+        console.log match
+      prep = "to"
+    ###
+
+    ###object = Find.object text
     ref = Find.reference text
-    return [object, ref]
+    return [object, ref]###
 
   @test: (text) ->
 

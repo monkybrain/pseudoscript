@@ -25,6 +25,12 @@ class Find
       if match?
         return module
 
+  @word: (object) ->
+    for module in modules
+      match = object.match module.self
+      if match?
+        return module.lexical.base
+
   @reference: (text) ->
 
     # Empty array of indices
@@ -43,6 +49,13 @@ class Find
       start = indices[0] + 1
       end = indices[1]
       return text[start...end]
+
+  @references: (text) ->
+    matches = text.match /'[^']*'/g
+    matches.map (match) ->
+      match.replace /'/g, ''
+
+
 
   @number: (text) ->
     pattern = /\b\d+\b/g

@@ -13,6 +13,9 @@
         });
         return pattern = pattern.join("|");
       },
+      enclose: function(expression) {
+        return "(" + expression + ")";
+      },
       bound: function(pattern) {
         return new RegExp("\\b(" + pattern + ")\\b", "g");
       }
