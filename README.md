@@ -1,6 +1,8 @@
 # pseudoscript
 
-Natural language scripting! Translates pseudo code in to valid CoffeeScript/JavaScript.
+Natural language scripting!
+
+Translates pseudo code in to valid CoffeeScript/JavaScript.
 
 It's kind of magic...
 

@@ -12,5 +12,4 @@ class Scope
       if ref is v.ref
         return k
 
-
 module.exports = Scope
