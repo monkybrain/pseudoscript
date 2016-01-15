@@ -2,7 +2,7 @@
 (function() {
   var Find, Module;
 
-  Find = require("./../parts/find");
+  Find = require("./../core/find");
 
   Module = (function() {
     Module.index = 0;

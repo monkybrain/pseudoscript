@@ -3,7 +3,7 @@
 modules = require "../../modules/modules"
 Module = require "../../modules/module"
 Scope = require "./../scope"
-Find = require "./../find"
+Find = require "./../../core/find"
 Verb = require "./verb"
 
 class Get extends Verb

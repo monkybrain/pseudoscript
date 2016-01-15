@@ -9,7 +9,7 @@
 
   modules = require("../../modules/modules");
 
-  Find = require("./../find");
+  Find = require("./../../core/find");
 
   Scope = require("./../scope");
 

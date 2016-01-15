@@ -1,7 +1,7 @@
 ### VERB: SET (BASED ON GET) ###
 
 modules = require "../../modules/modules"
-Find = require "./../find"
+Find = require "./../../core/find"
 Scope = require "./../scope"
 Get = require "./get"
 

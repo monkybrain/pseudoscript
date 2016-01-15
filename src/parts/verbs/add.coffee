@@ -1,4 +1,4 @@
-Find = require "./../find"
+Find = require "./../../core/find"
 Scope = require "./../scope"
 Verb = require "./verb"
 Util = require "./../../core/util"

@@ -1,4 +1,4 @@
-Find = require "./../parts/find"
+Find = require "./../core/find"
 
 class Module
 
