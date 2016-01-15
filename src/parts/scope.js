@@ -15,6 +15,17 @@
 
     Scope.subtype = null;
 
+    Scope.getByRef = function(ref) {
+      var k, ref1, v;
+      ref1 = Scope.modules;
+      for (k in ref1) {
+        v = ref1[k];
+        if (ref === v.ref) {
+          return k;
+        }
+      }
+    };
+
     return Scope;
 
   })();

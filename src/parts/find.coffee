@@ -31,6 +31,11 @@ class Find
       if match?
         return module.lexical.base
 
+  @getModuleByRef: (ref) ->
+    for module in modules
+      for member in module.members
+        if ref is member then return module.self
+
   @reference: (text) ->
 
     # Empty array of indices
@@ -51,9 +56,12 @@ class Find
       return text[start...end]
 
   @references: (text) ->
+    # FIXME: SHORTEN TO ONE LINE (i.e. get better at using regex groups)
+    # TODO: REWRITE @reference IN LINE WITH @references
     matches = text.match /'[^']*'/g
-    matches.map (match) ->
-      match.replace /'/g, ''
+    if matches?
+      matches.map (match) ->
+        match.replace /'/g, ''
 
 
 

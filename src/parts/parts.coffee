@@ -11,7 +11,7 @@ for verb in verbs
     keywords.push synonym
 
 # Add adverbs (FIXME: STILL A HACK, FIX IT!)
-preps = ["after", "in", "wait", "in"]
+preps = ["after", "in", "wait", "in", "every"]
 for prep in preps
   keywords.push prep
 

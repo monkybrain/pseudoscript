@@ -7,4 +7,10 @@ class Scope
   @type: null
   @subtype: null
 
+  @getByRef: (ref) =>
+    for k, v of @modules
+      if ref is v.ref
+        return k
+
+
 module.exports = Scope

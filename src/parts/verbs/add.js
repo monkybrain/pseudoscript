@@ -32,117 +32,91 @@
     };
 
     Add.parse = function(text) {
-      var direct, group, i, indirect, j, len, len1, match, noRefs, objects, pattern, ref, refs, results;
+      var direct, group, indirect, match, objects, refs;
       direct = {};
       indirect = {};
       refs = Find.references(text);
       objects = Find.objects(text);
-      match = text.match(/to/g);
+      match = text.match(/\bto\b/g);
       if (match != null) {
         group = objects.map(function(object) {
           return Find.word(object);
         });
         group = "(" + Util.regex.group(group) + ")";
-        match = text.match(new RegExp("(to\\s+?)" + group));
+        match = text.match(new RegExp("(to\\s+?(\\w+?\\s+?)*)" + group));
         if (match != null) {
-          indirect.object = match[2];
+          indirect.type = Find.object(match[3]);
         }
-        group = refs.map(function(ref) {
-          return "'" + ref + "'";
-        });
-        group = "(" + Util.regex.group(group) + ")";
-        match = text.match(new RegExp("(to\\s+?\\w+?\\s+?)" + group));
-        if (match != null) {
-          indirect.ref = match[2];
-        }
-        console.log(indirect.object);
-
-        /*for ref in refs
-          match = text.match new RegExp "to\\s+?'" + ref + "'", "g"
-          if match?
-            [indirect.ref] = match
-         */
-      }
-      if (refs.length === 2) {
-        for (i = 0, len = refs.length; i < len; i++) {
-          ref = refs[i];
-          pattern = new RegExp("to\\s+?" + ref, "g");
-          match = text.match(pattern);
+        if (refs != null) {
+          group = "(" + Util.regex.group(refs) + ")";
+          match = text.match(new RegExp("(to\\s+?(\\w+?\\s+?)*)'" + group + "'"));
           if (match != null) {
-            indirect.ref = ref;
-            direct.ref = refs.filter(function(ref) {
-              return ref !== indirect.ref;
-            })[0];
+            indirect.ref = match[3];
           }
         }
       }
-      console.log(direct);
-      console.log(indirect);
-      refs = Find.references(text);
-      noRefs = text;
-      results = [];
-      for (j = 0, len1 = refs.length; j < len1; j++) {
-        ref = refs[j];
-        results.push(noRefs = noRefs.replace("'" + ref + "'", ""));
+      if (objects != null) {
+        direct.type = objects[0];
       }
-      return results;
-
-      /*
-       * Find all objects
-      objects = Find.objects noRefs
-      
-       * If only one object -> set as direct object
-      if objects.length is 1
-        [object] = objects
-      
-       * If two objects -> find direct and indirect objects
-      if objects.length is 2
-        group = Util.regex.group objects.map (object) -> Find.word object
-        match = text.match group
-      
-        if match?
-          console.log match
-        prep = "to"
-       */
-
-      /*object = Find.object text
-      ref = Find.reference text
-      return [object, ref]
-       */
+      if (refs != null) {
+        refs = refs.filter(function(ref) {
+          return ref !== indirect.ref;
+        });
+        direct.ref = refs[0];
+      }
+      return [direct, indirect];
     };
 
     Add.test = function(text) {
-      var match, module, object, pattern, ref, ref1;
+      var direct, indirect, match, module, pattern, ref1, scope;
       pattern = this.lexical.regex();
       match = text.match(pattern);
       if (match != null) {
-        ref1 = Add.parse(text), object = ref1[0], ref = ref1[1];
-        module = Find.module(object);
-        if (ref == null) {
-          ref = module.lexical.base + module.index;
+        ref1 = Add.parse(text), direct = ref1[0], indirect = ref1[1];
+        module = Find.module(direct.type);
+        if (direct.ref == null) {
+          direct.ref = module.lexical.base + "_" + module.index;
         }
-        module.add(ref);
-        Scope.modules[object] = {
-          ref: ref
+        if (indirect.ref == null) {
+          scope = Scope.modules[indirect.type];
+          if (scope != null) {
+            indirect.ref = scope.ref;
+          }
+        }
+        if (indirect.type == null) {
+          indirect.type = Find.getModuleByRef(indirect.ref);
+        }
+        module.add(direct.ref);
+        Scope.modules[direct.type] = {
+          ref: direct.ref
         };
         Scope.current = {
-          object: object,
-          ref: ref
+          object: direct.type,
+          ref: direct.ref
         };
         return {
           type: 'verb',
           verb: 'add',
-          object: object,
-          ref: ref,
-          input: text
+          object: {
+            type: direct.type,
+            ref: direct.ref
+          },
+          parent: {
+            type: indirect.type,
+            ref: indirect.ref
+          }
         };
       }
     };
 
     Add.syntax = function(phrase) {
-      var object, ref, syntax;
-      object = phrase.object, ref = phrase.ref;
-      return syntax = ["# Adding new " + object + " called '" + ref + "'", "new " + object + "('" + ref + "')\n"];
+      var object, parent;
+      object = phrase.object, parent = phrase.parent;
+      if (parent.ref != null) {
+        return ["# Adding new " + object.type + " '" + object.ref + "' to " + parent.type + " '" + parent.ref + "'", "new " + object.type + "('" + object.ref + "', '" + parent.ref + "')\n"];
+      } else {
+        return ["# Adding new " + object.type + " '" + object.ref + "'", "new " + object.type + "('" + object.ref + "')\n"];
+      }
     };
 
     return Add;

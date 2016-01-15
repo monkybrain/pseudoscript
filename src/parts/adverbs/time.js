@@ -38,6 +38,7 @@
 
     Time.getType = function(preposition) {
       var i, k, len, p, ref, ref1, v;
+      console.log(preposition);
       ref = this.types;
       for (k in ref) {
         v = ref[k];

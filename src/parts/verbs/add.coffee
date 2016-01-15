@@ -5,6 +5,8 @@ Util = require "./../../core/util"
 
 # ISSUE: ADD OPERATIONS (AS IN SET/GET) TO ALLOW MULTIPLE 'ADDINGS' AT ONCE
 
+# ISSUE: At the moment, direct objects have to be stated before indirect object. 'To the room add a light' is invalid. Fix later!
+
 class Add extends Verb
 
   @lexical:
@@ -23,75 +25,35 @@ class Add extends Verb
     refs = Find.references text
     objects = Find.objects text
 
-    # Check if indirect object present
-    match = text.match /to/g
+    # Get indirect object (if present)
+    match = text.match /\bto\b/g
     if match?
 
       # Find indirect object type
       group = objects.map (object) ->
         Find.word object
       group = "(" + Util.regex.group(group) + ")"
-      match = text.match new RegExp "(to\\s+?)" + group
+      match = text.match new RegExp "(to\\s+?(\\w+?\\s+?)*)" + group
       if match?
-        indirect.object = match[2]
+        indirect.type = Find.object match[3]
 
       # Find indirect object ref
-      group = refs.map (ref) ->
-        "'" + ref + "'"
-      group = "(" + Util.regex.group(group) + ")"
-      match = text.match new RegExp "(to\\s+?\\w+?\\s+?)" + group
-      if match?
-        indirect.ref = match[2]
-
-      console.log indirect.object
-
-      ###for ref in refs
-        match = text.match new RegExp "to\\s+?'" + ref + "'", "g"
+      if refs?
+        group = "(" + Util.regex.group(refs) + ")"
+        match = text.match new RegExp "(to\\s+?(\\w+?\\s+?)*)'" + group + "'"
         if match?
-          [indirect.ref] = match###
+          indirect.ref = match[3]
+
+    # Get direct object
+    if objects?
+      [direct.type] = objects
+    if refs?
+      refs = refs.filter (ref) ->
+        ref isnt indirect.ref
+      [direct.ref] = refs
 
 
-    # If two refs,
-    if refs.length is 2
-
-      for ref in refs
-        pattern = new RegExp "to\\s+?" + ref, "g"
-        match = text.match pattern
-        if match?
-          indirect.ref = ref
-          [direct.ref] = refs.filter (ref) ->
-            ref isnt indirect.ref
-
-    console.log direct
-    console.log indirect
-
-
-    #### Exclude refs
-    refs = Find.references text
-    noRefs = text
-    for ref in refs
-      noRefs = noRefs.replace "'#{ref}'", ""
-    ###
-    # Find all objects
-    objects = Find.objects noRefs
-
-    # If only one object -> set as direct object
-    if objects.length is 1
-      [object] = objects
-
-    # If two objects -> find direct and indirect objects
-    if objects.length is 2
-      group = Util.regex.group objects.map (object) -> Find.word object
-      match = text.match group
-
-      if match?
-        console.log match
-      prep = "to"
-    ###
-
-    ###object = Find.object text
-    ref = Find.reference text
-    return [object, ref]###
+    return [direct, indirect]
 
   @test: (text) ->
 
@@ -101,30 +63,54 @@ class Add extends Verb
     if match?
 
       # Parse text for object and reference
-      [object, ref] = Add.parse text
+      [direct, indirect] = Add.parse text
 
       # Get module
-      module = Find.module object
+      module = Find.module direct.type
 
       # If no reference specified -> generate based on index
-      if not ref?
-        ref = module.lexical.base + module.index
+      if not direct.ref?
+        direct.ref = module.lexical.base + "_" + module.index
+
+      if not indirect.ref?
+        scope = Scope.modules[indirect.type]
+        if scope?
+          indirect.ref = scope.ref
+
+      if not indirect.type?
+        indirect.type = Find.getModuleByRef indirect.ref
 
       # Add object to module members
-      module.add ref
+      module.add direct.ref
 
       # Update scope
-      Scope.modules[object] = ref: ref
-      Scope.current = object: object, ref: ref
+      Scope.modules[direct.type] = ref: direct.ref
+      Scope.current = object: direct.type, ref: direct.ref
 
-      return type: 'verb', verb: 'add', object: object, ref: ref, input: text
+      return {
+      type: 'verb'
+      verb: 'add'
+      object:
+        type: direct.type
+        ref: direct.ref
+      parent:
+        type: indirect.type
+        ref: indirect.ref
+      }
 
   @syntax: (phrase) ->
-    {object: object, ref: ref} = phrase
-    syntax = [
-      "# Adding new #{object} called '#{ref}'",
-      "new #{object}('#{ref}')\n"
-    ]
+    {object: object, parent: parent} = phrase
+    if parent.ref?
+      return [
+        "# Adding new #{object.type} '#{object.ref}' to #{parent.type} '#{parent.ref}'",
+        "new #{object.type}('#{object.ref}', '#{parent.ref}')\n"
+      ]
+    else
+      return [
+        "# Adding new #{object.type} '#{object.ref}'",
+        "new #{object.type}('#{object.ref}')\n"
+      ]
+
 
 
 

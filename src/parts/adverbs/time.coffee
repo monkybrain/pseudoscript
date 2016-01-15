@@ -16,6 +16,7 @@ class Time extends Adverb
     prepositions
 
   @getType: (preposition) ->
+    console.log preposition
     for k, v of @types
       for p in v.prepositions
         if preposition is p
@@ -78,6 +79,7 @@ class Time extends Adverb
 
     # Find preposition
     match = text.match pattern
+
     if match?
 
       preposition = match[0]

@@ -53,6 +53,20 @@
       }
     };
 
+    Find.getModuleByRef = function(ref) {
+      var i, j, len, len1, member, module, ref1;
+      for (i = 0, len = modules.length; i < len; i++) {
+        module = modules[i];
+        ref1 = module.members;
+        for (j = 0, len1 = ref1.length; j < len1; j++) {
+          member = ref1[j];
+          if (ref === member) {
+            return module.self;
+          }
+        }
+      }
+    };
+
     Find.reference = function(text) {
       var end, indices, match, pattern, start;
       indices = [];
@@ -75,9 +89,11 @@
     Find.references = function(text) {
       var matches;
       matches = text.match(/'[^']*'/g);
-      return matches.map(function(match) {
-        return match.replace(/'/g, '');
-      });
+      if (matches != null) {
+        return matches.map(function(match) {
+          return match.replace(/'/g, '');
+        });
+      }
     };
 
     Find.number = function(text) {

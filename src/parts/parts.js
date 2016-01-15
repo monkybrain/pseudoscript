@@ -17,7 +17,7 @@
     }
   }
 
-  preps = ["after", "in", "wait", "in"];
+  preps = ["after", "in", "wait", "in", "every"];
 
   for (k = 0, len2 = preps.length; k < len2; k++) {
     prep = preps[k];
