@@ -1,6 +1,7 @@
 Find = require "./../core/find"
 
 class Module
+  # 'Module' already taken
 
   @index: 0
 
@@ -10,11 +11,17 @@ class Module
 
   @parent: null
 
-  constructor: () ->
+  ###
+  constructor: (ref) ->
+    console.log "Module: " + ref
+    return
     # Set default values
     @properties = {}
     for key, value of @constructor.properties
       @properties[key] = value.default
+  ###
+
+  constructor: (@ref) ->
 
   @add: (ref, parent) ->
 
@@ -26,9 +33,12 @@ class Module
     # Add to parent (if specified)
     # TODO: Implement!
 
-  @fetch: (ref) ->
+  @select: (ref) ->
     for member in @members
       if ref is member.ref
         return member
 
+fisk = new Module 'test'
+
+console.log fisk
 module.exports = Module

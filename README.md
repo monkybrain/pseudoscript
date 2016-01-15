@@ -37,15 +37,15 @@ The following demo shows the input (.pseudo) and output (.coffee) of a simple ho
 Add a home
 Add a room called 'living room' to the home
 Add a light called 'ceiling light' to the room and set the color to blue
-Every 10 seconds set the color to red and after 5 second set the color back to blue
-After 1 hour 30 minutes and 30 seconds, set the brightness to zero
+Every 10 seconds set the color to red and after 5 seconds set the color back to blue
+After 1 hour 30 minutes and 30 seconds, set the temperature of the room to 20
 
 # Terse
 Add home
 Add room 'living room' to home
 Add 'ceiling light' to room, set color blue
 Every 10s set color red, wait 5s, set color blue
-Wait 1h30m30s, set brightness 0
+Wait 1h30m30s, set room temperature 20
 ```
 
 Both result in identical compiled CoffeeScript:
@@ -84,11 +84,10 @@ setInterval () ->
 # Setting timeout to 5430 seconds
 setTimeout () ->
 
-  # Setting 'brightness' of 'ceiling light' to '0'
-  Light.select('ceiling light').set('brightness', '0')
+  # Setting 'temperature' of 'living room' to '20'
+  Room.select('living room').set('temperature', '20')
 
 , (5430*1000)
 
 ```
-
 

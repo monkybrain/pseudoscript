@@ -9,6 +9,10 @@
   Light = (function(superClass) {
     extend(Light, superClass);
 
+    function Light() {
+      return Light.__super__.constructor.apply(this, arguments);
+    }
+
     Light.self = 'Light';
 
     Light.lexical = {
@@ -34,10 +38,6 @@
         "default": 100
       }
     };
-
-    function Light() {
-      Light.__super__.constructor.call(this);
-    }
 
     return Light;
 

@@ -23,7 +23,4 @@ class Light extends Module
       set: true
       default: 100
 
-  constructor: () ->
-    super()
-
 module.exports = Light

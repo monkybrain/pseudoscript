@@ -10,4 +10,5 @@ Add home
 Add room 'living room' to home
 Add light 'ceiling light' to room, set color blue
 Every 10s set color red, wait 5s, set color blue
-Wait 1h30m30s, set brightness 0
+Wait 1h30m30s, set room temperature 0
+§1
