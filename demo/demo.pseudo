@@ -2,12 +2,12 @@
 Add a home
 Add a room called 'living room' to the home
 Add a light called 'ceiling light' to the room and set the color to blue
-Every 10 seconds set the color to red and after 1 second, set the color back to blue
+Every 10 seconds set the color to red and after 5 seconds, set the color back to blue
 After 1 hour 30 minutes and 30 seconds, set the brightness to zero
 
 # Terse
 Add home
 Add room 'living room' to home
 Add light 'ceiling light' to room, set color blue
-Every 10s set color red, after 1 s set color blue
+Every 10s set color red, wait 5s, set color blue
 Wait 1h30m30s, set brightness 0
