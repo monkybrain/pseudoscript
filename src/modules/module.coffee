@@ -11,18 +11,6 @@ class Module
 
   @parent: null
 
-  ###
-  constructor: (ref) ->
-    console.log "Module: " + ref
-    return
-    # Set default values
-    @properties = {}
-    for key, value of @constructor.properties
-      @properties[key] = value.default
-  ###
-
-  constructor: (@ref) ->
-
   @add: (ref, parent) ->
 
     # Add to self
@@ -38,7 +26,4 @@ class Module
       if ref is member.ref
         return member
 
-fisk = new Module 'test'
-
-console.log fisk
 module.exports = Module

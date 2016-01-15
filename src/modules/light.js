@@ -9,8 +9,15 @@
   Light = (function(superClass) {
     extend(Light, superClass);
 
-    function Light() {
-      return Light.__super__.constructor.apply(this, arguments);
+    function Light(ref) {
+      var k, ref1, v;
+      this.ref = ref;
+      this.properties = {};
+      ref1 = Light.properties;
+      for (k in ref1) {
+        v = ref1[k];
+        this.properties[k] = v["default"];
+      }
     }
 
     Light.self = 'Light';

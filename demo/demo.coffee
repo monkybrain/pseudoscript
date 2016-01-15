@@ -15,13 +15,13 @@ Light.select('ceiling light').set('color', 'blue')
 # Setting interval to 10 seconds
 setInterval () ->
 
-# Setting 'color' of 'ceiling light' to 'red'
+  # Setting 'color' of 'ceiling light' to 'red'
   Light.select('ceiling light').set('color', 'red')
 
   # Setting timeout to 5 seconds
   setTimeout () ->
 
-# Setting 'color' of 'ceiling light' to 'blue'
+    # Setting 'color' of 'ceiling light' to 'blue'
     Light.select('ceiling light').set('color', 'blue')
 
   , (5*1000)
@@ -31,7 +31,7 @@ setInterval () ->
 # Setting timeout to 5430 seconds
 setTimeout () ->
 
-# Setting 'temperature' of 'living room' to '20'
+  # Setting 'temperature' of 'living room' to '20'
   Room.select('living room').set('temperature', '20')
 
 , (5430*1000)

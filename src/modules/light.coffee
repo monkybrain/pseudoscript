@@ -2,6 +2,13 @@ Module = require "./module"
 
 class Light extends Module
 
+  constructor: (@ref) ->
+  # TODO: MOVE THIS TO PARENT (IF POSSIBLE)
+    @properties = {}
+    for k, v of Light.properties
+      @properties[k] = v.default
+
+
   @self: 'Light'
 
   @lexical:
