@@ -91,3 +91,12 @@ setTimeout () ->
 
 
 ```
+### Central metaphor and graphical profile
+The central metaphor for this project is magic, which is really just a continuation of a long tradition within this area. What do we call a bearded sys admin? A wizard! What does he or she do? Well, mostly he consults the scriptures (e.g. regex cheatsheets), constructs new spells (scripts) which he proceeds to cast into the void (terminal window) in order to manifest his intentions in the universe (system).
+
+I asked my designer colleague to riff off this theme and he came up with a cute, little mascot that I suppose symbolises the state of someone just learning to script: a sorcerer's apprentice.
+
+![Wizard](gfx/wizard.jpg)
+
+
+
