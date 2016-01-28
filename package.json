@@ -24,12 +24,12 @@
   "homepage": "https://github.com/monkybrain/pseudoscript#readme",
   "dependencies": {
     "colors": "^1.1.2",
-    "huejay": "^1.0.1",
+    "huejay": "*",
     "mailgun-js": "^0.7.7",
     "monky-tools": "0.0.4",
     "promise": "^7.1.1",
     "shelljs": "^0.5.3",
-    "spark": "^1.0.0",
-    "yargs": "^3.31.0"
+    "spark": "^1.1.0",
+    "yargs": "^3.32.0"
   }
 }

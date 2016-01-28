@@ -1,7 +1,6 @@
 Find = require "./../core/find"
 
 class Module
-  # 'Module' already taken
 
   @index: 0
 

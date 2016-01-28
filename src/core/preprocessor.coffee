@@ -1,5 +1,6 @@
 dict = require "./../dictionaries/dictionary"
 modules = require "./../modules/modules"
+Find = require "./find"
 
 class Preprocessor
 
@@ -17,7 +18,12 @@ class Preprocessor
     line
 
   @lowercase: (line) ->
-    line.toLowerCase()
+    # Conver to lowercase (excluding refs)
+    refs = Find.references line
+    line = line.toLowerCase()
+    for ref in refs
+      line = line.replace ref.toLowerCase(), ref
+    return line
 
   @comments: (line) ->
     index = line.indexOf "#"

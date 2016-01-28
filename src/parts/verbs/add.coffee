@@ -103,12 +103,12 @@ class Add extends Verb
     if parent.ref?
       return [
         "# Adding new #{object.type} '#{object.ref}' to #{parent.type} '#{parent.ref}'",
-        "new #{object.type}('#{object.ref}', '#{parent.ref}')\n"
+        "new #{object.type} '#{object.ref}', '#{parent.ref}'\n"
       ]
     else
       return [
         "# Adding new #{object.type} '#{object.ref}'",
-        "new #{object.type}('#{object.ref}')\n"
+        "new #{object.type} '#{object.ref}'\n"
       ]
 
 
