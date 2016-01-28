@@ -63,10 +63,14 @@ class Find
       matches.map (match) ->
         match.replace /'/g, ''
 
-
-
   @number: (text) ->
     pattern = /\b\d+\b/g
+    match = text.match pattern
+    if match?
+      return match[0]
+
+  @boolean: (text) ->
+    pattern = /\b((true)|(false))\b/g
     match = text.match pattern
     if match?
       return match[0]

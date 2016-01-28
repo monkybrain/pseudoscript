@@ -24,6 +24,10 @@ class Set extends Get
     if type is 'number'
       value = parseFloat Find.number segment
 
+    if type is 'boolean'
+      value = Find.boolean segment
+      console.log value
+
     if type is 'string'
 
       # Get indices of object, ref and property

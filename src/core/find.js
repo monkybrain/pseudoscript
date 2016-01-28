@@ -105,6 +105,15 @@
       }
     };
 
+    Find.boolean = function(text) {
+      var match, pattern;
+      pattern = /\b((true)|(false))\b/g;
+      match = text.match(pattern);
+      if (match != null) {
+        return match[0];
+      }
+    };
+
     return Find;
 
   })();

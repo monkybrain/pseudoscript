@@ -8,9 +8,6 @@ error = tools.console.error
 
 class Parser
 
-  @process: (line) ->
-    line = line.toLowerCase()
-
   @phrasify: (line) ->
 
     # Assemble regex pattern from keywords
@@ -43,8 +40,6 @@ class Parser
     phrases
 
   @parse: (line) ->
-
-    line = @process line
 
     segments = []
 

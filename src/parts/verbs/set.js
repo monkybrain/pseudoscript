@@ -39,6 +39,10 @@
       if (type === 'number') {
         value = parseFloat(Find.number(segment));
       }
+      if (type === 'boolean') {
+        value = Find.boolean(segment);
+        console.log(value);
+      }
       if (type === 'string') {
         occurrences = [
           {

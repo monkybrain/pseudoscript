@@ -17,10 +17,6 @@
   Parser = (function() {
     function Parser() {}
 
-    Parser.process = function(line) {
-      return line = line.toLowerCase();
-    };
-
     Parser.phrasify = function(line) {
       var i, index, indices, j, keywords, len, pattern, phrases, result;
       keywords = Util.regex.group(Parts.keywords);
@@ -52,7 +48,6 @@
 
     Parser.parse = function(line) {
       var adverb, j, k, l, len, len1, len2, phrase, phrases, ref, ref1, result, segments, verb;
-      line = this.process(line);
       segments = [];
       phrases = this.phrasify(line);
       for (j = 0, len = phrases.length; j < len; j++) {

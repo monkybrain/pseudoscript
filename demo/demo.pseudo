@@ -3,7 +3,7 @@ Add a home
 Add a room called 'living room' to the home
 Add a light called 'ceiling light' to the room and set the color to blue
 Every 10 seconds set the color to red and after 5 seconds, set the color back to blue
-After 1 hour 30 minutes and 30 seconds, set the temperature of the room to 20
+After 1 hour 30 minutes and 20 seconds, set the temperature of the room to 20
 
 # Terse
 # Add home

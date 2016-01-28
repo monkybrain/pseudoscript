@@ -16,7 +16,6 @@ class Time extends Adverb
     prepositions
 
   @getType: (preposition) ->
-    console.log preposition
     for k, v of @types
       for p in v.prepositions
         if preposition is p
