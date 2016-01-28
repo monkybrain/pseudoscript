@@ -25,4 +25,7 @@ class Module
       if ref is member.ref
         return member
 
+  constructor: (ref) ->
+    this.members.push ref
+
 module.exports = Module

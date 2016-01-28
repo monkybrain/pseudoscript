@@ -1,3 +1,3 @@
 Light = require "../src/modules/light"
 
-new Light('Hue 1')
+new Light 'Hue 1'

@@ -34,18 +34,18 @@ class Hue
 
 
 ### INIT ###
-Hue.lights = [
+###Hue.lights = [
   light: attributes: {attributes: {name: 'Hue 1'}},
   light: attributes: {attributes: {name: 'Hue 2'}}]
 
-ready = true
+ready = true###
 
-###lights = client.lights.getAll().then(
+lights = client.lights.getAll().then(
   (lights) ->
     Hue.lights = lights
     ready = true
   (error) ->
     console.error error
-)###
+)
 
 module.exports = Hue

@@ -47,13 +47,14 @@ class Light extends Module
     # TODO: Fix wicked synchronous pause!
     Hue.ready().then () =>
 
-      # Check if valid name
-      names = Hue.lights.map (light) ->
-        light.attributes.attributes.name
+      [light] = Hue.lights.filter (light) =>
+        light.attributes.attributes.name is @ref
 
-      if @ref not in names
+      @id = light.attributes.attributes.id
+
+      if not light?
         console.error "Error! Hue light '#{@ref}' not found"
-        # TODO: Throw error here
+        process.exit()
 
       # Set default properties
       # TODO: Move to parent if possible!
@@ -61,11 +62,9 @@ class Light extends Module
       for k, v of Light.properties
         @properties[k] = v.default
 
-
-
-
-
+      Light.members.push this
 
   set: (property, value) ->
+    Hue.lights.set()
 
 module.exports = Light
