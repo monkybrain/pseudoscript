@@ -38,6 +38,7 @@ segments = lines.map (line) -> Parser.parse line
 
 # Assembler: assemble output
 code = segments.map (segment) -> Assembler.parse segment
+code = Assembler.wrap code
 code = code.join "\n"
 
 # TODO: REWRITE COMPILE AND CLEANUP FUNCTIONS

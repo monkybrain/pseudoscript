@@ -10,5 +10,9 @@ class Util
     bound: (pattern) ->
       new RegExp "\\b(" + pattern + ")\\b", "g"
 
+  @random: (options) ->
+    Math.floor(options.min + Math.random() * options.max)
+
+
 
 module.exports = Util

@@ -20,27 +20,41 @@ class Light extends Module
 
   @properties:
     'on':
+      key: 'on'
       type: 'boolean'
-      set: true
+      operations: ['set', 'get']
       default: true
     'color':
+      operations: ['set']
       type: 'string'
       set: true
       default: 'white'
     'hue':
+      key: 'hue'
       type: 'number'
+      operations: ['set', 'get']
       min: 0
-      max: 65500
+      max: 65535
       default: 20000
     'saturation':
+      key: 'saturation'
       type: 'number'
+      operations: ['set', 'get']
       min: 0
       max: 254
       default: 200
     'brightness':
+      key: 'brightness'
       type: 'number'
-      set: true
+      operations: ['set', 'get']
+      min: 0
+      max: 254
       default: 100
+    'transition time':
+      key: 'transitionTime'
+      type: 'number'
+      operations: ['set']
+      default: 1
 
   constructor: (@ref) ->
 
@@ -50,11 +64,16 @@ class Light extends Module
       [light] = Hue.lights.filter (light) =>
         light.attributes.attributes.name is @ref
 
-      @id = light.attributes.attributes.id
-
       if not light?
         console.error "Error! Hue light '#{@ref}' not found"
         process.exit()
+
+      @id = light.attributes.attributes.id
+      console.log
+
+      @properties = {}
+      for k, v of Light.properties
+        @properties[k] = if 'get' in v.operations then light.state.attributes[v.key] else null
 
       # Set default properties
       # TODO: Move to parent if possible!
@@ -64,8 +83,25 @@ class Light extends Module
 
       Light.members.push this
 
-  set: () ->
-    console.log @id
-    # Hue.light.set(@id)
+  @set: (options) ->
+
+    new Promise (resolve, reject) =>
+
+      # Set properties
+      Hue.light.set(@current.id, options).then(
+          () -> resolve()
+          (error) -> reject "Error! " + error.message
+      )
+
+  @select: (ref) ->
+    new Promise (resolve, reject) =>
+      Hue.ready().then () =>
+        [@current] = Light.members.filter (member) => member.ref is ref
+        if @current? then resolve() else reject "Error! Cannot find '#{ref}'"
+
+
+
+
+
 
 module.exports = Light

@@ -9,8 +9,13 @@
 
   new Light('Hue 1');
 
-  setTimeout(function() {
-    return console.log(Light.select('Hue 1').set());
-  }, 1000);
+  Light.select('Hue 1').then(function() {
+    return Light.set({
+      hue: Math.floor(Math.random() * 65000, {
+        brightness: 200,
+        transitionTime: 1
+      })
+    });
+  });
 
 }).call(this);

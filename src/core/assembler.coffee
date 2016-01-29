@@ -59,4 +59,32 @@ class Assembler
 
     syntax.join "\n"
 
+  @wrap: (code) ->
+
+    # Core modules
+    imports = []
+    imports.push "# Core modules"
+    imports.push "Util = require '../src/core/util'\n"
+
+    # TODO: Make dynamic
+    modules = [
+      {name: 'Light', path: '../src/modules/light'},
+      {name: 'Room', path: '../src/modules/room'}
+    ]
+
+    # Add comment
+    imports.push "# Custom modules"
+
+    # Add line for each imported module
+    for module in modules
+      imports.push "#{module.name} = require '#{module.path}'"
+
+    # Add new line to last import
+    imports[imports.length - 1] = imports[imports.length - 1] + "\n"
+
+    # Concat
+    code = imports.concat code
+    code
+
+
 module.exports = Assembler

@@ -13,6 +13,8 @@
 
     Module.parent = null;
 
+    Module.current = null;
+
     Module.add = function(ref, parent) {
       Module.members.push({
         module: this.self,
@@ -22,20 +24,14 @@
       return this.index++;
     };
 
-    Module.select = function(ref) {
-      var i, len, member, ref1;
-      ref1 = this.members;
-      for (i = 0, len = ref1.length; i < len; i++) {
-        member = ref1[i];
-        if (ref === member.ref) {
-          return member;
-        }
-      }
-    };
 
-    function Module(ref) {
-      this.members.push(ref);
-    }
+    /*@select: (ref) ->
+      for member in @members
+        if ref is member.ref
+          this.current is member
+     */
+
+    function Module(ref) {}
 
     return Module;
 

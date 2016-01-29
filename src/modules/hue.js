@@ -37,8 +37,25 @@
     Hue.lights = [];
 
     Hue.light = {
-      set: function(id) {
-        return console.log(id);
+      set: function(id, options) {
+        return new Promise(function(resolve, reject) {
+          return Hue.ready().then(function() {
+            return client.lights.getById(id);
+          }).then(function(light) {
+            var key, value;
+            for (key in options) {
+              value = options[key];
+              light[key] = value;
+            }
+            return client.lights.save(light);
+          }, function(error) {
+            return console.error(error);
+          }).then(function(success) {
+            return resolve();
+          }, function(error) {
+            return reject(error);
+          });
+        });
       }
     };
 
@@ -53,7 +70,6 @@
   /*Hue.lights = [
     light: attributes: {attributes: {name: 'Hue 1'}},
     light: attributes: {attributes: {name: 'Hue 2'}}]
-  
   ready = true
    */
 

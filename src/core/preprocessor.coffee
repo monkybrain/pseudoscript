@@ -21,8 +21,9 @@ class Preprocessor
     # Conver to lowercase (excluding refs)
     refs = Find.references line
     line = line.toLowerCase()
-    for ref in refs
-      line = line.replace ref.toLowerCase(), ref
+    if refs?
+      for ref in refs
+        line = line.replace ref.toLowerCase(), ref
     return line
 
   @comments: (line) ->

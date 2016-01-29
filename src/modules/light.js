@@ -2,7 +2,8 @@
 (function() {
   var Hue, Light, Module, util,
     extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
-    hasProp = {}.hasOwnProperty;
+    hasProp = {}.hasOwnProperty,
+    indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
   Module = require("./module");
 
@@ -47,51 +48,73 @@
 
     Light.properties = {
       'on': {
+        key: 'on',
         type: 'boolean',
-        set: true,
+        operations: ['set', 'get'],
         "default": true
       },
       'color': {
+        operations: ['set'],
         type: 'string',
         set: true,
         "default": 'white'
       },
       'hue': {
+        key: 'hue',
         type: 'number',
+        operations: ['set', 'get'],
         min: 0,
-        max: 65500,
+        max: 65535,
         "default": 20000
       },
       'saturation': {
+        key: 'saturation',
         type: 'number',
+        operations: ['set', 'get'],
         min: 0,
         max: 254,
         "default": 200
       },
       'brightness': {
+        key: 'brightness',
         type: 'number',
-        set: true,
+        operations: ['set', 'get'],
+        min: 0,
+        max: 254,
         "default": 100
+      },
+      'transition time': {
+        key: 'transitionTime',
+        type: 'number',
+        operations: ['set'],
+        "default": 1
       }
     };
 
-    function Light(ref) {
-      this.ref = ref;
+    function Light(ref1) {
+      this.ref = ref1;
       Hue.ready().then((function(_this) {
         return function() {
-          var k, light, ref1, v;
+          var k, light, ref2, ref3, v;
           light = Hue.lights.filter(function(light) {
             return light.attributes.attributes.name === _this.ref;
           })[0];
-          _this.id = light.attributes.attributes.id;
           if (light == null) {
             console.error("Error! Hue light '" + _this.ref + "' not found");
             process.exit();
           }
+          _this.id = light.attributes.attributes.id;
+          console.log;
           _this.properties = {};
-          ref1 = Light.properties;
-          for (k in ref1) {
-            v = ref1[k];
+          ref2 = Light.properties;
+          for (k in ref2) {
+            v = ref2[k];
+            _this.properties[k] = indexOf.call(v.operations, 'get') >= 0 ? light.state.attributes[v.key] : null;
+          }
+          _this.properties = {};
+          ref3 = Light.properties;
+          for (k in ref3) {
+            v = ref3[k];
             _this.properties[k] = v["default"];
           }
           return Light.members.push(_this);
@@ -99,8 +122,33 @@
       })(this));
     }
 
-    Light.prototype.set = function() {
-      return console.log(this.id);
+    Light.set = function(options) {
+      return new Promise((function(_this) {
+        return function(resolve, reject) {
+          return Hue.light.set(_this.current.id, options).then(function() {
+            return resolve();
+          }, function(error) {
+            return reject("Error! " + error.message);
+          });
+        };
+      })(this));
+    };
+
+    Light.select = function(ref) {
+      return new Promise((function(_this) {
+        return function(resolve, reject) {
+          return Hue.ready().then(function() {
+            _this.current = Light.members.filter(function(member) {
+              return member.ref === ref;
+            })[0];
+            if (_this.current != null) {
+              return resolve();
+            } else {
+              return reject("Error! Cannot find '" + ref + "'");
+            }
+          });
+        };
+      })(this));
     };
 
     return Light;

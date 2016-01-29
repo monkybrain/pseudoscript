@@ -10,6 +10,8 @@ class Module
 
   @parent: null
 
+  @current: null
+
   @add: (ref, parent) ->
 
     # Add to self
@@ -20,12 +22,12 @@ class Module
     # Add to parent (if specified)
     # TODO: Implement!
 
-  @select: (ref) ->
+  ###@select: (ref) ->
     for member in @members
       if ref is member.ref
-        return member
+        this.current is member###
 
   constructor: (ref) ->
-    this.members.push ref
+    # this.members.push ref
 
 module.exports = Module

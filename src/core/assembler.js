@@ -75,6 +75,30 @@
       return syntax.join("\n");
     };
 
+    Assembler.wrap = function(code) {
+      var imports, j, len, module, modules;
+      imports = [];
+      imports.push("# Core modules");
+      imports.push("Util = require '../src/core/util'\n");
+      modules = [
+        {
+          name: 'Light',
+          path: '../src/modules/light'
+        }, {
+          name: 'Room',
+          path: '../src/modules/room'
+        }
+      ];
+      imports.push("# Custom modules");
+      for (j = 0, len = modules.length; j < len; j++) {
+        module = modules[j];
+        imports.push(module.name + " = require '" + module.path + "'");
+      }
+      imports[imports.length - 1] = imports[imports.length - 1] + "\n";
+      code = imports.concat(code);
+      return code;
+    };
+
     return Assembler;
 
   })();

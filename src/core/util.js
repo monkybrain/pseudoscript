@@ -21,6 +21,10 @@
       }
     };
 
+    Util.random = function(options) {
+      return Math.floor(options.min + Math.random() * options.max);
+    };
+
     return Util;
 
   })();

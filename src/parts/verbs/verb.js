@@ -7,7 +7,7 @@
 
     Verb.split = function(text) {
       var parts, pattern;
-      pattern = /and|,|&/g;
+      pattern = /\s+and\s+|,|\s+&\s+/g;
       parts = text.split(pattern);
       parts = parts.map(function(part) {
         return part.trim();

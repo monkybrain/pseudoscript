@@ -3,7 +3,7 @@ class Verb
   @split: (text) ->
 
     # Define delimiter pattern
-    pattern = /and|,|&/g
+    pattern = /\s+and\s+|,|\s+&\s+/g
 
     # Split by pattern
     parts = text.split pattern

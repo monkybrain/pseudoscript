@@ -30,15 +30,25 @@ class Hue
   @lights = []
 
   @light:
-    set: (id) ->
-      console.log id
-
+    set: (id, options) ->
+      new Promise (resolve, reject) ->
+        Hue.ready().then( -> client.lights.getById(id) )
+        .then(
+          (light) ->
+            for key, value of options
+              light[key] = value
+            client.lights.save light
+          (error) ->
+            console.error error
+        ).then(
+          (success) -> resolve()
+          (error) -> reject error
+        )
 
 ### INIT ###
 ###Hue.lights = [
   light: attributes: {attributes: {name: 'Hue 1'}},
   light: attributes: {attributes: {name: 'Hue 2'}}]
-
 ready = true###
 
 lights = client.lights.getAll().then(

@@ -38,9 +38,11 @@
       var i, len, ref, refs;
       refs = Find.references(line);
       line = line.toLowerCase();
-      for (i = 0, len = refs.length; i < len; i++) {
-        ref = refs[i];
-        line = line.replace(ref.toLowerCase(), ref);
+      if (refs != null) {
+        for (i = 0, len = refs.length; i < len; i++) {
+          ref = refs[i];
+          line = line.replace(ref.toLowerCase(), ref);
+        }
       }
       return line;
     };

@@ -53,6 +53,8 @@
     return Assembler.parse(segment);
   });
 
+  code = Assembler.wrap(code);
+
   code = code.join("\n");
 
   if (argv.s != null) {
