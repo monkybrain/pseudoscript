@@ -99,8 +99,8 @@
       })(this));
     }
 
-    Light.prototype.set = function(property, value) {
-      return Hue.lights.set();
+    Light.prototype.set = function() {
+      return console.log(this.id);
     };
 
     return Light;

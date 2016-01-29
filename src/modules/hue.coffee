@@ -30,7 +30,8 @@ class Hue
   @lights = []
 
   @light:
-    set: (property, value) ->
+    set: (id) ->
+      console.log id
 
 
 ### INIT ###

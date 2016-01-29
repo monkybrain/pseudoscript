@@ -64,7 +64,8 @@ class Light extends Module
 
       Light.members.push this
 
-  set: (property, value) ->
-    Hue.lights.set()
+  set: () ->
+    console.log @id
+    # Hue.light.set(@id)
 
 module.exports = Light
