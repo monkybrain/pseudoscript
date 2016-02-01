@@ -3,4 +3,7 @@ Set = require "./set"
 Get = require "./get"
 Log = require "./log"
 
-module.exports = [Add, Set, Get, Log]
+# Math
+Multiply = require "./math/multiply"
+
+module.exports = [Add, Set, Get, Log, Multiply]

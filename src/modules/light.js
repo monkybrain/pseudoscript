@@ -138,13 +138,13 @@
       return new Promise((function(_this) {
         return function(resolve, reject) {
           return Hue.light.get(_this.current.id, properties).then(function(properties) {
-            var response;
-            response = {
-              ref: _this.current.ref,
-              object: _this.self,
+
+            /*response =
+              ref: @current.ref
+              object: @self
               properties: properties
-            };
-            return resolve(response);
+             */
+            return resolve(properties);
           }, function(error) {
             return reject("Error! " + error.message);
           });

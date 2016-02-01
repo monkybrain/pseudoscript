@@ -85,6 +85,8 @@ class Get extends Verb
     Scope.current = object: object, ref: ref, property: property
     Scope.modules[object] = ref: ref, property: property
 
+    # console.log property
+
     # Return parsed info
     return object: object, ref: ref, property: property
 

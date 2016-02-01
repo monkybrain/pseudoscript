@@ -20,10 +20,9 @@ class Log extends Verb
   @syntax: (phrase) ->
     syntax = []
     syntax.push "# Logging"
-    syntax.push ".then (response) ->"
-    syntax.push "  console.log \"\#{response.ref} (\#{response.object})\""
-    syntax.push "  console.log \"  \#{key}: \#{value}\" for key, value of response.properties"
-    # syntax.push "  console.log 'fisk'"
+    syntax.push ".then (response) -> console.log response"
+    ###syntax.push "  console.log \"\#{response.ref} (\#{response.object})\""
+    syntax.push "  console.log \"  \#{key}: \#{value}\" for key, value of response.properties"###
     syntax
 
 module.exports = Log

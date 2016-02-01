@@ -15,7 +15,7 @@
 
     Scope.subtype = null;
 
-    Scope.variables = [];
+    Scope.variables = {};
 
     Scope.getByRef = function(ref) {
       var k, ref1, v;

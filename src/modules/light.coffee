@@ -100,11 +100,11 @@ class Light extends Module
       # Set properties
       Hue.light.get(@current.id, properties).then(
         (properties) =>
-          response =
+          ###response =
             ref: @current.ref
             object: @self
-            properties: properties
-          resolve response
+            properties: properties###
+          resolve properties
         (error) -> reject "Error! " + error.message
       )
 

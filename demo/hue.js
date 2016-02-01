@@ -15,24 +15,18 @@
 
   Light.select('Hue 1').then(function() {
     return Light.set({
-      hue: 30000,
+      hue: 5000,
       brightness: 100,
-      saturation: 250
+      saturation: 100
     });
   });
 
   Light.select('Hue 1').then(function() {
     return Light.get(['hue', 'saturation']);
+  }).then(function(operands) {
+    return Util.math.multiply([operands.hue, operands.saturation]);
   }).then(function(response) {
-    var key, ref, results, value;
-    console.log(response.ref + " - " + response.object);
-    ref = response.properties;
-    results = [];
-    for (key in ref) {
-      value = ref[key];
-      results.push(console.log("  " + key + ": " + value));
-    }
-    return results;
+    return console.log(response);
   });
 
 }).call(this);

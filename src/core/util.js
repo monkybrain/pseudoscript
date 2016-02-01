@@ -25,6 +25,37 @@
       return Math.floor(options.min + Math.random() * options.max);
     };
 
+    Util.math = {
+      multiply: function(operands) {
+        return new Promise(function(resolve, reject) {
+          return resolve(operands.reduce(function(prev, curr) {
+            return prev * curr;
+          }));
+        });
+      },
+      divide: function(operands) {
+        return new Promise(function(resolve, reject) {
+          return resolve(operands.reduce(function(prev, curr) {
+            return prev / curr;
+          }));
+        });
+      },
+      add: function(operands) {
+        return new Promise(function(resolve, reject) {
+          return resolve(operands.reduce(function(prev, curr) {
+            return prev + curr;
+          }));
+        });
+      },
+      subtract: function(operands) {
+        return new Promise(function(resolve, reject) {
+          return resolve(operands.reduce(function(prev, curr) {
+            return prev - curr;
+          }));
+        });
+      }
+    };
+
     return Util;
 
   })();

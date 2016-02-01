@@ -42,9 +42,11 @@
       var syntax;
       syntax = [];
       syntax.push("# Logging");
-      syntax.push(".then (response) ->");
-      syntax.push("  console.log \"\#{response.ref} (\#{response.object})\"");
-      syntax.push("  console.log \"  \#{key}: \#{value}\" for key, value of response.properties");
+      syntax.push(".then (response) -> console.log response");
+
+      /*syntax.push "  console.log \"\#{response.ref} (\#{response.object})\""
+      syntax.push "  console.log \"  \#{key}: \#{value}\" for key, value of response.properties"
+       */
       return syntax;
     };
 

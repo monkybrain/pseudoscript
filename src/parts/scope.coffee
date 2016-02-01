@@ -9,7 +9,7 @@ class Scope
   @subtype: null
 
   # Variables
-  @variables = []
+  @variables = {}
 
   @getByRef: (ref) =>
     for k, v of @modules

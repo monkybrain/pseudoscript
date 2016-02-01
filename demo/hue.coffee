@@ -13,15 +13,16 @@ new Light 'Hue 1'
 # Setting properties of 'Hue 1'
 Light.select 'Hue 1'
 .then -> Light.set
-  hue: 30000
+  hue: 5000
   brightness: 100
-  saturation: 250
+  saturation: 100
 
 # Getting properties of 'Hue 1'
 Light.select 'Hue 1'
 .then -> Light.get ['hue', 'saturation']
 
+# Multiplying
+.then (operands) -> Util.math.multiply [operands.hue, operands.saturation]
+
 # Logging
-.then (response) ->
-  console.log "#{response.ref} (#{response.object})"
-  console.log "  #{key}: #{value}" for key, value of response.properties
+.then (response) -> console.log response
