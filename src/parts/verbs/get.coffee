@@ -85,8 +85,6 @@ class Get extends Verb
     Scope.current = object: object, ref: ref, property: property
     Scope.modules[object] = ref: ref, property: property
 
-    # console.log property
-
     # Return parsed info
     return object: object, ref: ref, property: property
 
@@ -123,7 +121,10 @@ class Get extends Verb
       for property in properties
         props.push "'#{property}'"
 
-      syntax.push ".then -> Light.get [" + props.join(", ") + "]\n"
+      syntax.push ".then -> Light.get " + props.join(", ")
+      syntax.push ".then (response) -> Globals.set response\n"
+      # syntax.push "  Globals[key] = value for key, value of response"
+      # syntax.push "  Util.promise response\n"
 
     syntax
 

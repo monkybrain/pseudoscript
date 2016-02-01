@@ -26,27 +26,37 @@
     };
 
     Log.test = function(text) {
-      var match, pattern, split;
-      pattern = /\blog\b.*/g;
+      var match, pattern, properties;
+      pattern = /\blog\b(\s+?(.*))*/;
       match = text.match(pattern);
-      if (match) {
-        split = this.split(match[0]);
+      if (match != null) {
+        properties = match[2];
+        if (properties != null) {
+          properties = this.split(properties);
+        }
         return {
           type: 'verb',
-          verb: 'log'
+          verb: 'log',
+          properties: properties
         };
       }
     };
 
     Log.syntax = function(phrase) {
-      var syntax;
+      var i, len, property, ref, syntax;
       syntax = [];
       syntax.push("# Logging");
-      syntax.push(".then (response) -> console.log response");
-
-      /*syntax.push "  console.log \"\#{response.ref} (\#{response.object})\""
-      syntax.push "  console.log \"  \#{key}: \#{value}\" for key, value of response.properties"
-       */
+      if (phrase.properties == null) {
+        syntax.push(".then (response) -> console.log response\n");
+      } else {
+        syntax.push(".then ->");
+        ref = phrase.properties;
+        for (i = 0, len = ref.length; i < len; i++) {
+          property = ref[i];
+          syntax.push("  console.log \"" + property + ": \" + Globals['" + property + "']");
+        }
+        syntax[syntax.length - 1] = syntax[syntax.length - 1] + "\n";
+      }
       return syntax;
     };
 

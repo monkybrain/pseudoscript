@@ -64,7 +64,8 @@ class Assembler
     # Core modules
     imports = []
     imports.push "# Core modules"
-    imports.push "Util = require '../src/core/util'\n"
+    imports.push "Util = require '../src/core/util'"
+    imports.push "Globals = require '../src/core/globals'\n"
 
     # TODO: Make dynamic
     modules = [

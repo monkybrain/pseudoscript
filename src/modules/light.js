@@ -3,7 +3,8 @@
   var Hue, Light, Module, util,
     extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
     hasProp = {}.hasOwnProperty,
-    indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
+    indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; },
+    slice = [].slice;
 
   Module = require("./module");
 
@@ -134,16 +135,12 @@
       })(this));
     };
 
-    Light.get = function(properties) {
+    Light.get = function() {
+      var properties;
+      properties = 1 <= arguments.length ? slice.call(arguments, 0) : [];
       return new Promise((function(_this) {
         return function(resolve, reject) {
           return Hue.light.get(_this.current.id, properties).then(function(properties) {
-
-            /*response =
-              ref: @current.ref
-              object: @self
-              properties: properties
-             */
             return resolve(properties);
           }, function(error) {
             return reject("Error! " + error.message);

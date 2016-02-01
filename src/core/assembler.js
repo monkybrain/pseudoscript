@@ -79,7 +79,8 @@
       var imports, j, len, module, modules;
       imports = [];
       imports.push("# Core modules");
-      imports.push("Util = require '../src/core/util'\n");
+      imports.push("Util = require '../src/core/util'");
+      imports.push("Globals = require '../src/core/globals'\n");
       modules = [
         {
           name: 'Light',

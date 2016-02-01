@@ -159,7 +159,8 @@
           property = properties[j];
           props.push("'" + property + "'");
         }
-        syntax.push(".then -> Light.get [" + props.join(", ") + "]\n");
+        syntax.push(".then -> Light.get " + props.join(", "));
+        syntax.push(".then (response) -> Globals.set response\n");
       }
       return syntax;
     };

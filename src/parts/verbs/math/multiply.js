@@ -48,7 +48,7 @@
       operands = phrase.operands.map((function(_this) {
         return function(operand) {
           if (!_this.isExpression(operand)) {
-            return "operands." + operand;
+            return "Globals['" + operand + "']";
           } else {
             return operand;
           }
@@ -57,7 +57,7 @@
       syntax = [];
       syntax.push("# Multiplying");
       operands = operands.join(", ");
-      syntax.push(".then (operands) -> Util.math.multiply [" + operands + "]\n");
+      syntax.push(".then -> Util.math.multiply " + operands + "\n");
       return syntax;
     };
 

@@ -2,6 +2,7 @@
 
 # Core modules
 Util = require '../src/core/util'
+Globals = require '../src/core/globals'
 
 # Custom modules
 Light = require '../src/modules/light'
@@ -13,16 +14,22 @@ new Light 'Hue 1'
 # Setting properties of 'Hue 1'
 Light.select 'Hue 1'
 .then -> Light.set
-  hue: 5000
-  brightness: 100
+  hue: 1000
+  brightness: 150
   saturation: 100
 
 # Getting properties of 'Hue 1'
 Light.select 'Hue 1'
-.then -> Light.get ['hue', 'saturation']
+.then -> Light.get 'hue', 'saturation', 'brightness'
+.then (response) -> Globals.set response
+
+# Logging
+.then ->
+  console.log "saturation: " + Globals['saturation']
 
 # Multiplying
-.then (operands) -> Util.math.multiply [operands.hue, operands.saturation]
+.then -> Util.math.multiply Globals['hue'], Globals['brightness']
 
 # Logging
 .then (response) -> console.log response
+

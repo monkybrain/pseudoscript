@@ -1,15 +1,12 @@
 Add a light called 'Hue 1'
-Set the hue of the light to 5000 and the brightness to 100 and the saturation to 100
-Get hue and saturation of light and multiply hue by saturation and log
-# Get hue and saturation of light and multiply hue by saturation and log
-# Multiply hue by 2 - 2 + 2 and log
+Set the hue of the light to 1000 and the brightness to 150 and the saturation to 100
+Get hue, saturation and brightness and log saturation
+Multiply hue by brightness and log
 
 # Every 5 seconds set the hue to random and the transition time to 5
 # Add a light called 'Hue 2'
 # Set the hue to 30000 and the brightness to 100 and the saturation to 250
 # Every 5 seconds set the hue to random and the transition time to 5
-
-
 
 # Every 2 seconds, set hue to random, transition time to 4 and brightness to random
 # Add a light called 'Hue 2'

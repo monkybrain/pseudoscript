@@ -23,14 +23,13 @@ class Multiply extends Math
   @syntax: (phrase) ->
     operands = phrase.operands.map (operand) =>
       if not @isExpression operand
-        return "operands.#{operand}"
+        return "Globals['#{operand}']"
       else operand
 
     syntax = []
     syntax.push "# Multiplying"
     operands = operands.join ", "
-    # syntax.push ".then (operands) -> console.log operands"
-    syntax.push ".then (operands) -> Util.math.multiply [" + operands + "]\n"
+    syntax.push ".then -> Util.math.multiply " + operands + "\n"
     syntax
 
 module.exports = Multiply

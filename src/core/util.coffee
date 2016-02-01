@@ -1,3 +1,5 @@
+Promise = require "promise"
+
 class Util
 
   @regex:
@@ -14,7 +16,7 @@ class Util
     Math.floor(options.min + Math.random() * options.max)
 
   @math:
-    multiply: (operands) ->
+    multiply: (operands...) ->
       new Promise (resolve, reject) ->
         resolve operands.reduce (prev, curr) -> prev * curr
     divide: (operands) ->
@@ -26,5 +28,8 @@ class Util
     subtract: (operands) ->
       new Promise (resolve, reject) ->
         resolve operands.reduce (prev, curr) -> prev - curr
+
+  @promise: (object) ->
+    new Promise (resolve, reject) -> resolve object
 
 module.exports = Util

@@ -1,4 +1,7 @@
 Util = require "./../src/core/util"
 
-console.log Util.math.multiply [2, 3, 5, 15]
-console.log Util.math.subtract [0, 50, 25]
+Globals = {}
+Globals['hue'] = 23
+
+Util.math.multiply [Globals['hue'], 3]
+.then (response) -> console.log response

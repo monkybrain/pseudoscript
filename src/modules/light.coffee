@@ -93,17 +93,13 @@ class Light extends Module
           (error) -> reject "Error! " + error.message
       )
 
-  @get: (properties) ->
+  @get: (properties...) ->
 
     new Promise (resolve, reject) =>
 
       # Set properties
       Hue.light.get(@current.id, properties).then(
         (properties) =>
-          ###response =
-            ref: @current.ref
-            object: @self
-            properties: properties###
           resolve properties
         (error) -> reject "Error! " + error.message
       )
@@ -113,10 +109,5 @@ class Light extends Module
       Hue.ready().then () =>
         [@current] = Light.members.filter (member) => member.ref is ref
         if @current? then resolve() else reject "Error! Cannot find '#{ref}'"
-
-
-
-
-
 
 module.exports = Light
