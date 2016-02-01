@@ -93,6 +93,21 @@ class Light extends Module
           (error) -> reject "Error! " + error.message
       )
 
+  @get: (properties) ->
+
+    new Promise (resolve, reject) =>
+
+      # Set properties
+      Hue.light.get(@current.id, properties).then(
+        (properties) =>
+          response =
+            ref: @current.ref
+            object: @self
+            properties: properties
+          resolve response
+        (error) -> reject "Error! " + error.message
+      )
+
   @select: (ref) ->
     new Promise (resolve, reject) =>
       Hue.ready().then () =>

@@ -15,22 +15,24 @@
 
   Light.select('Hue 1').then(function() {
     return Light.set({
-      hue: 50000,
+      hue: 30000,
       brightness: 100,
       saturation: 250
     });
   });
 
-  setInterval(function() {
-    return Light.select('Hue 1').then(function() {
-      return Light.set({
-        hue: Util.random({
-          min: 0,
-          max: 65535
-        }),
-        transitionTime: 5
-      });
-    });
-  }, 5 * 1000);
+  Light.select('Hue 1').then(function() {
+    return Light.get(['hue', 'saturation']);
+  }).then(function(response) {
+    var key, ref, results, value;
+    console.log(response.ref + " - " + response.object);
+    ref = response.properties;
+    results = [];
+    for (key in ref) {
+      value = ref[key];
+      results.push(console.log("  " + key + ": " + value));
+    }
+    return results;
+  });
 
 }).call(this);

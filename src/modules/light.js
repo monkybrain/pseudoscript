@@ -134,6 +134,24 @@
       })(this));
     };
 
+    Light.get = function(properties) {
+      return new Promise((function(_this) {
+        return function(resolve, reject) {
+          return Hue.light.get(_this.current.id, properties).then(function(properties) {
+            var response;
+            response = {
+              ref: _this.current.ref,
+              object: _this.self,
+              properties: properties
+            };
+            return resolve(response);
+          }, function(error) {
+            return reject("Error! " + error.message);
+          });
+        };
+      })(this));
+    };
+
     Light.select = function(ref) {
       return new Promise((function(_this) {
         return function(resolve, reject) {

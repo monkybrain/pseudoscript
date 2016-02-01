@@ -44,6 +44,18 @@ class Hue
           (success) -> resolve()
           (error) -> reject error
         )
+    get: (id, properties) ->
+      new Promise (resolve, reject) ->
+        Hue.ready().then( -> client.lights.getById(id) )
+        .then(
+          (light) ->
+            response = {}
+            for property in properties
+              response[property] = light[property]
+            resolve response
+          (error) ->
+            console.error error
+        )
 
 ### INIT ###
 ###Hue.lights = [

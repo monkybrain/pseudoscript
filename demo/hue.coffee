@@ -13,18 +13,15 @@ new Light 'Hue 1'
 # Setting properties of 'Hue 1'
 Light.select 'Hue 1'
 .then -> Light.set
-  hue: 50000
+  hue: 30000
   brightness: 100
   saturation: 250
 
-# Setting interval to 5 seconds
-setInterval () ->
+# Getting properties of 'Hue 1'
+Light.select 'Hue 1'
+.then -> Light.get ['hue', 'saturation']
 
-  # Setting properties of 'Hue 1'
-  Light.select 'Hue 1'
-  .then -> Light.set
-    hue: Util.random min: 0, max: 65535
-    transitionTime: 5
-
-, (5*1000)
-
+# Logging
+.then (response) ->
+  console.log "#{response.ref} (#{response.object})"
+  console.log "  #{key}: #{value}" for key, value of response.properties

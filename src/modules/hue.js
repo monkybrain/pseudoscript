@@ -56,6 +56,23 @@
             return reject(error);
           });
         });
+      },
+      get: function(id, properties) {
+        return new Promise(function(resolve, reject) {
+          return Hue.ready().then(function() {
+            return client.lights.getById(id);
+          }).then(function(light) {
+            var i, len, property, response;
+            response = {};
+            for (i = 0, len = properties.length; i < len; i++) {
+              property = properties[i];
+              response[property] = light[property];
+            }
+            return resolve(response);
+          }, function(error) {
+            return console.error(error);
+          });
+        });
       }
     };
 
