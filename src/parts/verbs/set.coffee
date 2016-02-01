@@ -89,9 +89,6 @@ class Set extends Get
     match = text.match pattern
     if match?
       split = @split match[0]
-      ###segments = split.map (segment) =>
-        console.log segments
-        @parse segment###
 
       # TODO: UGLY! CLEAN UP AND BEAUTIFY!
       operations = []
@@ -126,12 +123,14 @@ class Set extends Get
       for key, value of properties
         if value is 'random'
           r = @random object, key
-          value = "Util.random(min: #{r.min}, max: #{r.max})"
-        options.push "#{key}: #{value}"
-      options = options.join ", "
+          value = "Util.random min: #{r.min}, max: #{r.max}"
+        options.push "  #{key}: #{value}"
+      options[options.length - 1] = options[options.length - 1] + "\n"
       syntax.push "# Setting properties of '#{ref}'"
       syntax.push "#{object}.select '#{ref}'"
-      syntax.push ".then -> Light.set {#{options}}\n"
+      syntax.push ".then -> Light.set"
+      syntax.push option for option in options
+
     syntax
 
 module.exports = Set

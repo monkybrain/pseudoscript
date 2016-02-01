@@ -109,11 +109,6 @@
       match = text.match(pattern);
       if (match != null) {
         split = this.split(match[0]);
-
-        /*segments = split.map (segment) =>
-          console.log segments
-          @parse segment
-         */
         operations = [];
         for (i = 0, len = split.length; i < len; i++) {
           segment = split[i];
@@ -165,7 +160,7 @@
     };
 
     Set.syntax = function(phrase) {
-      var i, key, len, object, operation, options, properties, r, ref, ref1, syntax, value;
+      var i, j, key, len, len1, object, operation, option, options, properties, r, ref, ref1, syntax, value;
       syntax = [];
       ref1 = phrase.operations;
       for (i = 0, len = ref1.length; i < len; i++) {
@@ -176,14 +171,18 @@
           value = properties[key];
           if (value === 'random') {
             r = this.random(object, key);
-            value = "Util.random(min: " + r.min + ", max: " + r.max + ")";
+            value = "Util.random min: " + r.min + ", max: " + r.max;
           }
-          options.push(key + ": " + value);
+          options.push("  " + key + ": " + value);
         }
-        options = options.join(", ");
+        options[options.length - 1] = options[options.length - 1] + "\n";
         syntax.push("# Setting properties of '" + ref + "'");
         syntax.push(object + ".select '" + ref + "'");
-        syntax.push(".then -> Light.set {" + options + "}\n");
+        syntax.push(".then -> Light.set");
+        for (j = 0, len1 = options.length; j < len1; j++) {
+          option = options[j];
+          syntax.push(option);
+        }
       }
       return syntax;
     };

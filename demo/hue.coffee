@@ -12,18 +12,19 @@ new Light 'Hue 1'
 
 # Setting properties of 'Hue 1'
 Light.select 'Hue 1'
-.then -> Light.set {hue: 50000, brightness: 250, saturation: 250}
+.then -> Light.set
+  hue: 50000
+  brightness: 100
+  saturation: 250
 
 # Setting interval to 5 seconds
 setInterval () ->
 
   # Setting properties of 'Hue 1'
   Light.select 'Hue 1'
-  .then -> Light.set {hue: Util.random(min: 0, max: 65535)}
-
-  # Setting properties of 'Hue 1'
-  Light.select 'Hue 1'
-  .then -> Light.set {transitionTime: 5}
+  .then -> Light.set
+    hue: Util.random min: 0, max: 65535
+    transitionTime: 5
 
 , (5*1000)
 

@@ -77,8 +77,9 @@ class Get extends Verb
     # Get object
     [object, ref] = @getObject segment
 
-    # Get property
+    # Get property and convert to short form
     property = @getProperty segment, object
+    property = Find.module(object).properties[property].key
 
     # Update scope
     Scope.current = object: object, ref: ref, property: property
@@ -92,9 +93,36 @@ class Get extends Verb
     match = text.match pattern
     if match?
       split = @split match[0]
-      segments = split.map (segment) =>
-        @parse segment
+      operations = []
+      for segment in split
+        details = @parse segment
+        run = true
+        for operation in operations
+          # If already exists -> set properties
+          if operation.ref is details.ref
+            operation.properties.push details.property
+            run = false
+        if run
+          properties = []
+          properties.push details.property
+          operations.push object: details.object, ref: details.ref, properties: properties
 
-      return type: 'verb', verb: 'get', operations: segments
+      return type: 'verb', verb: 'get', operations: operations
+
+  @syntax: (phrase) ->
+    syntax = []
+    for operation in phrase.operations
+      {object: object, ref: ref, properties: properties} = operation
+
+      syntax.push "# Getting properties of '#{ref}'"
+      syntax.push "#{object}.select '#{ref}'"
+
+      props = []
+      for property in properties
+        props.push "'#{property}'"
+
+      syntax.push ".then -> Light.get [" + props.join(", ") + "]\n"
+
+    syntax
 
 module.exports = Get

@@ -16,22 +16,18 @@
   Light.select('Hue 1').then(function() {
     return Light.set({
       hue: 50000,
-      brightness: 250,
+      brightness: 100,
       saturation: 250
     });
   });
 
   setInterval(function() {
-    Light.select('Hue 1').then(function() {
+    return Light.select('Hue 1').then(function() {
       return Light.set({
         hue: Util.random({
           min: 0,
           max: 65535
-        })
-      });
-    });
-    return Light.select('Hue 1').then(function() {
-      return Light.set({
+        }),
         transitionTime: 5
       });
     });

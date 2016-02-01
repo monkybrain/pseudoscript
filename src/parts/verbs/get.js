@@ -92,6 +92,7 @@
       var object, property, ref, ref1;
       ref1 = this.getObject(segment), object = ref1[0], ref = ref1[1];
       property = this.getProperty(segment, object);
+      property = Find.module(object).properties[property].key;
       Scope.current = {
         object: object,
         ref: ref,
@@ -109,22 +110,58 @@
     };
 
     Get.test = function(text) {
-      var match, pattern, segments, split;
+      var details, i, j, len, len1, match, operation, operations, pattern, properties, run, segment, split;
       pattern = /\bget .*( to)? \b(.*)\b/g;
       match = text.match(pattern);
       if (match != null) {
         split = this.split(match[0]);
-        segments = split.map((function(_this) {
-          return function(segment) {
-            return _this.parse(segment);
-          };
-        })(this));
+        operations = [];
+        for (i = 0, len = split.length; i < len; i++) {
+          segment = split[i];
+          details = this.parse(segment);
+          run = true;
+          for (j = 0, len1 = operations.length; j < len1; j++) {
+            operation = operations[j];
+            if (operation.ref === details.ref) {
+              operation.properties.push(details.property);
+              run = false;
+            }
+          }
+          if (run) {
+            properties = [];
+            properties.push(details.property);
+            operations.push({
+              object: details.object,
+              ref: details.ref,
+              properties: properties
+            });
+          }
+        }
         return {
           type: 'verb',
           verb: 'get',
-          operations: segments
+          operations: operations
         };
       }
+    };
+
+    Get.syntax = function(phrase) {
+      var i, j, len, len1, object, operation, properties, property, props, ref, ref1, syntax;
+      syntax = [];
+      ref1 = phrase.operations;
+      for (i = 0, len = ref1.length; i < len; i++) {
+        operation = ref1[i];
+        object = operation.object, ref = operation.ref, properties = operation.properties;
+        syntax.push("# Getting properties of '" + ref + "'");
+        syntax.push(object + ".select '" + ref + "'");
+        props = [];
+        for (j = 0, len1 = properties.length; j < len1; j++) {
+          property = properties[j];
+          props.push("'" + property + "'");
+        }
+        syntax.push(".then -> Light.get [" + props.join(", ") + "]\n");
+      }
+      return syntax;
     };
 
     return Get;
