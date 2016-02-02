@@ -164,23 +164,6 @@
       })(this));
     };
 
-    Light.select = function(ref) {
-      return new Promise((function(_this) {
-        return function(resolve, reject) {
-          return Hue.ready().then(function() {
-            _this.current = Light.members.filter(function(member) {
-              return member.ref === ref;
-            })[0];
-            if (_this.current != null) {
-              return resolve();
-            } else {
-              return reject("Error! Cannot find '" + ref + "'");
-            }
-          });
-        };
-      })(this));
-    };
-
     return Light;
 
   })(Module);

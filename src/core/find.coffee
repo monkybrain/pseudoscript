@@ -64,9 +64,11 @@ class Find
         match.replace /'/g, ''
 
   @number: (text) ->
-    pattern = /\b\d+\b/g
+    # pattern = /\b\d+(\.\d+)?\b/g
+    pattern = /\b[0-9]*[.][0-9]+\b/g
     match = text.match pattern
     if match?
+      console.log match
       return match[0]
 
   @boolean: (text) ->

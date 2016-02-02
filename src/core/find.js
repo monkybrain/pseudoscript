@@ -98,9 +98,10 @@
 
     Find.number = function(text) {
       var match, pattern;
-      pattern = /\b\d+\b/g;
+      pattern = /\b[0-9]*[.][0-9]+\b/g;
       match = text.match(pattern);
       if (match != null) {
+        console.log(match);
         return match[0];
       }
     };

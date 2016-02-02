@@ -110,10 +110,4 @@ class Light extends Module
         (error) -> reject "Error! " + error.message
       )
 
-  @select: (ref) ->
-    new Promise (resolve, reject) =>
-      Hue.ready().then () =>
-        [@current] = Light.members.filter (member) => member.ref is ref
-        if @current? then resolve() else reject "Error! Cannot find '#{ref}'"
-
 module.exports = Light
