@@ -7,7 +7,7 @@
 
   Util = require('../src/core/util');
 
-  Globals = require('../src/core/globals');
+  Globals = require('../src/core/runtime/globals');
 
   Light = require('../src/modules/light');
 
@@ -15,24 +15,53 @@
 
   new Light('Hue 1');
 
-  Light.select('Hue 1').then(function() {
-    return Light.set({
-      hue: 5000,
-      brightness: 150,
-      saturation: 100
+  setInterval(function() {
+    Light.set('Hue 1', {
+      hue: 20000
+    }).then(function() {
+      return Light.get('Hue 1', 'brightness', 'saturation');
+    }).then(function(result) {
+      return Globals.set(result);
+    }).then(function() {
+      var i, key, len, ref, results;
+      ref = ['and'];
+      results = [];
+      for (i = 0, len = ref.length; i < len; i++) {
+        key = ref[i];
+        results.push(console.log(key + ": " + Globals[key]));
+      }
+      return results;
+    })["catch"](function(err) {
+      return Util.error(err);
     });
+    return setTimeout(function() {
+      return Light.set('Hue 1', {
+        hue: 1000
+      })["catch"](function(err) {
+        return Util.error(err);
+      });
+    }, 1 * 1000);
+  }, 2 * 1000);
+
+  new Light('Hue 2').then(function() {
+    return Light.set('Hue 2', {
+      brightness: 100
+    })["catch"](function(err) {
+      return Util.error(err);
+    });
+  })["catch"](function(err) {
+    return Util.error(err);
   });
 
-  Light.select('Hue 1').then(function() {
-    return Light.get('hue', 'saturation', 'brightness');
-  }).then(function(response) {
-    return Globals.set(response);
-  }).then(function() {
-    return console.log("saturation: " + Globals['saturation']);
-  }).then(function() {
-    return Util.math.multiply(Globals['hue'], Globals['brightness']);
-  }).then(function(response) {
-    return console.log(response);
-  });
+  setInterval(function() {
+    return Light.set('Hue 2', {
+      hue: Util.random({
+        min: 0,
+        max: 65535
+      })
+    })["catch"](function(err) {
+      return Util.error(err);
+    });
+  }, 4 * 1000);
 
 }).call(this);

@@ -159,8 +159,8 @@
       };
     };
 
-    Set.syntax = function(phrase) {
-      var i, j, key, len, len1, object, operation, option, options, properties, r, ref, ref1, syntax, value;
+    Set.syntax = function(phrase, level) {
+      var i, j, key, len, len1, object, operation, option, options, prefix, properties, r, ref, ref1, syntax, value;
       syntax = [];
       ref1 = phrase.operations;
       for (i = 0, len = ref1.length; i < len; i++) {
@@ -176,9 +176,9 @@
           options.push("  " + key + ": " + value);
         }
         options[options.length - 1] = options[options.length - 1] + "\n";
-        syntax.push("# Setting properties of '" + ref + "'");
-        syntax.push(object + ".select '" + ref + "'");
-        syntax.push(".then -> Light.set");
+        syntax.push("# Set properties of '" + ref + "'");
+        prefix = level !== 0 ? ".then -> " : "";
+        syntax.push(prefix + (object + ".set '" + ref + "', "));
         for (j = 0, len1 = options.length; j < len1; j++) {
           option = options[j];
           syntax.push(option);

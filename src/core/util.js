@@ -28,6 +28,10 @@
       return Math.floor(options.min + Math.random() * options.max);
     };
 
+    Util.error = function(err) {
+      return console.error(err);
+    };
+
     Util.math = {
       multiply: function() {
         var operands;

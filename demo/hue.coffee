@@ -2,34 +2,31 @@
 
 # Core modules
 Util = require '../src/core/util'
-Globals = require '../src/core/globals'
+Globals = require '../src/core/runtime/globals'
 
 # Custom modules
 Light = require '../src/modules/light'
 Room = require '../src/modules/room'
 
-# Adding new Light 'Hue 1'
+# Add new Light 'Hue 1'
 new Light 'Hue 1'
 
-# Setting properties of 'Hue 1'
-Light.select 'Hue 1'
-.then -> Light.set
-  hue: 1000
-  brightness: 150
-  saturation: 100
+# Set properties of 'Hue 1'
+Light.set 'Hue 1', 
+  brightness: 100
 
-# Getting properties of 'Hue 1'
-Light.select 'Hue 1'
-.then -> Light.get 'hue', 'saturation', 'brightness'
-.then (response) -> Globals.set response
+# Catch errors
+.catch (err) -> Util.error err
 
-# Logging
-.then ->
-  console.log "saturation: " + Globals['saturation']
+# Set interval to 2 seconds
+setInterval () ->
 
-# Multiplying
-.then -> Util.math.multiply Globals['hue'], Globals['brightness']
+  # Set properties of 'Hue 1'
+  Light.set 'Hue 1', 
+    hue: Util.random min: 0, max: 65535
 
-# Logging
-.then (response) -> console.log response
+  # Catch errors
+  .catch (err) -> Util.error err
+
+, 2 * 1000
 

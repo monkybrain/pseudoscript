@@ -115,7 +115,8 @@ class Set extends Get
         min = v.min
     max: max, min: min
 
-  @syntax: (phrase) ->
+  @syntax: (phrase, level) ->
+    # console.log "Set level: " + phrase + " --> " + level
     syntax = []
     for operation in phrase.operations
       {object: object, ref: ref, properties: properties} = operation
@@ -126,9 +127,10 @@ class Set extends Get
           value = "Util.random min: #{r.min}, max: #{r.max}"
         options.push "  #{key}: #{value}"
       options[options.length - 1] = options[options.length - 1] + "\n"
-      syntax.push "# Setting properties of '#{ref}'"
-      syntax.push "#{object}.select '#{ref}'"
-      syntax.push ".then -> Light.set"
+      syntax.push "# Set properties of '#{ref}'"
+      prefix = if level isnt 0 then ".then -> " else ""
+      syntax.push prefix + "#{object}.set '#{ref}', "
+
       syntax.push option for option in options
 
     syntax

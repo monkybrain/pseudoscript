@@ -102,12 +102,12 @@ class Add extends Verb
     {object: object, parent: parent} = phrase
     if parent.ref?
       return [
-        "# Adding new #{object.type} '#{object.ref}' to #{parent.type} '#{parent.ref}'",
+        "# Add new #{object.type} '#{object.ref}' to #{parent.type} '#{parent.ref}'",
         "new #{object.type} '#{object.ref}', '#{parent.ref}'\n"
       ]
     else
       return [
-        "# Adding new #{object.type} '#{object.ref}'",
+        "# Add new #{object.type} '#{object.ref}'",
         "new #{object.type} '#{object.ref}'\n"
       ]
 

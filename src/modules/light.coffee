@@ -83,24 +83,30 @@ class Light extends Module
 
       Light.members.push this
 
-  @set: (options) ->
+  @set: (ref, options) ->
 
     new Promise (resolve, reject) =>
 
-      # Set properties
-      Hue.light.set(@current.id, options).then(
-          () -> resolve()
-          (error) -> reject "Error! " + error.message
-      )
+      Hue.ready().then () =>
+        [@current] = Light.members.filter (member) => member.ref is ref
+        if not @current? then reject "Error! Cannot find '#{ref}'"
 
-  @get: (properties...) ->
+        # Set properties
+        Hue.light.set(@current.id, options)
+        .then -> resolve()
+        .catch (err) -> reject "Error! " + error.message
+
+  @get: (ref, properties...) ->
 
     new Promise (resolve, reject) =>
+
+      Hue.ready().then () =>
+      [@current] = Light.members.filter (member) => member.ref is ref
+      if not @current? then reject "Error! Cannot find '#{ref}'"
 
       # Set properties
       Hue.light.get(@current.id, properties).then(
-        (properties) =>
-          resolve properties
+        (properties) => resolve properties
         (error) -> reject "Error! " + error.message
       )
 

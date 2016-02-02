@@ -43,19 +43,28 @@
     };
 
     Log.syntax = function(phrase) {
-      var i, len, property, ref, syntax;
+      var props, syntax;
       syntax = [];
       syntax.push("# Logging");
       if (phrase.properties == null) {
         syntax.push(".then (response) -> console.log response\n");
       } else {
+
+        /*syntax.push ".then ->"
+        for property in phrase.properties
+          if phrase.properties.length is 1
+            syntax[syntax.length - 1] = syntax[syntax.length - 1] + " console.log \"#{property}: \" + Globals['#{property}']"
+          else
+            syntax.push "  console.log \"#{property}: \" + Globals['#{property}']"
+        syntax[syntax.length - 1] = syntax[syntax.length - 1] + "\n"
+         */
+        props = phrase.properties.map(function(property) {
+          return "'" + property + "'";
+        });
+        props = props.join(", ");
         syntax.push(".then ->");
-        ref = phrase.properties;
-        for (i = 0, len = ref.length; i < len; i++) {
-          property = ref[i];
-          syntax.push("  console.log \"" + property + ": \" + Globals['" + property + "']");
-        }
-        syntax[syntax.length - 1] = syntax[syntax.length - 1] + "\n";
+        syntax.push("  for key in [" + props + "]");
+        syntax.push("    console.log \"\#{key}: \#{Globals[key]}\"\n");
       }
       return syntax;
     };

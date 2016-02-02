@@ -145,22 +145,22 @@
       }
     };
 
-    Get.syntax = function(phrase) {
-      var i, j, len, len1, object, operation, properties, property, props, ref, ref1, syntax;
+    Get.syntax = function(phrase, level) {
+      var i, j, len, len1, object, operation, prefix, properties, property, props, ref, ref1, syntax;
       syntax = [];
       ref1 = phrase.operations;
       for (i = 0, len = ref1.length; i < len; i++) {
         operation = ref1[i];
         object = operation.object, ref = operation.ref, properties = operation.properties;
-        syntax.push("# Getting properties of '" + ref + "'");
-        syntax.push(object + ".select '" + ref + "'");
         props = [];
         for (j = 0, len1 = properties.length; j < len1; j++) {
           property = properties[j];
           props.push("'" + property + "'");
         }
-        syntax.push(".then -> Light.get " + props.join(", "));
-        syntax.push(".then (response) -> Globals.set response\n");
+        syntax.push("# Get properties of '" + ref + "'");
+        prefix = level !== 0 ? ".then -> " : "";
+        syntax.push(prefix + (object + ".get '" + ref + "', ") + props.join(", "));
+        syntax.push(".then (result) -> Globals.set result\n");
       }
       return syntax;
     };

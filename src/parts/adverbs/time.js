@@ -145,11 +145,11 @@
       var adverb, close, open, time;
       adverb = phrase.adverb, time = phrase.time;
       if (adverb === 'delay') {
-        open = ["# Setting timeout to " + time + " seconds", "setTimeout () ->\n"];
+        open = ["# Set timeout to " + time + " seconds", "setTimeout () ->\n"];
         close = [", " + time + " * 1000\n"];
       }
       if (adverb === 'interval') {
-        open = ["# Setting interval to " + time + " seconds", "setInterval () ->\n"];
+        open = ["# Set interval to " + time + " seconds", "setInterval () ->\n"];
         close = [", " + time + " * 1000\n"];
       }
       return [open, close];

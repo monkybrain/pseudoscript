@@ -25,10 +25,19 @@ class Log extends Verb
     if not phrase.properties?
       syntax.push ".then (response) -> console.log response\n"
     else
-      syntax.push ".then ->"
+      ###syntax.push ".then ->"
       for property in phrase.properties
-        syntax.push "  console.log \"#{property}: \" + Globals['#{property}']"
-      syntax[syntax.length - 1] = syntax[syntax.length - 1] + "\n"
+        if phrase.properties.length is 1
+          syntax[syntax.length - 1] = syntax[syntax.length - 1] + " console.log \"#{property}: \" + Globals['#{property}']"
+        else
+          syntax.push "  console.log \"#{property}: \" + Globals['#{property}']"
+      syntax[syntax.length - 1] = syntax[syntax.length - 1] + "\n"###
+      props = phrase.properties.map (property) ->
+        return "'#{property}'"
+      props = props.join ", "
+      syntax.push ".then ->"
+      syntax.push "  for key in [#{props}]"
+      syntax.push "    console.log \"\#{key}: \#{Globals[key]}\"\n"
     syntax
 
 module.exports = Log

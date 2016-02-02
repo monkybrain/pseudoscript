@@ -7,55 +7,85 @@ class Assembler
     interval: 2
     level: 0
     inc: () ->
-      this.level += 2
+      @level += 2
     dec: () ->
-      this.level -= 2
+      @level -= 2
     set: (level) ->
-      this.level = level
+      @level = level
     exec: (syntax) ->
       indent = ""
-      for i in [0...this.level]
+      for i in [0...@level]
         indent += " "
       indent + syntax
 
-  @parse: (segment) ->
+  @chain:
+    level: 0
+    inc: -> @level += 1
+    reset: -> @level = 0
+    close: false
+    error:
+      comment: "# Catch errors"
+      syntax: ".catch (err) -> Util.error err\n"
 
-    # Store indentation level
-    level = @indent.level
+  @parse: (segment) ->
 
     syntax = []
     closures = []
 
+    previous = type: null, verb: null
+
     # Handle segment phrase by phrase
-    for phrase in segment
+    for phrase, index in segment
 
       # TODO: HARMONIZE VERB AND ADVERBS STRUCTURES
       if phrase.type is 'verb'
         for verb in verbs
           if phrase.verb is verb.lexical.base
-            for line in verb.syntax phrase
+            for line in verb.syntax phrase, @chain.level
               syntax.push @indent.exec line
 
-            # syntax.push @indent.exec verb.syntax phrase
+            # If 'add' -> continue, i.e. don't catch rejections
+            if phrase.verb is 'add'
+              continue
 
-      if phrase.type is 'adverb'
+            # Increment promise chain level
+            @chain.inc()
+
+            # If last phrase -> implement error handling here
+            if index is segment.length - 1
+              syntax.push @indent.exec @chain.error.comment
+              syntax.push @indent.exec @chain.error.syntax
+            # Else -> set error handling flag
+            else
+              @chain.close = true
+
+      else if phrase.type is 'adverb'
         for adverb in adverbs
+
+          # If error handling flag set -> add error handling
+          if @chain.close
+            syntax.push @indent.exec @chain.error.comment
+            syntax.push @indent.exec @chain.error.syntax
+            @chain.close = false
+
           if phrase.adverb in Object.keys(adverb.types)
-            [open, close] = adverb.syntax phrase
+            [open, close] = adverb.syntax phrase, @chain.level
             for line in open
               syntax.push @indent.exec line
+
+            # Add closure to array (but not yet to syntax)
             closures.push close
 
             # Increase indentation
             @indent.inc()
 
+            # Reset promise chain level and add error handling
+            @chain.reset()
+
     # Handle closures (reverse order and dedent accordingly)
     for closure in closures.reverse()
       @indent.dec()
       syntax.push @indent.exec closure
-
-    # Reset indentation level (NEEDED?)
-    # @indent.set level
 
     syntax.join "\n"
 
@@ -65,7 +95,7 @@ class Assembler
     imports = []
     imports.push "# Core modules"
     imports.push "Util = require '../src/core/util'"
-    imports.push "Globals = require '../src/core/globals'\n"
+    imports.push "Globals = require '../src/core/runtime/globals'\n"
 
     # TODO: Make dynamic
     modules = [

@@ -32,36 +32,69 @@
       }
     };
 
+    Assembler.chain = {
+      level: 0,
+      inc: function() {
+        return this.level += 1;
+      },
+      reset: function() {
+        return this.level = 0;
+      },
+      close: false,
+      error: {
+        comment: "# Catch errors",
+        syntax: ".catch (err) -> Util.error err\n"
+      }
+    };
+
     Assembler.parse = function(segment) {
-      var adverb, close, closure, closures, j, k, l, len, len1, len2, len3, len4, len5, level, line, m, n, o, open, phrase, ref, ref1, ref2, ref3, syntax, verb;
-      level = this.indent.level;
+      var adverb, close, closure, closures, index, j, k, l, len, len1, len2, len3, len4, len5, line, m, n, o, open, phrase, previous, ref, ref1, ref2, ref3, syntax, verb;
       syntax = [];
       closures = [];
-      for (j = 0, len = segment.length; j < len; j++) {
-        phrase = segment[j];
+      previous = {
+        type: null,
+        verb: null
+      };
+      for (index = j = 0, len = segment.length; j < len; index = ++j) {
+        phrase = segment[index];
         if (phrase.type === 'verb') {
           for (k = 0, len1 = verbs.length; k < len1; k++) {
             verb = verbs[k];
             if (phrase.verb === verb.lexical.base) {
-              ref = verb.syntax(phrase);
+              ref = verb.syntax(phrase, this.chain.level);
               for (l = 0, len2 = ref.length; l < len2; l++) {
                 line = ref[l];
                 syntax.push(this.indent.exec(line));
               }
+              if (phrase.verb === 'add') {
+                continue;
+              }
+              this.chain.inc();
+              if (index === segment.length - 1) {
+                syntax.push(this.indent.exec(this.chain.error.comment));
+                syntax.push(this.indent.exec(this.chain.error.syntax));
+              } else {
+                this.chain.close = true;
+              }
             }
           }
-        }
-        if (phrase.type === 'adverb') {
+        } else if (phrase.type === 'adverb') {
           for (m = 0, len3 = adverbs.length; m < len3; m++) {
             adverb = adverbs[m];
+            if (this.chain.close) {
+              syntax.push(this.indent.exec(this.chain.error.comment));
+              syntax.push(this.indent.exec(this.chain.error.syntax));
+              this.chain.close = false;
+            }
             if (ref1 = phrase.adverb, indexOf.call(Object.keys(adverb.types), ref1) >= 0) {
-              ref2 = adverb.syntax(phrase), open = ref2[0], close = ref2[1];
+              ref2 = adverb.syntax(phrase, this.chain.level), open = ref2[0], close = ref2[1];
               for (n = 0, len4 = open.length; n < len4; n++) {
                 line = open[n];
                 syntax.push(this.indent.exec(line));
               }
               closures.push(close);
               this.indent.inc();
+              this.chain.reset();
             }
           }
         }
@@ -80,7 +113,7 @@
       imports = [];
       imports.push("# Core modules");
       imports.push("Util = require '../src/core/util'");
-      imports.push("Globals = require '../src/core/globals'\n");
+      imports.push("Globals = require '../src/core/runtime/globals'\n");
       modules = [
         {
           name: 'Light',

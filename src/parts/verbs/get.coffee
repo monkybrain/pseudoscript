@@ -109,20 +109,20 @@ class Get extends Verb
 
       return type: 'verb', verb: 'get', operations: operations
 
-  @syntax: (phrase) ->
+  @syntax: (phrase, level) ->
     syntax = []
     for operation in phrase.operations
       {object: object, ref: ref, properties: properties} = operation
-
-      syntax.push "# Getting properties of '#{ref}'"
-      syntax.push "#{object}.select '#{ref}'"
 
       props = []
       for property in properties
         props.push "'#{property}'"
 
-      syntax.push ".then -> Light.get " + props.join(", ")
-      syntax.push ".then (response) -> Globals.set response\n"
+      syntax.push "# Get properties of '#{ref}'"
+      prefix = if level isnt 0 then ".then -> " else ""
+      syntax.push prefix + "#{object}.get '#{ref}', " + props.join ", "
+
+      syntax.push ".then (result) -> Globals.set result\n"
       # syntax.push "  Globals[key] = value for key, value of response"
       # syntax.push "  Util.promise response\n"
 

@@ -113,9 +113,9 @@
       var object, parent;
       object = phrase.object, parent = phrase.parent;
       if (parent.ref != null) {
-        return ["# Adding new " + object.type + " '" + object.ref + "' to " + parent.type + " '" + parent.ref + "'", "new " + object.type + " '" + object.ref + "', '" + parent.ref + "'\n"];
+        return ["# Add new " + object.type + " '" + object.ref + "' to " + parent.type + " '" + parent.ref + "'", "new " + object.type + " '" + object.ref + "', '" + parent.ref + "'\n"];
       } else {
-        return ["# Adding new " + object.type + " '" + object.ref + "'", "new " + object.type + " '" + object.ref + "'\n"];
+        return ["# Add new " + object.type + " '" + object.ref + "'", "new " + object.type + " '" + object.ref + "'\n"];
       }
     };
 
