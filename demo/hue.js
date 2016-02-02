@@ -48,12 +48,6 @@
         max: 65535
       }),
       transitionTime: 3
-    }).then(function() {
-      return Light.get('Hue 2', 'brightness');
-    }).then(function(result) {
-      return Globals.set(result);
-    }).then(function(response) {
-      return console.log(response);
     })["catch"](function(err) {
       return Util.error(err);
     });
