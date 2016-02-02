@@ -24,9 +24,33 @@ setInterval () ->
   # Set properties of 'Hue 1'
   Light.set 'Hue 1', 
     hue: Util.random min: 0, max: 65535
+    transitionTime: 2
 
   # Catch errors
   .catch (err) -> Util.error err
 
 , 2 * 1000
+
+# Add new Light 'Hue 2'
+new Light 'Hue 2'
+
+# Set properties of 'Hue 2'
+Light.set 'Hue 2', 
+  brightness: 100
+
+# Catch errors
+.catch (err) -> Util.error err
+
+# Set interval to 3 seconds
+setInterval () ->
+
+  # Set properties of 'Hue 2'
+  Light.set 'Hue 2', 
+    hue: Util.random min: 0, max: 65535
+    transitionTime: 3
+
+  # Catch errors
+  .catch (err) -> Util.error err
+
+, 3 * 1000
 

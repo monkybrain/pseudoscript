@@ -1,2 +1,4 @@
 Add a light called 'Hue 1' and set the brightness to 100
-Every 2 seconds, set the hue to random
+Every 2 seconds, set the hue to random and transition time to 2
+Add a light 'Hue 2' and set the brightness to 100
+Every 3 seconds, set the hue to random and the transition time to 3

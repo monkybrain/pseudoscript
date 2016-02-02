@@ -15,40 +15,28 @@
 
   new Light('Hue 1');
 
+  Light.set('Hue 1', {
+    brightness: 100
+  })["catch"](function(err) {
+    return Util.error(err);
+  });
+
   setInterval(function() {
-    Light.set('Hue 1', {
-      hue: 20000
-    }).then(function() {
-      return Light.get('Hue 1', 'brightness', 'saturation');
-    }).then(function(result) {
-      return Globals.set(result);
-    }).then(function() {
-      var i, key, len, ref, results;
-      ref = ['and'];
-      results = [];
-      for (i = 0, len = ref.length; i < len; i++) {
-        key = ref[i];
-        results.push(console.log(key + ": " + Globals[key]));
-      }
-      return results;
+    return Light.set('Hue 1', {
+      hue: Util.random({
+        min: 0,
+        max: 65535
+      }),
+      transitionTime: 2
     })["catch"](function(err) {
       return Util.error(err);
     });
-    return setTimeout(function() {
-      return Light.set('Hue 1', {
-        hue: 1000
-      })["catch"](function(err) {
-        return Util.error(err);
-      });
-    }, 1 * 1000);
   }, 2 * 1000);
 
-  new Light('Hue 2').then(function() {
-    return Light.set('Hue 2', {
-      brightness: 100
-    })["catch"](function(err) {
-      return Util.error(err);
-    });
+  new Light('Hue 2');
+
+  Light.set('Hue 2', {
+    brightness: 100
   })["catch"](function(err) {
     return Util.error(err);
   });
@@ -58,10 +46,17 @@
       hue: Util.random({
         min: 0,
         max: 65535
-      })
+      }),
+      transitionTime: 3
+    }).then(function() {
+      return Light.get('Hue 2', 'brightness');
+    }).then(function(result) {
+      return Globals.set(result);
+    }).then(function(response) {
+      return console.log(response);
     })["catch"](function(err) {
       return Util.error(err);
     });
-  }, 4 * 1000);
+  }, 3 * 1000);
 
 }).call(this);

@@ -55,9 +55,9 @@ class Assembler
             if index is segment.length - 1
               syntax.push @indent.exec @chain.error.comment
               syntax.push @indent.exec @chain.error.syntax
+              @chain.reset()
             # Else -> set error handling flag
-            else
-              @chain.close = true
+            else @chain.close = true
 
       else if phrase.type is 'adverb'
         for adverb in adverbs
@@ -66,6 +66,7 @@ class Assembler
           if @chain.close
             syntax.push @indent.exec @chain.error.comment
             syntax.push @indent.exec @chain.error.syntax
+            @chain.reset()
             @chain.close = false
 
           if phrase.adverb in Object.keys(adverb.types)

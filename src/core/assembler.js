@@ -73,6 +73,7 @@
               if (index === segment.length - 1) {
                 syntax.push(this.indent.exec(this.chain.error.comment));
                 syntax.push(this.indent.exec(this.chain.error.syntax));
+                this.chain.reset();
               } else {
                 this.chain.close = true;
               }
@@ -84,6 +85,7 @@
             if (this.chain.close) {
               syntax.push(this.indent.exec(this.chain.error.comment));
               syntax.push(this.indent.exec(this.chain.error.syntax));
+              this.chain.reset();
               this.chain.close = false;
             }
             if (ref1 = phrase.adverb, indexOf.call(Object.keys(adverb.types), ref1) >= 0) {
