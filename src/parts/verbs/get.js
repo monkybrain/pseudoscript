@@ -32,7 +32,7 @@
     Get.getObject = function(segment) {
 
       /* FIND OBJECT AND REFERENCE */
-      var err, error, error1, i, len, match, module, object, ref;
+      var err, error, i, len, match, module, object, ref;
       for (i = 0, len = modules.length; i < len; i++) {
         module = modules[i];
         match = segment.match(module.lexical.base);
@@ -55,16 +55,14 @@
           ref = Scope.current.ref;
         }
       } else {
-        if (ref != null) {
-          try {
-            object = Module.fetch(ref).module;
-          } catch (error1) {
-            err = error1;
-            console.error("Error! '" + ref + "' not found.");
-          }
-        } else {
-          ref = Scope.modules[object].ref;
-        }
+
+        /*if ref?
+          try
+            object = Module.fetch(ref).module
+          catch err
+            console.error "Error! '#{ref}' not found."
+         */
+        ref = Scope.modules[object].ref;
       }
       return [object, ref];
     };

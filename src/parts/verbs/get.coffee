@@ -42,14 +42,13 @@ class Get extends Verb
     # If object...
     else
       # ...and ref? -> fetch from members
-      if ref?
+      ###if ref?
         try
           object = Module.fetch(ref).module
         catch err
-          console.error "Error! '#{ref}' not found."
+          console.error "Error! '#{ref}' not found."###
       # ...else ->
-      else
-        ref = Scope.modules[object].ref
+      ref = Scope.modules[object].ref
 
     return [object, ref]
 

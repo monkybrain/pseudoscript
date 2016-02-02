@@ -64,11 +64,16 @@ class Find
         match.replace /'/g, ''
 
   @number: (text) ->
-    # pattern = /\b\d+(\.\d+)?\b/g
-    pattern = /\b[0-9]*[.][0-9]+\b/g
+
+    # TODO: FIX THIS UGLY REFERENCE REMOVING HACK!
+    pattern = /'[^']*'/g
+    matches = text.match pattern
+    for match in matches
+      text = text.replace match, ""
+    pattern = /\b\d+(\.\d+)?\b/g
+    # pattern = /\b[0-9]*[.][0-9]+\b/g
     match = text.match pattern
     if match?
-      console.log match
       return match[0]
 
   @boolean: (text) ->

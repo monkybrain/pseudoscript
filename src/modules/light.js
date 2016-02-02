@@ -105,7 +105,6 @@
             process.exit();
           }
           _this.id = light.attributes.attributes.id;
-          console.log;
           _this.properties = {};
           ref2 = Light.properties;
           for (k in ref2) {

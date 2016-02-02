@@ -101,7 +101,8 @@ class Assembler
     # TODO: Make dynamic
     modules = [
       {name: 'Light', path: '../src/modules/light'},
-      {name: 'Room', path: '../src/modules/room'}
+      {name: 'Room', path: '../src/modules/room'},
+      {name: 'Shaker', path: '../src/modules/shaker'}
     ]
 
     # Add comment

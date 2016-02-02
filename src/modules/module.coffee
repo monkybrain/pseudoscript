@@ -22,6 +22,11 @@ class Module
     # Add to parent (if specified)
     # TODO: Implement!
 
+  @fetch: (ref) ->
+    for member in @members
+      if member.ref is ref
+        return member
+
   ###@select: (ref) ->
     for member in @members
       if ref is member.ref

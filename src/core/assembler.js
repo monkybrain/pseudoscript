@@ -123,6 +123,9 @@
         }, {
           name: 'Room',
           path: '../src/modules/room'
+        }, {
+          name: 'Shaker',
+          path: '../src/modules/shaker'
         }
       ];
       imports.push("# Custom modules");

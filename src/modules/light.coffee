@@ -69,7 +69,6 @@ class Light extends Module
         process.exit()
 
       @id = light.attributes.attributes.id
-      console.log
 
       @properties = {}
       for k, v of Light.properties

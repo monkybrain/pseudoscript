@@ -1,0 +1,9 @@
+Add lights 'Hue 1' and 'Hue 2'
+Add shaker 'shaker 1'
+
+When 'shaker 1' shakes, set brightness of light 'Hue 1' to 1
+
+# Set brightness of 'Hue 1' to 100
+# Add a light called 'Hue 2'
+# When shaker is shaked, set brightness of 'Hue 1' to 100
+# Every 2 seconds

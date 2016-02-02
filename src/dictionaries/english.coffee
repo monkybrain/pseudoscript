@@ -15,6 +15,10 @@ dictionary =
           prepositions: ["in", "after", "wait"]
         interval:
           prepositions: ["every"]
+    'when':
+      types:
+        when:
+          prepositions: ['when', 'on']
 
   preprocessor:
     numbers:

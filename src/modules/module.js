@@ -24,6 +24,17 @@
       return this.index++;
     };
 
+    Module.fetch = function(ref) {
+      var i, len, member, ref1;
+      ref1 = this.members;
+      for (i = 0, len = ref1.length; i < len; i++) {
+        member = ref1[i];
+        if (member.ref === ref) {
+          return member;
+        }
+      }
+    };
+
 
     /*@select: (ref) ->
       for member in @members

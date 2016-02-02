@@ -1,3 +1,4 @@
 Time = require "./time"
+When = require "./when"
 
-module.exports = [Time]
+module.exports = [Time, When]

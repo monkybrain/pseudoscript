@@ -65,6 +65,7 @@ class Preprocessor
     lines = lines.map (line) =>
       line = @replace @trim @lowercase @comments line
     @filter lines
+
     ###lines = lines.map (line) =>
       @phrases line###
 

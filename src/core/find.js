@@ -97,11 +97,16 @@
     };
 
     Find.number = function(text) {
-      var match, pattern;
-      pattern = /\b[0-9]*[.][0-9]+\b/g;
+      var i, len, match, matches, pattern;
+      pattern = /'[^']*'/g;
+      matches = text.match(pattern);
+      for (i = 0, len = matches.length; i < len; i++) {
+        match = matches[i];
+        text = text.replace(match, "");
+      }
+      pattern = /\b\d+(\.\d+)?\b/g;
       match = text.match(pattern);
       if (match != null) {
-        console.log(match);
         return match[0];
       }
     };

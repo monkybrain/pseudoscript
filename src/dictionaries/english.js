@@ -23,6 +23,13 @@
             prepositions: ["every"]
           }
         }
+      },
+      'when': {
+        types: {
+          when: {
+            prepositions: ['when', 'on']
+          }
+        }
       }
     },
     preprocessor: {
