@@ -51,36 +51,35 @@ class Shaker extends Module
 
                 # Remove this pyramid of doom
                 member.tag.connectAndSetUp (err) ->
-                  if err?
-                    reject err
-                  else
-                    console.log member.tag
-                    member.tag.enableAccelerometer (err) ->
+                  if err? then console.error err and process.exit()
+
+
+                  member.tag.enableAccelerometer (err) ->
+                  if err? then console.error err and process.exit()
+
+                  member.tag.setAccelerometerPeriod 200, (err) ->
                     if err? then console.error err and process.exit()
 
-                    ###member.tag.setAccelerometerPeriod 200, (err) ->
+                    member.tag.notifyAccelerometer (err) ->
                       if err? then console.error err and process.exit()
 
-                      member.tag.notifyAccelerometer (err) ->
-                        if err? then console.error err and process.exit()
+                      member.connected = true
 
-                        member.connected = true
+                      member.tag.on 'accelerometerChange', (x, y, z) ->
 
-                        member.tag.on 'accelerometerChange', (x, y, z) ->
+                        console.log x
 
-                          console.log x
+                        axes = [
+                          Math.abs x
+                          Math.abs y
+                          Math.abs z
+                        ]
 
-                          axes = [
-                            Math.abs x
-                            Math.abs y
-                            Math.abs z
-                          ]
-
-                          movement = axes.reduce (prev, curr) -> prev + curr
-                          if movement > 4
-                            console.log "movement!"
-                            member.events.start()
-                          resolve()###
+                        movement = axes.reduce (prev, curr) -> prev + curr
+                        if movement > 4
+                          console.log "movement!"
+                          member.events.start()
+                        resolve()
 
   @on: (ref, event, callback) ->
 

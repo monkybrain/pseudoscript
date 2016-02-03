@@ -61,39 +61,36 @@
                   member.tag = tag;
                   return member.tag.connectAndSetUp(function(err) {
                     if (err != null) {
-                      return reject(err);
-                    } else {
-                      console.log(member.tag);
-                      member.tag.enableAccelerometer(function(err) {});
-                      if (err != null) {
-                        return console.error(err && process.exit());
-                      }
-
-                      /*member.tag.setAccelerometerPeriod 200, (err) ->
-                        if err? then console.error err and process.exit()
-                      
-                        member.tag.notifyAccelerometer (err) ->
-                          if err? then console.error err and process.exit()
-                      
-                          member.connected = true
-                      
-                          member.tag.on 'accelerometerChange', (x, y, z) ->
-                      
-                            console.log x
-                      
-                            axes = [
-                              Math.abs x
-                              Math.abs y
-                              Math.abs z
-                            ]
-                      
-                            movement = axes.reduce (prev, curr) -> prev + curr
-                            if movement > 4
-                              console.log "movement!"
-                              member.events.start()
-                            resolve()
-                       */
+                      console.error(err && process.exit());
                     }
+                    member.tag.enableAccelerometer(function(err) {});
+                    if (err != null) {
+                      console.error(err && process.exit());
+                    }
+                    return member.tag.setAccelerometerPeriod(200, function(err) {
+                      if (err != null) {
+                        console.error(err && process.exit());
+                      }
+                      return member.tag.notifyAccelerometer(function(err) {
+                        if (err != null) {
+                          console.error(err && process.exit());
+                        }
+                        member.connected = true;
+                        return member.tag.on('accelerometerChange', function(x, y, z) {
+                          var axes, movement;
+                          console.log(x);
+                          axes = [Math.abs(x), Math.abs(y), Math.abs(z)];
+                          movement = axes.reduce(function(prev, curr) {
+                            return prev + curr;
+                          });
+                          if (movement > 4) {
+                            console.log("movement!");
+                            member.events.start();
+                          }
+                          return resolve();
+                        });
+                      });
+                    });
                   });
                 }
               }));
