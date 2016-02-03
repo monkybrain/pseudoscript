@@ -53,7 +53,6 @@ class Shaker extends Module
                 member.tag.connectAndSetUp (err) ->
                   if err? then console.error err and process.exit()
 
-
                   member.tag.enableAccelerometer (err) ->
                   if err? then console.error err and process.exit()
 
@@ -66,8 +65,6 @@ class Shaker extends Module
                       member.connected = true
 
                       member.tag.on 'accelerometerChange', (x, y, z) ->
-
-                        console.log x
 
                         axes = [
                           Math.abs x
@@ -89,11 +86,6 @@ class Shaker extends Module
 
         if member.ref is ref
           member.events[event] = callback
-          setInterval ->
-            func = member.events[event]
-            func()
-            func()
-          , 1000
           resolve()
 
 module.exports = Shaker

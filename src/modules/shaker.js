@@ -78,7 +78,6 @@
                         member.connected = true;
                         return member.tag.on('accelerometerChange', function(x, y, z) {
                           var axes, movement;
-                          console.log(x);
                           axes = [Math.abs(x), Math.abs(y), Math.abs(z)];
                           movement = axes.reduce(function(prev, curr) {
                             return prev + curr;
@@ -113,12 +112,6 @@
             member = ref1[i];
             if (member.ref === ref) {
               member.events[event] = callback;
-              setInterval(function() {
-                var func;
-                func = member.events[event];
-                func();
-                return func();
-              }, 1000);
               results.push(resolve());
             } else {
               results.push(void 0);
