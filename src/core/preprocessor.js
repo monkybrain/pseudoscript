@@ -61,7 +61,7 @@
     /* MULTILINE OPERATIONS */
 
     Preprocessor.split = function(file) {
-      return file.split(/(\n)|(\.)/g);
+      return file.split(/(\n)|[^0-9](\.)[^0-9]/g);
     };
 
     Preprocessor.filter = function(lines) {

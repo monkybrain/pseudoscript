@@ -23,9 +23,9 @@
         return this.level = level;
       },
       exec: function(syntax) {
-        var i, indent, j, ref;
+        var i, indent, j, ref1;
         indent = "";
-        for (i = j = 0, ref = this.level; 0 <= ref ? j < ref : j > ref; i = 0 <= ref ? ++j : --j) {
+        for (i = j = 0, ref1 = this.level; 0 <= ref1 ? j < ref1 : j > ref1; i = 0 <= ref1 ? ++j : --j) {
           indent += " ";
         }
         return indent + syntax;
@@ -47,8 +47,18 @@
       }
     };
 
+    Assembler.action = function(phrase, level) {
+      var action, object, prefix, ref, syntax;
+      action = phrase.action, object = phrase.object, ref = phrase.ref;
+      prefix = level !== 0 ? ".then -> " : "";
+      syntax = [];
+      syntax.push("# Performing action '" + action + "'");
+      syntax.push(prefix + (object + ".do '" + ref + "', '" + action + "'\n"));
+      return syntax;
+    };
+
     Assembler.parse = function(segment) {
-      var adverb, close, closure, closures, index, j, k, l, len, len1, len2, len3, len4, len5, line, m, n, o, open, phrase, previous, ref, ref1, ref2, ref3, syntax, verb;
+      var adverb, close, closure, closures, index, j, k, l, len, len1, len2, len3, len4, len5, len6, line, m, n, o, open, p, phrase, previous, ref1, ref2, ref3, ref4, ref5, syntax, verb;
       syntax = [];
       closures = [];
       previous = {
@@ -61,9 +71,9 @@
           for (k = 0, len1 = verbs.length; k < len1; k++) {
             verb = verbs[k];
             if (phrase.verb === verb.lexical.base) {
-              ref = verb.syntax(phrase, this.chain.level);
-              for (l = 0, len2 = ref.length; l < len2; l++) {
-                line = ref[l];
+              ref1 = verb.syntax(phrase, this.chain.level);
+              for (l = 0, len2 = ref1.length; l < len2; l++) {
+                line = ref1[l];
                 syntax.push(this.indent.exec(line));
               }
               if (phrase.verb === 'add') {
@@ -74,24 +84,32 @@
                 syntax.push(this.indent.exec(this.chain.error.comment));
                 syntax.push(this.indent.exec(this.chain.error.syntax));
                 this.chain.reset();
+                this.chain.close = false;
               } else {
                 this.chain.close = true;
               }
             }
           }
+        } else if (phrase.type === 'action') {
+          ref2 = this.action(phrase, this.chain.level);
+          for (m = 0, len3 = ref2.length; m < len3; m++) {
+            line = ref2[m];
+            syntax.push(this.indent.exec(line));
+          }
+          this.chain.inc();
         } else if (phrase.type === 'adverb') {
-          for (m = 0, len3 = adverbs.length; m < len3; m++) {
-            adverb = adverbs[m];
+          for (n = 0, len4 = adverbs.length; n < len4; n++) {
+            adverb = adverbs[n];
             if (this.chain.close) {
               syntax.push(this.indent.exec(this.chain.error.comment));
               syntax.push(this.indent.exec(this.chain.error.syntax));
               this.chain.reset();
               this.chain.close = false;
             }
-            if (ref1 = phrase.adverb, indexOf.call(Object.keys(adverb.types), ref1) >= 0) {
-              ref2 = adverb.syntax(phrase, this.chain.level), open = ref2[0], close = ref2[1];
-              for (n = 0, len4 = open.length; n < len4; n++) {
-                line = open[n];
+            if (ref3 = phrase.adverb, indexOf.call(Object.keys(adverb.types), ref3) >= 0) {
+              ref4 = adverb.syntax(phrase, this.chain.level), open = ref4[0], close = ref4[1];
+              for (o = 0, len5 = open.length; o < len5; o++) {
+                line = open[o];
                 syntax.push(this.indent.exec(line));
               }
               closures.push(close);
@@ -101,9 +119,9 @@
           }
         }
       }
-      ref3 = closures.reverse();
-      for (o = 0, len5 = ref3.length; o < len5; o++) {
-        closure = ref3[o];
+      ref5 = closures.reverse();
+      for (p = 0, len6 = ref5.length; p < len6; p++) {
+        closure = ref5[p];
         this.indent.dec();
         syntax.push(this.indent.exec(closure));
       }

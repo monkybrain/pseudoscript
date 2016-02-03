@@ -17,10 +17,26 @@
 
   new Light('Hue 1');
 
-  Light.set('Hue 1', {
+  new Light('Hue 2');
+
+  new Shaker('shaker 1');
+
+  Light.set('Hue 2', {
     hue: 50000,
     saturation: 240,
     brightness: 150
+  }).then(function(result) {
+    return Globals.set(result);
+  })["catch"](function(err) {
+    return Util.error(err);
+  });
+
+  Light.set('Hue 1', {
+    hue: 30000,
+    saturation: 240,
+    brightness: 150
+  }).then(function(result) {
+    return Globals.set(result);
   })["catch"](function(err) {
     return Util.error(err);
   });
@@ -30,10 +46,33 @@
       hue: Util.random({
         min: 0,
         max: 65535
-      })
+      }),
+      transitionTime: 0.1
+    }).then(function(result) {
+      return Globals.set(result);
+    }).then(function(response) {
+      Util.log(response);
+      return Util.log('');
     })["catch"](function(err) {
       return Util.error(err);
     });
   }, 2 * 1000);
+
+  setInterval(function() {
+    return Light.set('Hue 2', {
+      hue: Util.random({
+        min: 0,
+        max: 65535
+      }),
+      transitionTime: 3
+    }).then(function(result) {
+      return Globals.set(result);
+    }).then(function(response) {
+      Util.log(response);
+      return Util.log('');
+    })["catch"](function(err) {
+      return Util.error(err);
+    });
+  }, 3 * 1000);
 
 }).call(this);

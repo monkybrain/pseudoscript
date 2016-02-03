@@ -25,9 +25,16 @@
     Shaker.properties = null;
 
     Shaker.events = {
-      'shake': function() {
-        return console.log("nothing");
+      'start': function() {
+        return console.log("start");
+      },
+      'stop': function() {
+        return console.log("stop");
       }
+    };
+
+    Shaker.actions = {
+      'connect': null
     };
 
     function Shaker(ref1) {
@@ -38,57 +45,65 @@
       Shaker.members.push(this);
     }
 
-    Shaker.connect = function(ref) {
-      return new Promise((function(_this) {
-        return function(resolve, reject) {
-          var i, len, member, ref1, results;
+    Shaker["do"] = function(ref, action) {
+      return new Promise(function(resolve, reject) {
+        var i, len, member, ref1, results;
+        if (action === 'connect') {
+          console.log("Connecting '" + ref + "'...");
           ref1 = Shaker.members;
           results = [];
           for (i = 0, len = ref1.length; i < len; i++) {
             member = ref1[i];
             if (member.ref === ref) {
               results.push(SensorTag.discover(function(tag) {
-                member.tag = tag;
-                return member.tag.connectAndSetUp(function(err) {
-                  if (err != null) {
-                    console.error(err && process.exit());
-                  }
-                  return member.tag.enableAccelerometer(function(err) {
+                console.log(tag);
+                if (tag.type === 'cc2650') {
+                  member.tag = tag;
+                  return member.tag.connectAndSetUp(function(err) {
                     if (err != null) {
-                      console.error(err && process.exit());
-                    }
-                    return member.tag.setAccelerometerPeriod(200, function(err) {
+                      return reject(err);
+                    } else {
+                      console.log(member.tag);
+                      member.tag.enableAccelerometer(function(err) {});
                       if (err != null) {
-                        console.error(err && process.exit());
+                        return console.error(err && process.exit());
                       }
-                      return member.tag.notifyAccelerometer(function(err) {
-                        if (err != null) {
-                          console.error(err && process.exit());
-                        }
-                        member.connected = true;
-                        return member.tag.on('accelerometerChange', function(x, y, z) {
-                          var axes, movement;
-                          axes = [Math.abs(x), Math.abs(y), Math.abs(z)];
-                          movement = axes.reduce(function(prev, curr) {
-                            return prev + curr;
-                          });
-                          if (movement > 4) {
-                            member.events.shake();
-                          }
-                          return resolve();
-                        });
-                      });
-                    });
+
+                      /*member.tag.setAccelerometerPeriod 200, (err) ->
+                        if err? then console.error err and process.exit()
+                      
+                        member.tag.notifyAccelerometer (err) ->
+                          if err? then console.error err and process.exit()
+                      
+                          member.connected = true
+                      
+                          member.tag.on 'accelerometerChange', (x, y, z) ->
+                      
+                            console.log x
+                      
+                            axes = [
+                              Math.abs x
+                              Math.abs y
+                              Math.abs z
+                            ]
+                      
+                            movement = axes.reduce (prev, curr) -> prev + curr
+                            if movement > 4
+                              console.log "movement!"
+                              member.events.start()
+                            resolve()
+                       */
+                    }
                   });
-                });
+                }
               }));
             } else {
               results.push(void 0);
             }
           }
           return results;
-        };
-      })(this));
+        }
+      });
     };
 
     Shaker.on = function(ref, event, callback) {
@@ -100,20 +115,14 @@
           for (i = 0, len = ref1.length; i < len; i++) {
             member = ref1[i];
             if (member.ref === ref) {
-              if (!member.connected) {
-                console.log("Connecting...");
-                results.push(Shaker.connect(member.ref).then(function() {
-                  member.events.shake = function() {
-                    return console.log("slow");
-                  };
-                  return resolve();
-                }));
-              } else {
-                member.events.shake = function() {
-                  return console.log("fast");
-                };
-                results.push(resolve());
-              }
+              member.events[event] = callback;
+              setInterval(function() {
+                var func;
+                func = member.events[event];
+                func();
+                return func();
+              }, 1000);
+              results.push(resolve());
             } else {
               results.push(void 0);
             }

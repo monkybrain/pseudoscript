@@ -47,6 +47,16 @@
 
     Light.members = [];
 
+    Light.actions = {
+      'blink': {
+        options: {
+          'times': {
+            type: 'number'
+          }
+        }
+      }
+    };
+
     Light.properties = {
       'on': {
         key: 'on',
@@ -132,10 +142,10 @@
             if (_this.current == null) {
               reject("Error! Cannot find '" + ref + "'");
             }
-            return Hue.light.set(_this.current.id, options).then(function() {
-              return resolve();
+            return Hue.light.set(_this.current.id, options).then(function(result) {
+              return resolve(result);
             })["catch"](function(err) {
-              return reject("Error! " + error.message);
+              return reject("Error! " + err.message);
             });
           });
         };
@@ -147,17 +157,41 @@
       ref = arguments[0], properties = 2 <= arguments.length ? slice.call(arguments, 1) : [];
       return new Promise((function(_this) {
         return function(resolve, reject) {
-          Hue.ready().then(function() {});
+          return Hue.ready().then(function() {
+            _this.current = Light.members.filter(function(member) {
+              return member.ref === ref;
+            })[0];
+            if (_this.current == null) {
+              reject("Error! Cannot find '" + ref + "'");
+            }
+            return Hue.light.get(_this.current.id, properties).then(function(properties) {
+              return resolve(properties);
+            })["catch"](function(err) {
+              return reject("Error! " + err.message);
+            });
+          });
+        };
+      })(this));
+    };
+
+    Light["do"] = function(ref, action, options) {
+      return Hue.ready().then((function(_this) {
+        return function() {
           _this.current = Light.members.filter(function(member) {
             return member.ref === ref;
           })[0];
           if (_this.current == null) {
             reject("Error! Cannot find '" + ref + "'");
           }
-          return Hue.light.get(_this.current.id, properties).then(function(properties) {
-            return resolve(properties);
-          }, function(error) {
-            return reject("Error! " + error.message);
+          if (action === 'blink') {
+            options = {
+              alert: 'select'
+            };
+          }
+          return Hue.light.set(_this.current.id, options).then(function(result) {
+            return console.log(result);
+          })["catch"](function(err) {
+            return console.error(err);
           });
         };
       })(this));
@@ -168,5 +202,7 @@
   })(Module);
 
   module.exports = Light;
+
+  Light["do"]();
 
 }).call(this);

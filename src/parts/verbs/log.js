@@ -3,7 +3,7 @@
 /* VERB: LOG */
 
 (function() {
-  var Log, Scope, Verb, modules,
+  var Find, Log, Scope, Verb, modules,
     extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
     hasProp = {}.hasOwnProperty;
 
@@ -12,6 +12,8 @@
   Verb = require("../../parts/verbs/verb");
 
   Scope = require("../../parts/scope");
+
+  Find = require("../../core/find");
 
   Log = (function(superClass) {
     extend(Log, superClass);
@@ -26,46 +28,76 @@
     };
 
     Log.test = function(text) {
-      var match, pattern, properties;
+      var i, len, match, parameters, pattern, properties, property, result, strings;
       pattern = /\blog\b(\s+?(.*))*/;
       match = text.match(pattern);
       if (match != null) {
-        properties = match[2];
-        if (properties != null) {
-          properties = this.split(properties);
+        result = false;
+        parameters = match[2];
+        if (parameters != null) {
+          parameters = this.split(parameters);
+          properties = parameters.filter(function(parameter) {
+            return parameter.indexOf("'") === -1;
+          });
+          if (properties != null) {
+            for (i = 0, len = properties.length; i < len; i++) {
+              property = properties[i];
+              if (property === 'result') {
+                properties.splice(properties.indexOf('result', 1));
+                result = true;
+                break;
+              }
+            }
+            if (properties.length === 0) {
+              properties = void 0;
+            }
+          }
+          strings = Find.references(parameters.join(" "));
+        } else {
+          result = true;
         }
         return {
           type: 'verb',
           verb: 'log',
-          properties: properties
+          properties: properties,
+          strings: strings,
+          result: result
         };
       }
     };
 
-    Log.syntax = function(phrase) {
-      var props, syntax;
+    Log.syntax = function(phrase, level) {
+      var indent, props, string, strings, syntax;
       syntax = [];
-      syntax.push("# Logging");
-      if (phrase.properties == null) {
-        syntax.push(".then (response) -> console.log response\n");
+      if (level !== 0) {
+        syntax.push("# Log");
+        syntax.push(".then (response) ->");
+        indent = "  ";
       } else {
-
-        /*syntax.push ".then ->"
-        for property in phrase.properties
-          if phrase.properties.length is 1
-            syntax[syntax.length - 1] = syntax[syntax.length - 1] + " console.log \"#{property}: \" + Globals['#{property}']"
-          else
-            syntax.push "  console.log \"#{property}: \" + Globals['#{property}']"
-        syntax[syntax.length - 1] = syntax[syntax.length - 1] + "\n"
-         */
+        indent = "";
+      }
+      if (phrase.strings != null) {
+        strings = phrase.strings.map(function(string) {
+          return "'" + string + "'";
+        });
+        string = strings.join(", ");
+        syntax.push(indent + "# Log strings");
+        syntax.push(indent + ("Util.log string for string in [" + strings + "]"));
+      }
+      if (phrase.properties != null) {
         props = phrase.properties.map(function(property) {
           return "'" + property + "'";
         });
         props = props.join(", ");
-        syntax.push(".then ->");
-        syntax.push("  for key in [" + props + "]");
-        syntax.push("    console.log \"\#{key}: \#{Globals[key]}\"\n");
+        syntax.push(indent + "# Log properties");
+        syntax.push(indent + ("Util.log \"\#{key}: \#{Globals[key]}\" for key in [" + props + "]\n"));
       }
+      if (phrase.result) {
+        syntax.push(indent + "# Log response");
+        syntax.push(indent + "Util.log response");
+      }
+      syntax.push(indent + "# Log empty line");
+      syntax.push(indent + "Util.log ''\n");
       return syntax;
     };
 

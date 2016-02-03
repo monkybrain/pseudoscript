@@ -87,7 +87,9 @@
           ref1 = module.events;
           for (key in ref1) {
             value = ref1[key];
-            return key;
+            if (segment.match(key)) {
+              return key;
+            }
           }
         }
       }
@@ -105,7 +107,7 @@
       pattern = /\bwhen\b/g;
       match = text.match(pattern);
       if (match != null) {
-        ref1 = this.parse(match[0]), object = ref1[0], ref = ref1[1], event = ref1[2];
+        ref1 = this.parse(text), object = ref1[0], ref = ref1[1], event = ref1[2];
         return {
           type: 'adverb',
           adverb: 'when',

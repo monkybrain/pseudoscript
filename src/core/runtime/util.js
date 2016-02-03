@@ -3,8 +3,10 @@
 /* UTIL: RUN TIME */
 
 (function() {
-  var Util,
+  var Promise, Util,
     slice = [].slice;
+
+  Promise = require("promise");
 
   Util = (function() {
     function Util() {}
@@ -15,6 +17,13 @@
 
     Util.error = function(err) {
       return console.error(err);
+    };
+
+    Util.log = function(string) {
+      return new Promise(function(resolve, reject) {
+        console.log(string);
+        return resolve();
+      });
     };
 
     Util.math = {

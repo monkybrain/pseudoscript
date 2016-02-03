@@ -32,7 +32,7 @@ class Preprocessor
 
   ### MULTILINE OPERATIONS ###
   @split: (file) ->
-    file.split /(\n)|(\.)/g
+    file.split /(\n)|[^0-9](\.)[^0-9]/g
 
   @filter: (lines) ->
     lines.filter (line) ->

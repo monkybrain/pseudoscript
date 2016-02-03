@@ -1,0 +1,4 @@
+Add light 'Hue 1'
+Set brightness to 250
+# Every 2 s, blink
+Every 400 ms, set brightness to 250, hue to random, transition time 0.1 and after 200 ms set brightness to 5, transition time 0.1

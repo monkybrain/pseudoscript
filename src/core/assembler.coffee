@@ -27,6 +27,15 @@ class Assembler
       comment: "# Catch errors"
       syntax: ".catch (err) -> Util.error err\n"
 
+  # TODO: MOVE TO BETTER PLACEs
+  @action: (phrase, level) ->
+    {action: action, object: object, ref: ref} = phrase
+    prefix = if level isnt 0 then ".then -> " else ""
+    syntax = []
+    syntax.push "# Performing action '#{action}'"
+    syntax.push prefix + "#{object}.do '#{ref}', '#{action}'\n"
+    syntax
+
   @parse: (segment) ->
 
     syntax = []
@@ -44,7 +53,7 @@ class Assembler
             for line in verb.syntax phrase, @chain.level
               syntax.push @indent.exec line
 
-            # If 'add' -> continue, i.e. don't catch rejections
+            # If 'add' -> skip error handling (constructor cannot return promise)
             if phrase.verb is 'add'
               continue
 
@@ -56,8 +65,19 @@ class Assembler
               syntax.push @indent.exec @chain.error.comment
               syntax.push @indent.exec @chain.error.syntax
               @chain.reset()
+              @chain.close = false
+
             # Else -> set error handling flag
             else @chain.close = true
+
+      # TODO: MOVE TO BETTER PLACE
+      else if phrase.type is 'action'
+
+        for line in @action phrase, @chain.level
+          syntax.push @indent.exec line
+
+        # Increment promise chain level
+        @chain.inc()
 
       else if phrase.type is 'adverb'
         for adverb in adverbs
@@ -82,6 +102,9 @@ class Assembler
 
             # Reset promise chain level and add error handling
             @chain.reset()
+
+
+
 
     # Handle closures (reverse order and dedent accordingly)
     for closure in closures.reverse()

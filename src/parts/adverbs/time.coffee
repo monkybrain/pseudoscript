@@ -108,10 +108,10 @@ class Time extends Adverb
   @syntax: (phrase) ->
     {adverb: adverb, time: time} = phrase
     if adverb is 'delay'
-      open = ["# Set timeout to #{time} seconds", "setTimeout () ->\n"]
+      open = ["# Set timeout to #{time} seconds", "setTimeout ->\n"]
       close = [", #{time} * 1000\n"]
     if adverb is 'interval'
-      open = ["# Set interval to #{time} seconds", "setInterval () ->\n"]
+      open = ["# Set interval to #{time} seconds", "setInterval ->\n"]
       close = [", #{time} * 1000\n"]
     return [open, close]
 

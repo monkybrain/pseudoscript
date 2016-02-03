@@ -71,7 +71,8 @@ class When extends Adverb
     for module in modules
       if module.events?
         for key, value of module.events
-          return key
+          if segment.match key
+            return key
 
   @parse: (segment) ->
     [object, ref] = @getObject segment
@@ -83,7 +84,7 @@ class When extends Adverb
     match = text.match pattern
     if match?
       # TODO: Add split later!
-      [object, ref, event] = @parse match[0]
+      [object, ref, event] = @parse text
       return type: 'adverb', adverb: 'when', object: object, ref: ref, event: event
 
   @syntax: (phrase) ->

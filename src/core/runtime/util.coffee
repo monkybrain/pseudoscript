@@ -1,5 +1,7 @@
 ### UTIL: RUN TIME ###
 
+Promise = require "promise"
+
 class Util
 
   @random: (options) ->
@@ -7,6 +9,11 @@ class Util
 
   @error: (err) ->
     console.error err
+
+  @log: (string) ->
+    new Promise (resolve, reject) ->
+      console.log string
+      resolve()
 
   @math:
     multiply: (operands...) ->

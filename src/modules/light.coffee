@@ -18,6 +18,12 @@ class Light extends Module
 
   @members: []
 
+  @actions:
+    'blink':
+      options:
+        'times':
+          type: 'number'
+
   @properties:
     'on':
       key: 'on'
@@ -91,22 +97,39 @@ class Light extends Module
         if not @current? then reject "Error! Cannot find '#{ref}'"
 
         # Set properties
-        Hue.light.set(@current.id, options)
-        .then -> resolve()
-        .catch (err) -> reject "Error! " + error.message
+        Hue.light.set @current.id, options
+        .then (result) -> resolve result
+        .catch (err) -> reject "Error! " + err.message
 
   @get: (ref, properties...) ->
 
     new Promise (resolve, reject) =>
 
-      Hue.ready().then () =>
+      Hue.ready()
+      .then () =>
+        [@current] = Light.members.filter (member) => member.ref is ref
+        if not @current? then reject "Error! Cannot find '#{ref}'"
+
+        # get properties
+        Hue.light.get @current.id, properties
+        .then (properties) => resolve properties
+        .catch (err) -> reject "Error! " + err.message
+
+  @do: (ref, action, options) ->
+
+    Hue.ready()
+    .then () =>
+
       [@current] = Light.members.filter (member) => member.ref is ref
       if not @current? then reject "Error! Cannot find '#{ref}'"
 
-      # Set properties
-      Hue.light.get(@current.id, properties).then(
-        (properties) => resolve properties
-        (error) -> reject "Error! " + error.message
-      )
+      if action is 'blink'
+        options = alert: 'select'
+
+      Hue.light.set @current.id, options
+      .then (result) -> console.log result
+      .catch (err) -> console.error err
 
 module.exports = Light
+
+Light.do()

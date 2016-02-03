@@ -11,7 +11,6 @@
       var i, len, match, module;
       for (i = 0, len = modules.length; i < len; i++) {
         module = modules[i];
-        console.log("fisk");
         match = text.match(module.lexical.base);
         if (match != null) {
           return module.self;
@@ -98,16 +97,15 @@
     };
 
     Find.number = function(text) {
-      var i, len, match, matches, pattern;
-      pattern = /'[^']*'/g;
-      matches = text.match(pattern);
-      if (matches != null) {
-        for (i = 0, len = matches.length; i < len; i++) {
-          match = matches[i];
-          text = text.replace(match, "");
+      var i, len, match, pattern, ref, refs;
+      refs = this.references(text);
+      if (refs != null) {
+        for (i = 0, len = refs.length; i < len; i++) {
+          ref = refs[i];
+          text = text.replace("'" + ref + "'", '');
         }
       }
-      pattern = /\b\d+(\.\d+)?\b/g;
+      pattern = /\b([0-9]+([.][0-9]*)*)\b/g;
       match = text.match(pattern);
       if (match != null) {
         return match[0];

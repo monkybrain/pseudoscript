@@ -126,12 +126,12 @@ class Set extends Get
           r = @random object, key
           value = "Util.random min: #{r.min}, max: #{r.max}"
         options.push "  #{key}: #{value}"
-      options[options.length - 1] = options[options.length - 1] + "\n"
+      # options[options.length - 1] = options[options.length - 1] + "\n"
       syntax.push "# Set properties of '#{ref}'"
       prefix = if level isnt 0 then ".then -> " else ""
       syntax.push prefix + "#{object}.set '#{ref}', "
-
       syntax.push option for option in options
+      syntax.push ".then (result) -> Globals.set result\n"
 
     syntax
 

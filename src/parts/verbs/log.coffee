@@ -3,6 +3,7 @@
 modules = require "../../modules/modules"
 Verb = require "../../parts/verbs/verb"
 Scope = require "../../parts/scope"
+Find = require "../../core/find"
 
 class Log extends Verb
 
@@ -11,33 +12,60 @@ class Log extends Verb
     synonyms: ['log']
 
   @test: (text) ->
+    # pattern = /\blog\b(\s+?(.*))*/
     pattern = /\blog\b(\s+?(.*))*/
     match = text.match pattern
     if match?
-      properties = match[2]
-      if properties?
-        properties = @split properties
-      return type: 'verb', verb: 'log', properties: properties
+      result = false
+      parameters = match[2]
+      if parameters?
+        parameters = @split parameters
+        properties = parameters.filter (parameter) -> parameter.indexOf("'") is -1
+        # TODO: Ugly handling below
+        if properties?
+          for property in properties
+            if property is 'result'
+              properties.splice properties.indexOf 'result', 1
+              result = true
+              break
+          if properties.length is 0
+            properties = undefined
+        strings = Find.references parameters.join " "
+      else
+        result = true
+      return type: 'verb', verb: 'log', properties: properties, strings: strings, result: result
 
-  @syntax: (phrase) ->
+  @syntax: (phrase, level) ->
+
+    # TODO: Implement chain levels!
     syntax = []
-    syntax.push "# Logging"
-    if not phrase.properties?
-      syntax.push ".then (response) -> console.log response\n"
+    if level isnt 0
+      syntax.push "# Log"
+      syntax.push ".then (response) ->"
+      indent = "  "
     else
-      ###syntax.push ".then ->"
-      for property in phrase.properties
-        if phrase.properties.length is 1
-          syntax[syntax.length - 1] = syntax[syntax.length - 1] + " console.log \"#{property}: \" + Globals['#{property}']"
-        else
-          syntax.push "  console.log \"#{property}: \" + Globals['#{property}']"
-      syntax[syntax.length - 1] = syntax[syntax.length - 1] + "\n"###
-      props = phrase.properties.map (property) ->
-        return "'#{property}'"
+      indent = ""
+
+    if phrase.strings?
+      strings = phrase.strings.map (string) -> "'#{string}'"
+      string = strings.join ", "
+      syntax.push indent + "# Log strings"
+      syntax.push indent + "Util.log string for string in [#{strings}]"
+
+    if phrase.properties?
+      props = phrase.properties.map (property) -> "'#{property}'"
       props = props.join ", "
-      syntax.push ".then ->"
-      syntax.push "  for key in [#{props}]"
-      syntax.push "    console.log \"\#{key}: \#{Globals[key]}\"\n"
+      syntax.push indent + "# Log properties"
+      syntax.push indent + "Util.log \"\#{key}: \#{Globals[key]}\" for key in [#{props}]\n"
+
+    if phrase.result
+      syntax.push indent + "# Log response"
+      syntax.push indent + "Util.log response"
+
+    # Add empty line
+    syntax.push indent + "# Log empty line"
+    syntax.push indent + "Util.log ''\n"
+
     syntax
 
 module.exports = Log

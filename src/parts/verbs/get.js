@@ -40,9 +40,7 @@
         words = [module.lexical.base, module.lexical.plural];
         pattern = Util.regex.groupAndBound(words);
         match = segment.match(pattern);
-        console.log(pattern);
         if (match != null) {
-          console.log(match);
           object = module.self;
           break;
         }

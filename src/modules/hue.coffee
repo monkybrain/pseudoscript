@@ -31,19 +31,16 @@ class Hue
 
   @light:
     set: (id, options) ->
+
       new Promise (resolve, reject) ->
-        Hue.ready().then( -> client.lights.getById(id) )
-        .then(
-          (light) ->
-            for key, value of options
-              light[key] = value
-            client.lights.save light
-          (error) ->
-            console.error error
-        ).then(
-          (success) -> resolve()
-          (error) -> reject error
-        )
+        Hue.ready()
+        .then -> client.lights.getById(id)
+        .then (light) ->
+          light[key] = value for key, value of options
+          client.lights.save light
+        .then (result) -> resolve options
+        .catch (err) -> reject error
+
     get: (id, properties) ->
       new Promise (resolve, reject) ->
         Hue.ready().then( -> client.lights.getById(id) )
@@ -57,18 +54,10 @@ class Hue
             console.error error
         )
 
-### INIT ###
-###Hue.lights = [
-  light: attributes: {attributes: {name: 'Hue 1'}},
-  light: attributes: {attributes: {name: 'Hue 2'}}]
-ready = true###
-
-lights = client.lights.getAll().then(
-  (lights) ->
+lights = client.lights.getAll()
+.then (lights) ->
     Hue.lights = lights
     ready = true
-  (error) ->
-    console.error error
-)
+.catch (error) -> console.error error
 
 module.exports = Hue

@@ -1,3 +1,7 @@
-Add light 'Hue 1'
+Add the light called 'Hue 1'
+Add light 'Hue 2'
+Add shaker 'shaker 1'
 Set hue to 50000, saturation to 240 and brightness to 150
-Every 2 seconds, set the hue to random
+Set hue of 'Hue 1' to 30000, saturation to 240, brightness to 150
+Every 2 seconds, set the hue of 'Hue 1' to random and transition time to 0.1 and log
+Every 3 seconds, set the hue of 'Hue 2' to random and transition time to 3 and log

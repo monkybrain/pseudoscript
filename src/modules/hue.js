@@ -48,11 +48,9 @@
               light[key] = value;
             }
             return client.lights.save(light);
-          }, function(error) {
-            return console.error(error);
-          }).then(function(success) {
-            return resolve();
-          }, function(error) {
+          }).then(function(result) {
+            return resolve(options);
+          })["catch"](function(err) {
             return reject(error);
           });
         });
@@ -80,20 +78,10 @@
 
   })();
 
-
-  /* INIT */
-
-
-  /*Hue.lights = [
-    light: attributes: {attributes: {name: 'Hue 1'}},
-    light: attributes: {attributes: {name: 'Hue 2'}}]
-  ready = true
-   */
-
   lights = client.lights.getAll().then(function(lights) {
     Hue.lights = lights;
     return ready = true;
-  }, function(error) {
+  })["catch"](function(error) {
     return console.error(error);
   });
 

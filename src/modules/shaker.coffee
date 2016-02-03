@@ -15,7 +15,11 @@ class Shaker extends Module
   @properties: null
 
   @events:
-    'shake': -> console.log "nothing"
+    'start': -> console.log "start"
+    'stop': -> console.log "stop"
+
+  @actions:
+    'connect': null
 
   constructor: (@ref) ->
 
@@ -25,45 +29,58 @@ class Shaker extends Module
 
     Shaker.members.push this
 
-  @connect: (ref) ->
+  @do: (ref, action) ->
 
-    new Promise (resolve, reject) =>
+    new Promise (resolve, reject) ->
 
-      for member in Shaker.members
+      if action is 'connect'
 
-        if member.ref is ref
+        console.log "Connecting '#{ref}'..."
 
-          SensorTag.discover (tag) ->
+        for member in Shaker.members
 
-            member.tag = tag
+          if member.ref is ref
 
-            # Remove this pyramid of doom
-            member.tag.connectAndSetUp (err) ->
-              if err? then console.error err and process.exit()
+            SensorTag.discover (tag) ->
 
-              member.tag.enableAccelerometer (err) ->
-                if err? then console.error err and process.exit()
+              console.log tag
 
-                member.tag.setAccelerometerPeriod 200, (err) ->
-                  if err? then console.error err and process.exit()
+              if tag.type is 'cc2650'
 
-                  member.tag.notifyAccelerometer (err) ->
+                member.tag = tag
+
+                # Remove this pyramid of doom
+                member.tag.connectAndSetUp (err) ->
+                  if err?
+                    reject err
+                  else
+                    console.log member.tag
+                    member.tag.enableAccelerometer (err) ->
                     if err? then console.error err and process.exit()
 
-                    member.connected = true
+                    ###member.tag.setAccelerometerPeriod 200, (err) ->
+                      if err? then console.error err and process.exit()
 
-                    member.tag.on 'accelerometerChange', (x, y, z) ->
+                      member.tag.notifyAccelerometer (err) ->
+                        if err? then console.error err and process.exit()
 
-                      axes = [
-                        Math.abs x
-                        Math.abs y
-                        Math.abs z
-                      ]
+                        member.connected = true
 
-                      movement = axes.reduce (prev, curr) -> prev + curr
-                      if movement > 4 then member.events.shake()
+                        member.tag.on 'accelerometerChange', (x, y, z) ->
 
-                      resolve()
+                          console.log x
+
+                          axes = [
+                            Math.abs x
+                            Math.abs y
+                            Math.abs z
+                          ]
+
+                          movement = axes.reduce (prev, curr) -> prev + curr
+                          if movement > 4
+                            console.log "movement!"
+                            member.events.start()
+                          resolve()###
 
   @on: (ref, event, callback) ->
 
@@ -72,16 +89,13 @@ class Shaker extends Module
       for member in Shaker.members
 
         if member.ref is ref
-
-          if not member.connected
-            console.log "Connecting..."
-            Shaker.connect member.ref
-            .then =>
-              member.events.shake = -> console.log "slow"
-              resolve()
-          else
-            member.events.shake = -> console.log "fast"
-            resolve()
+          member.events[event] = callback
+          setInterval ->
+            func = member.events[event]
+            func()
+            func()
+          , 1000
+          resolve()
 
 module.exports = Shaker
 

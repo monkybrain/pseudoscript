@@ -22,9 +22,7 @@ class Get extends Verb
       words = [module.lexical.base, module.lexical.plural]
       pattern = Util.regex.groupAndBound words
       match = segment.match pattern
-      console.log pattern
       if match?
-        console.log match
         object = module.self
         break
 

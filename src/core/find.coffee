@@ -6,7 +6,6 @@ class Find
 
   @object: (text) ->
     for module in modules
-      console.log "fisk"
       match = text.match module.lexical.base
       if match?
         return module.self
@@ -66,15 +65,14 @@ class Find
 
   @number: (text) ->
 
-    # TODO: FIX THIS UGLY REFERENCE REMOVING HACK!
-    pattern = /'[^']*'/g
-    matches = text.match pattern
-    if matches?
-      for match in matches
-        text = text.replace match, ""
-    pattern = /\b\d+(\.\d+)?\b/g
-    # pattern = /\b[0-9]*[.][0-9]+\b/g
+    # Exclude refs from number search
+    refs = @references text
+    if refs? then text = text.replace "'#{ref}'", '' for ref in refs
+
+    # Perform number search (find integers and floats)
+    pattern = /\b([0-9]+([.][0-9]*)*)\b/g
     match = text.match pattern
+
     if match?
       return match[0]
 

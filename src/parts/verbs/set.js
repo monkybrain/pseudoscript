@@ -175,7 +175,6 @@
           }
           options.push("  " + key + ": " + value);
         }
-        options[options.length - 1] = options[options.length - 1] + "\n";
         syntax.push("# Set properties of '" + ref + "'");
         prefix = level !== 0 ? ".then -> " : "";
         syntax.push(prefix + (object + ".set '" + ref + "', "));
@@ -183,6 +182,7 @@
           option = options[j];
           syntax.push(option);
         }
+        syntax.push(".then (result) -> Globals.set result\n");
       }
       return syntax;
     };

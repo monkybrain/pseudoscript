@@ -12,23 +12,21 @@ Shaker = require '../src/modules/shaker'
 # Add new Light 'Hue 1'
 new Light 'Hue 1'
 
-# Set properties of 'Hue 1'
-Light.set 'Hue 1', 
-  hue: 50000
-  saturation: 240
-  brightness: 150
+# Add new Shaker 'shaker 1'
+new Shaker 'shaker 1'
 
-# Catch errors
-.catch (err) -> Util.error err
+# Performing action 'connect'
+Shaker.do 'shaker 1', 'connect'
 
-# Set interval to 2 seconds
-setInterval () ->
+# On event 'start' for 'shaker 1'
+Shaker.on 'shaker 1', 'start', () ->
 
   # Set properties of 'Hue 1'
   Light.set 'Hue 1', 
     hue: Util.random min: 0, max: 65535
+  .then (result) -> Globals.set result
 
   # Catch errors
   .catch (err) -> Util.error err
 
-, 2 * 1000
+
