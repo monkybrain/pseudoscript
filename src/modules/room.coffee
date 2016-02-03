@@ -6,6 +6,7 @@ class Room extends Module
 
   @lexical:
     base: 'room'
+    plural: 'rooms'
 
   @members = []
 

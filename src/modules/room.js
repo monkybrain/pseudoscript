@@ -12,7 +12,8 @@
     Room.self = 'Room';
 
     Room.lexical = {
-      base: 'room'
+      base: 'room',
+      plural: 'rooms'
     };
 
     Room.members = [];

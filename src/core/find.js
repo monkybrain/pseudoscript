@@ -11,6 +11,7 @@
       var i, len, match, module;
       for (i = 0, len = modules.length; i < len; i++) {
         module = modules[i];
+        console.log("fisk");
         match = text.match(module.lexical.base);
         if (match != null) {
           return module.self;
@@ -100,9 +101,11 @@
       var i, len, match, matches, pattern;
       pattern = /'[^']*'/g;
       matches = text.match(pattern);
-      for (i = 0, len = matches.length; i < len; i++) {
-        match = matches[i];
-        text = text.replace(match, "");
+      if (matches != null) {
+        for (i = 0, len = matches.length; i < len; i++) {
+          match = matches[i];
+          text = text.replace(match, "");
+        }
       }
       pattern = /\b\d+(\.\d+)?\b/g;
       match = text.match(pattern);

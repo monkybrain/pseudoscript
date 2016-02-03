@@ -8,7 +8,7 @@ class Shaker extends Module
 
   @lexical:
     base: 'shaker'
-    plurals: 'shakers'
+    plural: 'shakers'
 
   @members: []
 

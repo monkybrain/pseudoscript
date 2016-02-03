@@ -5,6 +5,7 @@ Module = require "../../modules/module"
 Scope = require "./../scope"
 Find = require "./../../core/find"
 Verb = require "./verb"
+Util = require "./../../core/util"
 
 class Get extends Verb
 
@@ -18,10 +19,16 @@ class Get extends Verb
 
     # Search for object
     for module in modules
-      match = segment.match module.lexical.base
+      words = [module.lexical.base, module.lexical.plural]
+      pattern = Util.regex.groupAndBound words
+      match = segment.match pattern
+      console.log pattern
       if match?
+        console.log match
         object = module.self
         break
+
+
 
     # Search for reference
     ref = Find.reference segment

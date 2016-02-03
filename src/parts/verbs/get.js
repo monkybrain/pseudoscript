@@ -3,7 +3,7 @@
 /* VERB: GET */
 
 (function() {
-  var Find, Get, Module, Scope, Verb, modules,
+  var Find, Get, Module, Scope, Util, Verb, modules,
     extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
     hasProp = {}.hasOwnProperty;
 
@@ -16,6 +16,8 @@
   Find = require("./../../core/find");
 
   Verb = require("./verb");
+
+  Util = require("./../../core/util");
 
   Get = (function(superClass) {
     extend(Get, superClass);
@@ -32,11 +34,15 @@
     Get.getObject = function(segment) {
 
       /* FIND OBJECT AND REFERENCE */
-      var err, error, i, len, match, module, object, ref;
+      var err, error, i, len, match, module, object, pattern, ref, words;
       for (i = 0, len = modules.length; i < len; i++) {
         module = modules[i];
-        match = segment.match(module.lexical.base);
+        words = [module.lexical.base, module.lexical.plural];
+        pattern = Util.regex.groupAndBound(words);
+        match = segment.match(pattern);
+        console.log(pattern);
         if (match != null) {
+          console.log(match);
           object = module.self;
           break;
         }

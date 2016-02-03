@@ -12,7 +12,8 @@
     Home.self = 'Home';
 
     Home.lexical = {
-      base: 'home'
+      base: 'home',
+      plural: 'homes'
     };
 
     Home.members = [];

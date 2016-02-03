@@ -17,7 +17,7 @@
 
     Shaker.lexical = {
       base: 'shaker',
-      plurals: 'shakers'
+      plural: 'shakers'
     };
 
     Shaker.members = [];

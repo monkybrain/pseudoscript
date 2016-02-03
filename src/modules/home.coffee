@@ -6,6 +6,7 @@ class Home extends Module
 
   @lexical:
     base: 'home'
+    plural: 'homes'
 
   @members = []
 
