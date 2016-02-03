@@ -2,4 +2,4 @@ Add light 'Hue 1'
 Add shaker 'shaker 1'
 Connect shaker
 
-When shaker starts shaking, set hue of 'Hue 1' to random
+When shaker starts shaking, log 'fisk'
