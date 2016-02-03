@@ -103,6 +103,8 @@
     shell.exec("coffee .temp", function() {
       return console.log("done");
     });
+  } else {
+    process.exit();
   }
 
 }).call(this);

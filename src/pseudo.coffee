@@ -88,3 +88,5 @@ if argv.r?
   code.to ".temp"
   shell.exec "coffee .temp", () ->
     console.log "done"
+else
+  process.exit()

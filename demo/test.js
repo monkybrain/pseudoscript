@@ -18,9 +18,22 @@
   new Light('Hue 1');
 
   Light.set('Hue 1', {
-    brightness: 100
+    hue: 50000,
+    saturation: 240,
+    brightness: 150
   })["catch"](function(err) {
     return Util.error(err);
   });
+
+  setInterval(function() {
+    return Light.set('Hue 1', {
+      hue: Util.random({
+        min: 0,
+        max: 65535
+      })
+    })["catch"](function(err) {
+      return Util.error(err);
+    });
+  }, 2 * 1000);
 
 }).call(this);
