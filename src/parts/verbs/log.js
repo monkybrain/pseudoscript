@@ -96,8 +96,6 @@
         syntax.push(indent + "# Log response");
         syntax.push(indent + "Util.log response");
       }
-      syntax.push(indent + "# Log empty line");
-      syntax.push(indent + "Util.log ''\n");
       return syntax;
     };
 

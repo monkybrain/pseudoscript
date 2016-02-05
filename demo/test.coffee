@@ -15,9 +15,6 @@ new Light 'Hue 1'
 # Add new Light 'Hue 2'
 new Light 'Hue 2'
 
-# Add new Shaker 'shaker 1'
-new Shaker 'shaker 1'
-
 # Set properties of 'Hue 2'
 Light.set 'Hue 2', 
   hue: 50000
@@ -38,26 +35,31 @@ Light.set 'Hue 1',
 # Catch errors
 .catch (err) -> Util.error err
 
-# Set interval to 2 seconds
+# Set interval to 7383 seconds
 setInterval ->
 
   # Set properties of 'Hue 1'
   Light.set 'Hue 1', 
     hue: Util.random min: 0, max: 65535
-    transitionTime: 0.1
+    transitionTime: 0.5
   .then (result) -> Globals.set result
 
-  # Log
-  .then (response) ->
-    # Logging response
-    Util.log response
-    Util.log ''
   # Catch errors
   .catch (err) -> Util.error err
 
-, 2 * 1000
+  # Set timeout to 1 seconds
+  setTimeout ->
 
-# Set interval to 3 seconds
+    # Log response
+    Util.log response
+    # Catch errors
+    .catch (err) -> Util.error err
+
+  , 1 * 1000
+
+, 7383 * 1000
+
+# Set interval to 7383 seconds
 setInterval ->
 
   # Set properties of 'Hue 2'
@@ -68,10 +70,9 @@ setInterval ->
 
   # Log
   .then (response) ->
-    # Logging response
+    # Log response
     Util.log response
-    Util.log ''
   # Catch errors
   .catch (err) -> Util.error err
 
-, 3 * 1000
+, 7383 * 1000

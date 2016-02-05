@@ -26,10 +26,11 @@ class Get extends Verb
         object = module.self
         break
 
-
-
     # Search for reference
-    ref = Find.reference segment
+    refs = Find.references segment
+    console.log refs
+    if refs?
+      ref = refs[0]
 
     # If no object...
     if not object?

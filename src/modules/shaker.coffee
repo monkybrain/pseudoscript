@@ -41,9 +41,15 @@ class Shaker extends Module
 
           if member.ref is ref
 
-            SensorTag.discover (tag) ->
-
+            SensorTag.discoverById 'b0b448be5384', (tag) ->
               console.log tag
+              tag.connectAndSetUp (err) ->
+                tag.readDeviceName (err, name) ->
+                  console.log name
+
+            ###SensorTag.discover (tag) ->
+
+              console.log tag._peripheral
 
               if tag.type is 'cc2650'
 
@@ -76,7 +82,7 @@ class Shaker extends Module
                         if movement > 4
                           console.log "movement!"
                           member.events.start()
-                        resolve()
+                        resolve()###
 
   @on: (ref, event, callback) ->
 

@@ -103,9 +103,6 @@ class Assembler
             # Reset promise chain level and add error handling
             @chain.reset()
 
-
-
-
     # Handle closures (reverse order and dedent accordingly)
     for closure in closures.reverse()
       @indent.dec()

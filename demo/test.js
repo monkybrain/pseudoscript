@@ -19,8 +19,6 @@
 
   new Light('Hue 2');
 
-  new Shaker('shaker 1');
-
   Light.set('Hue 2', {
     hue: 50000,
     saturation: 240,
@@ -42,21 +40,23 @@
   });
 
   setInterval(function() {
-    return Light.set('Hue 1', {
+    Light.set('Hue 1', {
       hue: Util.random({
         min: 0,
         max: 65535
       }),
-      transitionTime: 0.1
+      transitionTime: 0.5
     }).then(function(result) {
       return Globals.set(result);
-    }).then(function(response) {
-      Util.log(response);
-      return Util.log('');
     })["catch"](function(err) {
       return Util.error(err);
     });
-  }, 2 * 1000);
+    return setTimeout(function() {
+      return Util.log(response)["catch"](function(err) {
+        return Util.error(err);
+      });
+    }, 1 * 1000);
+  }, 7383 * 1000);
 
   setInterval(function() {
     return Light.set('Hue 2', {
@@ -68,11 +68,10 @@
     }).then(function(result) {
       return Globals.set(result);
     }).then(function(response) {
-      Util.log(response);
-      return Util.log('');
+      return Util.log(response);
     })["catch"](function(err) {
       return Util.error(err);
     });
-  }, 3 * 1000);
+  }, 7383 * 1000);
 
 }).call(this);

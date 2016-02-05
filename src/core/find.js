@@ -67,25 +67,6 @@
       }
     };
 
-    Find.reference = function(text) {
-      var end, indices, match, pattern, start;
-      indices = [];
-      pattern = /"|'/g;
-      while (true) {
-        match = pattern.exec(text);
-        if (match != null) {
-          indices.push(match.index);
-        } else {
-          break;
-        }
-      }
-      if (indices.length > 0) {
-        start = indices[0] + 1;
-        end = indices[1];
-        return text.slice(start, end);
-      }
-    };
-
     Find.references = function(text) {
       var matches;
       matches = text.match(/'[^']*'/g);

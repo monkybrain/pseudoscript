@@ -62,10 +62,6 @@ class Log extends Verb
       syntax.push indent + "# Log response"
       syntax.push indent + "Util.log response"
 
-    # Add empty line
-    syntax.push indent + "# Log empty line"
-    syntax.push indent + "Util.log ''\n"
-
     syntax
 
 module.exports = Log

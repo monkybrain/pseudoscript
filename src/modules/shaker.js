@@ -55,44 +55,52 @@
           for (i = 0, len = ref1.length; i < len; i++) {
             member = ref1[i];
             if (member.ref === ref) {
-              results.push(SensorTag.discover(function(tag) {
+              results.push(SensorTag.discoverById('b0b448be5384', function(tag) {
                 console.log(tag);
-                if (tag.type === 'cc2650') {
-                  member.tag = tag;
-                  return member.tag.connectAndSetUp(function(err) {
-                    if (err != null) {
-                      console.error(err && process.exit());
-                    }
-                    member.tag.enableAccelerometer(function(err) {});
-                    if (err != null) {
-                      console.error(err && process.exit());
-                    }
-                    return member.tag.setAccelerometerPeriod(200, function(err) {
-                      if (err != null) {
-                        console.error(err && process.exit());
-                      }
-                      return member.tag.notifyAccelerometer(function(err) {
-                        if (err != null) {
-                          console.error(err && process.exit());
-                        }
-                        member.connected = true;
-                        return member.tag.on('accelerometerChange', function(x, y, z) {
-                          var axes, movement;
-                          axes = [Math.abs(x), Math.abs(y), Math.abs(z)];
-                          movement = axes.reduce(function(prev, curr) {
-                            return prev + curr;
-                          });
-                          if (movement > 4) {
-                            console.log("movement!");
-                            member.events.start();
-                          }
-                          return resolve();
-                        });
-                      });
-                    });
+                return tag.connectAndSetUp(function(err) {
+                  return tag.readDeviceName(function(err, name) {
+                    return console.log(name);
                   });
-                }
+                });
               }));
+
+              /*SensorTag.discover (tag) ->
+              
+                console.log tag._peripheral
+              
+                if tag.type is 'cc2650'
+              
+                  member.tag = tag
+              
+                   * Remove this pyramid of doom
+                  member.tag.connectAndSetUp (err) ->
+                    if err? then console.error err and process.exit()
+              
+                    member.tag.enableAccelerometer (err) ->
+                    if err? then console.error err and process.exit()
+              
+                    member.tag.setAccelerometerPeriod 200, (err) ->
+                      if err? then console.error err and process.exit()
+              
+                      member.tag.notifyAccelerometer (err) ->
+                        if err? then console.error err and process.exit()
+              
+                        member.connected = true
+              
+                        member.tag.on 'accelerometerChange', (x, y, z) ->
+              
+                          axes = [
+                            Math.abs x
+                            Math.abs y
+                            Math.abs z
+                          ]
+              
+                          movement = axes.reduce (prev, curr) -> prev + curr
+                          if movement > 4
+                            console.log "movement!"
+                            member.events.start()
+                          resolve()
+               */
             } else {
               results.push(void 0);
             }

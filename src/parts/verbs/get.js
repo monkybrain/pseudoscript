@@ -34,7 +34,7 @@
     Get.getObject = function(segment) {
 
       /* FIND OBJECT AND REFERENCE */
-      var err, error, i, len, match, module, object, pattern, ref, words;
+      var err, error, i, len, match, module, object, pattern, ref, refs, words;
       for (i = 0, len = modules.length; i < len; i++) {
         module = modules[i];
         words = [module.lexical.base, module.lexical.plural];
@@ -45,7 +45,11 @@
           break;
         }
       }
-      ref = Find.reference(segment);
+      refs = Find.references(segment);
+      console.log(refs);
+      if (refs != null) {
+        ref = refs[0];
+      }
       if (object == null) {
         if (ref != null) {
           try {

@@ -36,25 +36,6 @@ class Find
       for member in module.members
         if ref is member then return module.self
 
-  @reference: (text) ->
-
-    # Empty array of indices
-    indices = []
-
-    # Define pattern
-    pattern = /"|'/g
-
-    # Find all single and double quotes (TODO: Disallow combinations of single and double qoutes)
-    loop
-      match = pattern.exec text
-      if match? then indices.push match.index else break
-
-    # Cut out reference from text and return
-    if indices.length > 0
-      start = indices[0] + 1
-      end = indices[1]
-      return text[start...end]
-
   @references: (text) ->
     # FIXME: SHORTEN TO ONE LINE (i.e. get better at using regex groups)
     # TODO: REWRITE @reference IN LINE WITH @references
