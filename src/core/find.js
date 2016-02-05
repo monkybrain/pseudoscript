@@ -21,6 +21,7 @@
     Find.objects = function(text) {
       var i, len, match, matches, module;
       matches = [];
+      console.log(text);
       for (i = 0, len = modules.length; i < len; i++) {
         module = modules[i];
         match = text.match(module.lexical.base);

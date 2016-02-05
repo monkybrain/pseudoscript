@@ -13,6 +13,7 @@ class Find
   # TODO: Merge 'object' and 'objects'?
   @objects: (text) ->
     matches = []
+    console.log text
     for module in modules
       match = text.match module.lexical.base
       if match?
