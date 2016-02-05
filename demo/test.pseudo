@@ -1,7 +1,8 @@
-Add a light called 'Hue 1'
-Add light 'Hue 2'
+# Add a light called 'Hue 1'
+Add room 'bedroom'
+Add lights 'Hue 1' and 'Hue 2' to 'bedroom'
 # Add shaker 'shaker 1'
-Set hue to 50000, saturation to 240 and brightness to 150
-Set hue of 'Hue 1' to 30000, saturation to 240, brightness to 150
-Every 2 hours 3 minutes and 3 seconds, set hue random, transition time 0.5 and after 1 second log
-Every 2h3m3s, set the hue of 'Hue 2' to random and the transition time to 3 and log
+# Set hue to 50000, saturation to 240 and brightness to 150
+# Set hue of 'Hue 1' to 30000, saturation to 240, brightness to 150
+# Every 2 hours 3 minutes and 3 seconds, set hue random, transition time 0.5 and after 1 second log
+# Every 2h3m3s, set the hue of 'Hue 2' to random and the transition time to 3 and log

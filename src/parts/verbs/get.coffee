@@ -28,7 +28,6 @@ class Get extends Verb
 
     # Search for reference
     refs = Find.references segment
-    console.log refs
     if refs?
       ref = refs[0]
 

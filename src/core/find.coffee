@@ -1,4 +1,5 @@
 modules = require "../modules/modules"
+Util = require "./util"
 
 class Find
 
@@ -12,13 +13,18 @@ class Find
 
   # TODO: Merge 'object' and 'objects'?
   @objects: (text) ->
-    matches = []
-    console.log text
+
+    words = []
     for module in modules
-      match = text.match module.lexical.base
-      if match?
-        matches.push module.self
-    matches
+      words.push module.lexical.base
+      words.push module.lexical.plural
+
+    pattern = Util.regex.groupAndBoundGlobal words
+    matches = text.match pattern
+    objects = matches.map (match) ->
+      for module in modules
+        if module.lexical.base is match
+          return module.self
 
   @module: (object) ->
     for module in modules

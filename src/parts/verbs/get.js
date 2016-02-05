@@ -46,7 +46,6 @@
         }
       }
       refs = Find.references(segment);
-      console.log(refs);
       if (refs != null) {
         ref = refs[0];
       }

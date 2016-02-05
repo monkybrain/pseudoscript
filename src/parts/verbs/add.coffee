@@ -52,7 +52,6 @@ class Add extends Verb
         ref isnt indirect.ref
       [direct.ref] = refs
 
-
     return [direct, indirect]
 
   @test: (text) ->

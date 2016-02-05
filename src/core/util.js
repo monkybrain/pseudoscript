@@ -13,6 +13,11 @@
         words = expressions.join("|");
         return pattern = new RegExp("\\b" + words + "\\b");
       },
+      groupAndBoundGlobal: function(expressions) {
+        var pattern, words;
+        words = expressions.join("|");
+        return pattern = new RegExp("\\b" + words + "\\b", "g");
+      },
       group: function(expressions) {
         var pattern;
         pattern = expressions.map(function(expression) {

@@ -6,6 +6,9 @@ class Util
     groupAndBound: (expressions) ->
       words = expressions.join "|"
       pattern = new RegExp "\\b" + words + "\\b"
+    groupAndBoundGlobal: (expressions) ->
+      words = expressions.join "|"
+      pattern = new RegExp "\\b" + words + "\\b", "g"
     group: (expressions) ->
       pattern = expressions.map (expression) ->
         "(" + expression + ")"
